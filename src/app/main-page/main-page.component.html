@@ -1,0 +1,133 @@
+<div>
+    <div id="menu" class="border">
+        <div id="nastaveni">
+            <h3>Nastavení</h3>
+            <div class="gridNastaveni">
+                <label for="pocetVstupu">Počet proměnných</label>
+                <!-- (input)="pocetPromennych = $event.target.value" -->
+                <input id="pocetVstupu" type="number" min="1" max="26" [value]="pocetPromennych" (change)="zmenaPoctuPromennych($event.target.value)"
+                />
+            </div>
+            <div class="gridNastaveni">
+                <label for="pocetReseni">Počet řešení</label>
+                <input id="pocetReseni" type="number" min="1" value="1" />
+            </div>
+        </div>
+
+        <hr>
+        <div id="vstupy">
+        	<div class="row-layout">
+        		<h3>Proměnné</h3>
+        		<i class="fa fa-fw fa-plus clickable" (click)="pridejPromennou()"></i>
+        	</div>
+            
+            <div id="promenneBlok">
+            <form class="table-layout">
+                <div *ngFor="let r of listPromennych, index as i">
+<!--                 	<div> -->
+	                	<div class="min">{{r.nazev}}</div>
+	                	<div class="min">=</div>
+	                    <div>
+	                     	 &#123;
+	                     	 <input name="domena" [(ngModel)]="r.domena" required pattern="^(-?\d+,? ?)*-?\d+$" numbersConvertor #domenaControl />
+	                     	 &#125;
+	                     	 <span>{{domenaControl.className}}</span>
+	                    </div>
+	                    <div>
+	                    	<button type="button" class="btn btn-default btn-sm" (click)="openModal(i)">Omezení {{i}}</button>
+	                    </div>
+	                    <div>
+	                    	<i class="fa fa-ban text-danger clickable rowHover"></i>
+	                    	<i class="fa fa-remove text-danger clickable rowHover" (click)="odeberPromennou(r)"></i>
+	                    </div>
+<!--                     </div> -->
+                    
+<!--                     <div *ngFor="let o of r.omezeni" class=""> -->
+<!--                     	<div></div> -->
+<!--                     	<div>{{o.typOmezeni}}</div> -->
+<!--                     	<div>{{o.hodnotyOmezeni}}</div> -->
+<!--                     </div> -->
+
+                    <div class="backdrop" [ngStyle]="{'display':display}"></div>
+                    <div class="modal" tabindex="-1" role="dialog" [ngStyle]="{'display':display}">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" aria-label="Close" (click)="onCancelHandled()">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                    <h4 class="modal-title">Model Title</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <p>Model body text</p>
+                                    <input type="text" [value]="vybranaPromenna.domena" (input)="upravenaVybranaPromenna.domena = $event.target.value">
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" (click)="onOKHandled()">OK</button>
+                                    <button type="button" class="btn btn-default" (click)="onCancelHandled()">Cancel</button>
+                                </div>
+                            </div>
+                            <!-- /.modal-content -->
+                        </div>
+                        <!-- /.modal-dialog -->
+                    </div>
+                    <!-- /.modal !-->
+                </div>
+                </form>
+            </div>
+        </div>
+
+        <div id="algoritmy">
+        </div>
+
+        <div id="dynamic"></div>
+
+        <hr>
+        <h3>Provedení</h3>
+        <div class="gridAlgoritmu">
+            <select class="select" (change)="algorithmSelect($event)">
+                <option value="Backtracking">Backtracking</option>
+                <option value="Backjumping">Backjumping</option>
+                <option value="Forward Check">Forward Check</option>
+                <option value="Arc Consistency">Arc Consistency</option>
+                <option value="Constraint Recording">Constraint Recording</option>
+            </select>
+            <button (click)="run()">Spocti</button>
+            <!-- <input type="submit" value="backtracking" onclick="Backtracking.spusteni('backtracking')" />
+            <input type="submit" value="backjumping" onclick="Backtracking.spusteni('backjumping')" />
+            <input type="submit" value="forward check" onclick="Backtracking.spusteni('forwardChecking')" />
+            <input type="submit" value="arc consistency" onclick="Backtracking.spusteni('arcConsistency')" />
+            <input type="submit" value="constraintRecording" onclick="Backtracking.spusteni('constraintRecording')" />
+            -->
+        </div>
+        <p id="vykonanyAlgoritmus">&nbsp;</p>
+        <div class="border" style="height: 30%">
+                <app-algoritm [pocetPromennych]="pocetPromennych" *ngIf="(selectedAlgorithm=='Backtracking')"></app-algoritm>
+            <app-backjumping *ngIf="(selectedAlgorithm=='Backjumping')"></app-backjumping>
+        </div>
+    </div>
+    <div id="graf" class="border table-layout">
+        <div id="myDiagramDiv" style="width: 100%; height: 600px"></div>
+
+        <div id="krok">
+
+        </div>
+
+        <div id="navigace">
+            <div>
+                <button id="previous10">-10
+                    &lt;&lt;</button>
+                        <button id="previous">
+                            &lt;&lt;</button>
+                                <button id="whole">Vykreslení</button>
+                                <button id="next">&gt;&gt;</button>
+                                <button id="next10">+10 &gt;&gt;</button>
+            </div>
+            <div>
+                <button id="zoomToFit">Zoom to Fit</button>
+                <button id="vis" onclick="zobrazeniAktualnichHodnotDomen()">skrýt</button>
+                <button id="centerRoot">Přiblížení</button>
+            </div>
+        </div>
+    </div>
+</div>

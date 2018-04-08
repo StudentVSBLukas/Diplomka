@@ -1,0 +1,41 @@
+
+<!-- Now converting it  to angular, By clicking the button open the modal using event binding method as the  following -->
+<!-- <button type="button" class="btn btn-info btn-lg" (click)="openModal()">click to open</button> -->
+
+<div class="backdrop" [ngStyle]="{'display':display}"></div>
+<div class="modal" tabindex="-1" role="dialog"  [ngStyle]="{'display':display}">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" aria-label="Close" (click)="onCancelHandled()"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Model Title</h4>
+      </div>
+      <div class="modal-body">
+        <p>Model body text</p>
+        <input type="text">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" (click)="onOKHandled()" >OK</button>
+        <button type="button" class="btn btn-default" (click)="onCancelHandled()" >Cancel</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal !-->
+<p [style.background-color]="pocetPromennych == 1 ? '#10ff10' : null">
+  Přiřazení prvku z domény pro zpracovavanou proměnnou.
+</p>
+<p [style.background-color]="pocetPromennych == 2 ? '#10ff10' : null">
+  Kontrola jestli jsou splněna omezení
+</p>
+<p [style.background-color]="pocetPromennych == 3 ? '#10ff10' : null">
+  &nbsp; -> Pokračování na další proměnnou
+</p>
+<p [style.background-color]="pocetPromennych == 4 ? '#10ff10' : null">
+  &nbsp; &nbsp; -> Pokud není další proměnná je nalezeno řešení
+</p>
+<p [style.background-color]="pocetPromennych == 5 ? '#10ff10' : null">
+  &nbsp; -> Návrat k předchozí proměnné
+</p>
+<p [style.background-color]="pocetPromennych == 6 ? '#10ff10' : null">
+  &nbsp;&nbsp; -> Pokud není přechozí proměnná tak se nenašlo požadované řešení
+</p>
