@@ -18,12 +18,12 @@ class Promenna {
     return this.domena[this.pozice];
   }
   
-  set domenaText(value: string) {
-    this.domena = [parseInt(value)];
-  }
-  
-  get domenaText() {
-    return this.domena.toString();
+  update (p: Promenna) {
+    if (this.nazev !== p.nazev) {
+      return;
+    }
+    this.domena = p.domena;
+    this.omezeni = p.omezeni;
   }
 }
 
@@ -60,10 +60,10 @@ interface ListPromennych {
 
 
 export class MainPageComponent implements OnInit {
+  pocetReseni;
 
   listPromennych = [];
-  vybranaPromenna = {};
-  upravenaVybranaPromenna = {};
+  vybranaPromenna;
   index;
   selectedAlgorithm = 'Backtracking';
   display = 'none';
@@ -108,22 +108,21 @@ export class MainPageComponent implements OnInit {
     }
   }
 
-  openModal(i: number) {
-    this.vybranaPromenna = this.listPromennych[i];
-    this.upravenaVybranaPromenna = Object.assign({}, this.listPromennych[i]);
-    this.index = i;
+  openModal(p: Promenna) {
+    this.vybranaPromenna = { ...p}; // Object.assign({}, p);
     this.display = 'block';
   }
 
   onOKHandled() {
-    this.listPromennych[this.index] = Object.assign({}, this.upravenaVybranaPromenna);
-    this.upravenaVybranaPromenna = {};
-    this.vybranaPromenna = {};
+    const self = this;
+    this.listPromennych.forEach(function(item) {
+      item.update(self.vybranaPromenna);
+    });
+    this.vybranaPromenna = null;
     this.display = 'none';
   }
   onCancelHandled() {
-    this.upravenaVybranaPromenna = {};
-    this.vybranaPromenna = {};
+    this.vybranaPromenna = null;
     this.display = 'none';
   }
 
@@ -186,7 +185,7 @@ export class MainPageComponent implements OnInit {
       }
 
       var krokAlgoritmu = new KrokAlgoritmu();
-      krokAlgoritmu.popis = 'Výběr hodnoty z domény proměnné ' + zpracovavanaPromenna.nazev;
+      krokAlgoritmu.popis = 'VĂ˝bÄ›r hodnoty z domĂ©ny promÄ›nnĂ© ' + zpracovavanaPromenna.nazev;
       krokAlgoritmu.nazev = zpracovavanaPromenna.nazev;
       krokAlgoritmu.promenna = promenna;
       krokAlgoritmu.hodnota = zpracovavanaPromenna.domena[zpracovavanaPromenna.pozice];
@@ -201,7 +200,7 @@ export class MainPageComponent implements OnInit {
         if (promenna === (seznamPromennych.length - 1)) {
           pocetReseni++;
           krokAlgoritmu.stav = 'reseni';
-          krokAlgoritmu.popis = 'NALEZENO ŘEŠENÍ';
+          krokAlgoritmu.popis = 'NALEZENO Ĺ�EĹ ENĂŤ';
         } else {
           promenna++;
         }
@@ -238,7 +237,7 @@ export class MainPageComponent implements OnInit {
           break;
         }
         var krokAlgoritmu = new KrokAlgoritmu();
-        krokAlgoritmu.popis = 'Výběr hodnoty z domény proměnné ' + zpracovavanaPromenna.nazev;
+        krokAlgoritmu.popis = 'VĂ˝bÄ›r hodnoty z domĂ©ny promÄ›nnĂ© ' + zpracovavanaPromenna.nazev;
         krokAlgoritmu.nazev = zpracovavanaPromenna.nazev;
         krokAlgoritmu.promenna = promenna;
         krokAlgoritmu.hodnota = zpracovavanaPromenna.domena[zpracovavanaPromenna.pozice];
@@ -247,7 +246,7 @@ export class MainPageComponent implements OnInit {
         if (promenna === seznamPromennych.length - 1) {
           pocetReseni++;
           krokAlgoritmu.stav = 'reseni';
-          krokAlgoritmu.popis = 'NALEZENO ŘEŠENÍ';
+          krokAlgoritmu.popis = 'NALEZENO Ĺ�EĹ ENĂŤ';
           leafend[promenna] = true;
         } else {
           leafend[promenna] = true;
@@ -288,7 +287,7 @@ export class MainPageComponent implements OnInit {
           promenna = backjump;
         } else {
           var krokAlgoritmu = new KrokAlgoritmu();
-          krokAlgoritmu.popis = 'Výběr hodnoty z domény proměnné ' + zpracovavanaPromenna.nazev;
+          krokAlgoritmu.popis = 'VĂ˝bÄ›r hodnoty z domĂ©ny promÄ›nnĂ© ' + zpracovavanaPromenna.nazev;
           krokAlgoritmu.nazev = zpracovavanaPromenna.nazev;
           krokAlgoritmu.promenna = promenna;
           krokAlgoritmu.hodnota = zpracovavanaPromenna.domena[zpracovavanaPromenna.pozice];
@@ -298,7 +297,7 @@ export class MainPageComponent implements OnInit {
             if (promenna === seznamPromennych.length - 1) {
               pocetReseni++;
               krokAlgoritmu.stav = 'reseni';
-              krokAlgoritmu.popis = 'NALEZENO ŘEŠENÍ';
+              krokAlgoritmu.popis = 'NALEZENO Ĺ�EĹ ENĂŤ';
               leafend[promenna] = true;
             } else {
               leafend[promenna] = true;
@@ -349,7 +348,7 @@ export class MainPageComponent implements OnInit {
       }
 
       var krokAlgoritmu = new KrokAlgoritmu();
-      krokAlgoritmu.popis = 'Výběr hodnoty z domény proměnné ' + zpracovavanaPromenna.nazev;
+      krokAlgoritmu.popis = 'VĂ˝bÄ›r hodnoty z domĂ©ny promÄ›nnĂ© ' + zpracovavanaPromenna.nazev;
       krokAlgoritmu.nazev = zpracovavanaPromenna.nazev;
       krokAlgoritmu.promenna = promenna;
       krokAlgoritmu.hodnota = zpracovavanaPromenna.domena[zpracovavanaPromenna.pozice];
@@ -364,7 +363,7 @@ export class MainPageComponent implements OnInit {
         if (promenna === (seznamPromennych.length - 1)) {
           pocetReseni++;
           krokAlgoritmu.stav = 'reseni';
-          krokAlgoritmu.popis = 'NALEZENO ŘEŠENÍ';
+          krokAlgoritmu.popis = 'NALEZENO Ĺ�EĹ ENĂŤ';
           krokAlgoritmu.hodnotaDomenKroku = this._forwardChechHodnotaDomen(seznamPromennych);
         } else {
           var tmp = this._forwardCheck(promenna + 1, zpracovavanaPromenna.domena[zpracovavanaPromenna.pozice], seznamPromennych, vstup);
@@ -661,7 +660,7 @@ export class MainPageComponent implements OnInit {
         promennaA.domena.splice(i, 1);
         i--;
         if (promennaA.domena.length === 0) {
-          return 'U proměnné ' + promennaA.nazev + ' vznikla prázdná doména, tudíž pro tento problém neexistuje řešení';
+          return 'U promÄ›nnĂ© ' + promennaA.nazev + ' vznikla prĂˇzdnĂˇ domĂ©na, tudĂ­Ĺľ pro tento problĂ©m neexistuje Ĺ™eĹˇenĂ­';
         }
       }
     }
@@ -684,7 +683,7 @@ export class MainPageComponent implements OnInit {
         promennaA.domena.splice(i, 1);
         i--;
         if (promennaA.domena.length === 0) {
-          return 'U proměnné ' + promennaA.nazev + ' vznikla prázdná doména, tudíž pro tento problém neexistuje řešení';
+          return 'U promÄ›nnĂ© ' + promennaA.nazev + ' vznikla prĂˇzdnĂˇ domĂ©na, tudĂ­Ĺľ pro tento problĂ©m neexistuje Ĺ™eĹˇenĂ­';
         }
       }
     }
@@ -707,7 +706,7 @@ export class MainPageComponent implements OnInit {
         promennaA.domena.splice(i, 1);
         i--;
         if (promennaA.domena.length === 0) {
-          return 'U proměnné ' + promennaA.nazev + ' vznikla prázdná doména, tudíž pro tento problém neexistuje řešení';
+          return 'U promÄ›nnĂ© ' + promennaA.nazev + ' vznikla prĂˇzdnĂˇ domĂ©na, tudĂ­Ĺľ pro tento problĂ©m neexistuje Ĺ™eĹˇenĂ­';
         }
       }
     }
@@ -730,7 +729,7 @@ export class MainPageComponent implements OnInit {
         promennaA.domena.splice(i, 1);
         i--;
         if (promennaA.domena.length === 0) {
-          return 'U proměnné ' + promennaA.nazev + ' vznikla prázdná doména, tudíž pro tento problém neexistuje řešení';
+          return 'U promÄ›nnĂ© ' + promennaA.nazev + ' vznikla prĂˇzdnĂˇ domĂ©na, tudĂ­Ĺľ pro tento problĂ©m neexistuje Ĺ™eĹˇenĂ­';
         }
       }
     }
@@ -775,13 +774,13 @@ export class MainPageComponent implements OnInit {
         promennaA.domena.splice(i, 1);
         i--;
         if (promennaA.domena.length === 0) {
-          return 'U proměnné ' + promennaA.nazev + ' vznikla prázdná doména, tudíž pro tento problém neexistuje řešení';
+          return 'U promÄ›nnĂ© ' + promennaA.nazev + ' vznikla prĂˇzdnĂˇ domĂ©na, tudĂ­Ĺľ pro tento problĂ©m neexistuje Ĺ™eĹˇenĂ­';
         }
       } else if (remove && volani === 2) {
         promennaB.domena.splice(i, 1);
         i--;
         if (promennaB.domena.length === 0) {
-          return 'U proměnné ' + promennaA.nazev + ' vznikla prázdná doména, tudíž pro tento problém neexistuje řešení';
+          return 'U promÄ›nnĂ© ' + promennaA.nazev + ' vznikla prĂˇzdnĂˇ domĂ©na, tudĂ­Ĺľ pro tento problĂ©m neexistuje Ĺ™eĹˇenĂ­';
         }
       }
     }
@@ -850,13 +849,13 @@ export class MainPageComponent implements OnInit {
       if (remove && volani === 1) {
         promennaA.domena.splice(i, 1);
         if (promennaA.domena.length === 0) {
-          return 'U proměnné ' + promennaA.nazev + ' vznikla prázdná doména, tudíž pro tento problém neexistuje řešení';
+          return 'U promÄ›nnĂ© ' + promennaA.nazev + ' vznikla prĂˇzdnĂˇ domĂ©na, tudĂ­Ĺľ pro tento problĂ©m neexistuje Ĺ™eĹˇenĂ­';
         }
         i--;
       } else if (remove && volani === 2) {
         promennaB.domena.splice(i, 1);
         if (promennaB.domena.length === 0) {
-          return 'U proměnné ' + promennaB.nazev + ' vznikla prázdná doména, tudíž pro tento problém neexistuje řešení';
+          return 'U promÄ›nnĂ© ' + promennaB.nazev + ' vznikla prĂˇzdnĂˇ domĂ©na, tudĂ­Ĺľ pro tento problĂ©m neexistuje Ĺ™eĹˇenĂ­';
         }
         i--;
       }
@@ -896,7 +895,7 @@ export class MainPageComponent implements OnInit {
       }
 
       var krokAlgoritmu = new KrokAlgoritmu();
-      krokAlgoritmu.popis = 'Výběr hodnoty z domény proměnné ' + zpracovavanaPromenna.nazev;
+      krokAlgoritmu.popis = 'VĂ˝bÄ›r hodnoty z domĂ©ny promÄ›nnĂ© ' + zpracovavanaPromenna.nazev;
       krokAlgoritmu.nazev = zpracovavanaPromenna.nazev;
       krokAlgoritmu.promenna = promenna;
       krokAlgoritmu.hodnota = zpracovavanaPromenna.domena[zpracovavanaPromenna.pozice];
@@ -912,7 +911,7 @@ export class MainPageComponent implements OnInit {
         if (promenna === (seznamPromennych.length - 1)) {
           pocetReseni++;
           krokAlgoritmu.stav = 'reseni';
-          krokAlgoritmu.popis = 'NALEZENO ŘEŠENÍ';
+          krokAlgoritmu.popis = 'NALEZENO Ĺ�EĹ ENĂŤ';
         } else {
           promenna++;
         }
@@ -946,7 +945,7 @@ export class MainPageComponent implements OnInit {
       }
 
       var krokAlgoritmu = new KrokAlgoritmu();
-      krokAlgoritmu.popis = 'Výběr hodnoty z domény proměnné ' + zpracovavanaPromenna.nazev;
+      krokAlgoritmu.popis = 'VĂ˝bÄ›r hodnoty z domĂ©ny promÄ›nnĂ© ' + zpracovavanaPromenna.nazev;
       krokAlgoritmu.nazev = zpracovavanaPromenna.nazev;
       krokAlgoritmu.promenna = promenna;
       krokAlgoritmu.hodnota = zpracovavanaPromenna.domena[zpracovavanaPromenna.pozice];
@@ -961,7 +960,7 @@ export class MainPageComponent implements OnInit {
         if (promenna === (seznamPromennych.length - 1)) {
           pocetReseni++;
           krokAlgoritmu.stav = 'reseni';
-          krokAlgoritmu.popis = 'NALEZENO ŘEŠENÍ';
+          krokAlgoritmu.popis = 'NALEZENO Ĺ�EĹ ENĂŤ';
         } else {
           promenna++;
         }
@@ -1380,7 +1379,7 @@ export class MainPageComponent implements OnInit {
             var porovnavanaPromenna = omezeni.hodnotyOmezeni[j];
             var porovnavanaHodnota = this._valueOf(seznamPromennych, porovnavanaPromenna).vratPrirazenouHodnotu();
             if (!(cislo < porovnavanaHodnota)) {
-              return ', nesplnění podmínky ' + promenna.nazev + '<' + porovnavanaPromenna + ' (' + cislo + '<' + porovnavanaHodnota + ')';
+              return ', nesplnÄ›nĂ­ podmĂ­nky ' + promenna.nazev + '<' + porovnavanaPromenna + ' (' + cislo + '<' + porovnavanaHodnota + ')';
             }
           }
           break;
@@ -1389,7 +1388,7 @@ export class MainPageComponent implements OnInit {
             var porovnavanaPromenna = omezeni.hodnotyOmezeni[j];
             var porovnavanaHodnota = this._valueOf(seznamPromennych, porovnavanaPromenna).vratPrirazenouHodnotu();
             if (!(cislo > porovnavanaHodnota)) {
-              return ', nesplnění podmínky ' + promenna.nazev + '>' + porovnavanaPromenna + ' (' + cislo + '>' + porovnavanaHodnota + ')';
+              return ', nesplnÄ›nĂ­ podmĂ­nky ' + promenna.nazev + '>' + porovnavanaPromenna + ' (' + cislo + '>' + porovnavanaHodnota + ')';
             }
           }
           break;
@@ -1398,7 +1397,7 @@ export class MainPageComponent implements OnInit {
             var porovnavanaPromenna = omezeni.hodnotyOmezeni[j];
             var porovnavanaHodnota = this._valueOf(seznamPromennych, porovnavanaPromenna).vratPrirazenouHodnotu();
             if (cislo !== porovnavanaHodnota) {
-              return ', nesplnění podmínky ' + promenna.nazev + '=' + porovnavanaPromenna + ' (' + cislo + '=' + porovnavanaHodnota + ')';
+              return ', nesplnÄ›nĂ­ podmĂ­nky ' + promenna.nazev + '=' + porovnavanaPromenna + ' (' + cislo + '=' + porovnavanaHodnota + ')';
             }
           }
           break;
@@ -1407,7 +1406,7 @@ export class MainPageComponent implements OnInit {
             var porovnavanaPromenna = omezeni.hodnotyOmezeni[j];
             var porovnavanaHodnota = this._valueOf(seznamPromennych, porovnavanaPromenna).vratPrirazenouHodnotu();
             if (cislo === porovnavanaHodnota) {
-              return ', nesplnění podmínky ' + promenna.nazev + '≠' + porovnavanaPromenna + ' (' + cislo + '≠' + porovnavanaHodnota + ')';
+              return ', nesplnÄ›nĂ­ podmĂ­nky ' + promenna.nazev + 'â‰ ' + porovnavanaPromenna + ' (' + cislo + 'â‰ ' + porovnavanaHodnota + ')';
             }
           }
           break;
@@ -1424,7 +1423,7 @@ export class MainPageComponent implements OnInit {
             }
           }
           if (!nalezeno) {
-            return ',  nesplnění podmínky ' + promenna.nazev + 'p' + porovnavanaPromenna + ' (' + cislo + 'p' + porovnavanaHodnota + ')';
+            return ',  nesplnÄ›nĂ­ podmĂ­nky ' + promenna.nazev + 'p' + porovnavanaPromenna + ' (' + cislo + 'p' + porovnavanaHodnota + ')';
           }
           break;
         case 'z':
@@ -1432,7 +1431,7 @@ export class MainPageComponent implements OnInit {
           var porovnavanaHodnota = this._valueOf(seznamPromennych, porovnavanaPromenna).vratPrirazenouHodnotu();
           for (var j = 0; j < omezeni.hodnotyOmezeni.length; j++) {
             if (cislo === parseInt(omezeni.hodnotyOmezeni[j][0]) && porovnavanaHodnota === parseInt(omezeni.hodnotyOmezeni[j][1])) {
-              return ',  nesplnění podmínky ' + promenna.nazev + 'z' + porovnavanaPromenna + ' (' + cislo + 'z' + porovnavanaHodnota + ')';
+              return ',  nesplnÄ›nĂ­ podmĂ­nky ' + promenna.nazev + 'z' + porovnavanaPromenna + ' (' + cislo + 'z' + porovnavanaHodnota + ')';
             }
           }
           break;
