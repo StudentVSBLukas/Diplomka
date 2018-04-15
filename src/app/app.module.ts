@@ -11,7 +11,10 @@ import { BackjumpingComponent } from './backjumping/backjumping.component';
 import { NumbersConvertorDirective } from './convertor/numbersconvertor.directive';
 import { PromennaComponent } from './promenna/promenna.component';
 import { FormsModule } from '@angular/forms';
-import {KeyFilterModule} from 'primeng/keyfilter';
+import { DropdownModule } from 'primeng/dropdown';
+import { MultiSelectModule } from 'primeng/multiselect';
+import { OmezeniPromenneComponent } from './omezeni-promenne/omezeni-promenne.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 
 @NgModule({
@@ -22,13 +25,16 @@ import {KeyFilterModule} from 'primeng/keyfilter';
     BackjumpingComponent,
     PromennaComponent,
     NumbersConvertorDirective,
+    OmezeniPromenneComponent,
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     AppRoutingModule,
     FormsModule,
     HttpModule,
-    KeyFilterModule,
+    DropdownModule,
+    MultiSelectModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

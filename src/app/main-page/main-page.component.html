@@ -19,7 +19,7 @@
                 <div *ngFor="let r of listPromennych, index as i" class="row">
 	                	<div class="col-sm-1">{{r.nazev}}</div>
 	                    <div class="col-sm-11">
-	                    	<i class="fa fa-cog clickable" (click)="openModal(r)"></i>
+	                    	<i class="fa fa-cog clickable" (click)="openDialogOmezeni(r)"></i>
 	                    	<i class="fa fa-ban text-danger clickable rowHover"></i>
 	                    	<i class="fa fa-remove text-danger clickable rowHover" (click)="odeberPromennou(r)"></i>
 	                    </div>
@@ -43,7 +43,7 @@
                     <div *ngFor="let o of r.omezeni" class="">
                     	<div class="col-sm-1"></div>
 	                	<div class="col-sm-11">
-                    		<span class="operator">{{o.typOmezeni}}</span> {{o.hodnotyOmezeni}}
+                    		<span class="operator">{{o.typOmezeni}}{{o.omezeniProPromennou}}</span> {{o.hodnotyOmezeni}}
                     	</div>
                     </div>
 
@@ -53,28 +53,62 @@
         </div>
         
         
-        <div class="backdrop" [ngStyle]="{'display':display}"></div>
-        <div class="modal" tabindex="-1" role="dialog" [ngStyle]="{'display':display}">
-            <div class="modal-dialog" role="document" *ngIf="vybranaPromenna">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" aria-label="Close" (click)="onCancelHandled()">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                        <h4 class="modal-title">Model Title</h4>
-                    </div>
-                    <div class="modal-body">
-                        <p>Model body text</p>
-                        <input type="text" name="upravenaDomena" [(ngModel)]="vybranaPromenna.domena">
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" (click)="onOKHandled()">OK</button>
-                        <button type="button" class="btn btn-default" (click)="onCancelHandled()">Cancel</button>
-                    </div>
-                </div>
-                <!-- /.modal-content -->
-            </div>
-            <!-- /.modal-dialog -->
+        <div *ngIf="vybranaPromenna">
+	        <div class="backdrop"></div>
+	        <div class="modal" tabindex="-1" role="dialog" style="display: block">
+	            <div class="modal-dialog" role="document">
+	                <div class="modal-content">
+	                    <div class="modal-header">
+	                        <button type="button" class="close" aria-label="Close" (click)="closeDialogOmezeni()">
+	                            <span aria-hidden="true">&times;</span>
+	                        </button>
+	                        <h4 class="modal-title">Model Title</h4>
+	                    </div>
+	                    <div class="modal-body input-form">
+	                        <div *ngFor="let omezeni of vybranaPromenna.omezeni; index as i" class="row">
+	                        	<div *ngIf="!omezeni.omezeniProPromennou">
+	                        		<div class="col-sm-11">
+	                        			<label for="omezeni{{i}}" style="min-width: 3em">{{vybranaPromenna.nazev}} {{omezeni.typOmezeni}}</label>
+	                        		</div>
+		                        	<div class="col-sm-1">
+		                        		<i class="fa fa-remove text-danger clickable rowHover" (click)="odeberOmezeni(vybranaPromenna, omezeni)"></i>
+		                        	</div>
+		                        	
+									<div class="col-sm-12">		                        	
+		                        		<p-multiSelect id="omezeni{{i}}" [(ngModel)]="omezeni.hodnotyOmezeni" [options]="filtrovanePromenne" optionLabel="nazev" maxSelectedLabels="30" required></p-multiSelect>
+		                        	</div>
+		                        </div>
+		                        
+		                        <div *ngIf="omezeni.omezeniProPromennou">
+		                        	<div class="col-sm-11">
+	                        			<label for="omezeni{{i}}" style="min-width: 3em">{{vybranaPromenna.nazev}} {{omezeni.typOmezeni}} {{omezeni.omezeniProPromennou.nazev}}</label>
+	                        		</div>
+		                        	<div class="col-sm-1">
+		                        		<i class="fa fa-remove text-danger clickable rowHover" (click)="odeberOmezeni(vybranaPromenna, omezeni)"></i>
+		                        	</div>
+		                        	
+									<div class="col-sm-12">		                        	
+		                        		<textarea id="omezeni{{i}}" rows="4" [(ngModel)]="omezeni.hodnotyOmezeni" required></textarea>
+		                        	</div>
+		                        </div>
+	                        </div>
+	                        
+	                        <div class="spacer">
+	                        	<p-dropdown #newTypOmezeni [options]="typyOmezeni" placeholder="Typ"></p-dropdown>
+	                        	<p-dropdown [disabled]="!newTypOmezeni.value || jeJednoducheOmezeni(newTypOmezeni.value)" #newCilovaPromenna [options]="filtrovanePromenne" optionLabel="nazev" placeholder="Cil"></p-dropdown>
+	                        	<button type="button" class="btn btn-default" [disabled]="!(newTypOmezeni.value && (jeJednoducheOmezeni(newTypOmezeni.value) || newCilovaPromenna.value))" (click)="pridejOmezeni(vybranaPromenna, newTypOmezeni.value, newCilovaPromenna.value)"><i class="fa fa-plus" ></i> Pøidat omezení</button>
+	                        </div>
+	                    </div>
+	                    
+	                    <div class="modal-footer">
+	                        <button type="button" class="btn btn-default" (click)="submitDialogOmezeni()">OK</button>
+	                        <button type="button" class="btn btn-default" (click)="closeDialogOmezeni()">Cancel</button>
+	                    </div>
+	                </div>
+	                <!-- /.modal-content -->
+	            </div>
+	            <!-- /.modal-dialog -->
+	        </div>
         </div>
         <!-- /.modal !-->
 

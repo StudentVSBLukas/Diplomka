@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import {SelectItem} from 'primeng/api';
 import * as go from 'gojs';
 
-class Promenna {
+export class Promenna {
   nazev;
   domena: Array<Number>;
   omezeni;
@@ -17,28 +18,21 @@ class Promenna {
   vratPrirazenouHodnotu() {
     return this.domena[this.pozice];
   }
-  
-  update (p: Promenna) {
-    if (this.nazev !== p.nazev) {
-      return;
-    }
-    this.domena = p.domena;
-    this.omezeni = p.omezeni;
-  }
 }
 
-class Omezeni {
+export class Omezeni {
+  // TODO predelat na Enum a zmenit i atribut ve tride Omezeni
   typOmezeni;
   hodnotyOmezeni;
   omezeniProPromennou;
-  constructor(typOmezeni, hodnotyOmezeni, omezeniProPromennou) {
+  constructor(typOmezeni: string, hodnotyOmezeni: any[] = [], omezeniProPromennou: string = null) {
     this.typOmezeni = typOmezeni;
     this.hodnotyOmezeni = hodnotyOmezeni;
     this.omezeniProPromennou = omezeniProPromennou;
   }
 }
 
-class KrokAlgoritmu {
+export class KrokAlgoritmu {
   promenna;
   nazev;
   hodnota;
@@ -48,9 +42,6 @@ class KrokAlgoritmu {
   hodnotaDomenKroku = new Array();
 };
 
-interface ListPromennych {
-  promenna: Array<Promenna>;
-}
 
 @Component({
   selector: 'app-main-page',
@@ -63,15 +54,25 @@ export class MainPageComponent implements OnInit {
   pocetReseni;
 
   listPromennych = [];
+  
+  // TODO Modalni dialog komponenta
   vybranaPromenna;
+  filtrovanePromenne;
+
   index;
   selectedAlgorithm = 'Backtracking';
-  display = 'none';
+  typyOmezeni = [
+    {label: '<', value: '<'},
+    {label: '>', value: '>'},
+    {label: '==', value: '=='},
+    {label: '!=', value: '!='},
+    {label: 'p', value: 'p'},
+    {label: 'z', value: 'z'}
+  ];
+  
 
   postup;
   graf;
-
-  numberPattern = new RegExp('^[\\d,]+');
 
   constructor() { }
 
@@ -82,8 +83,8 @@ export class MainPageComponent implements OnInit {
     }
 
     const a = this.listPromennych[0];
-    const ogt = new Omezeni('<', 'B', null);
-    const one = new Omezeni('!=', 'C', null);
+    const ogt = new Omezeni('<', ['B'], null);
+    const one = new Omezeni('!=', ['C'], null);
     const op = new Omezeni('p', [[4, 5], [2, 1]], 'B');
     a.omezeni = [ogt, one, op];
 
@@ -107,23 +108,88 @@ export class MainPageComponent implements OnInit {
       this.listPromennych.splice(index, 1);
     }
   }
-
-  openModal(p: Promenna) {
-    this.vybranaPromenna = { ...p}; // Object.assign({}, p);
-    this.display = 'block';
+  
+  openDialogOmezeni(promenna: Promenna) {
+    this.vybranaPromenna = this.prevedPromennou(promenna);
+    this.filtrovanePromenne = this.listPromennych.filter(
+      (p: Promenna) => p.nazev !== this.vybranaPromenna.nazev
+    );
   }
 
-  onOKHandled() {
-    const self = this;
-    this.listPromennych.forEach(function(item) {
-      item.update(self.vybranaPromenna);
-    });
+  submitDialogOmezeni() {
+    const promenna = this._valueOf(this.listPromennych, this.vybranaPromenna.nazev);
+    this.upravPromennou(promenna, this.vybranaPromenna);
+
     this.vybranaPromenna = null;
-    this.display = 'none';
   }
-  onCancelHandled() {
+  
+  closeDialogOmezeni() {
     this.vybranaPromenna = null;
-    this.display = 'none';
+  }
+  
+  // TODO presunout na Promennou (spravny typ na vybranaPromenna)
+  odeberOmezeni(promenna: Promenna, omezeni: Omezeni) {
+    const index = promenna.omezeni.indexOf(omezeni);
+    if (index !== -1) {
+      promenna.omezeni.splice(index, 1);
+    }
+  }
+  
+  pridejOmezeni(promenna: Promenna, typ: string, cilovaPromenna: Promenna) {
+    const omezeni = new Omezeni(typ);
+    omezeni.omezeniProPromennou = cilovaPromenna;
+    promenna.omezeni.push(omezeni);
+  }
+
+  // Promenna Converter class
+  prevedPromennou(p: Promenna) {
+    const vysledek = Object.assign({}, p);
+
+    vysledek.omezeni = p.omezeni.map( function(item) {
+      const o =  Object.assign({}, item);
+      
+      if (this.jeJednoducheOmezeni(o.typOmezeni)) {
+        o.hodnotyOmezeni = item.hodnotyOmezeni.map(
+          (hodnota: string) => this._valueOf(this.listPromennych, hodnota)
+        );
+      } else {
+        o.hodnotyOmezeni = item.hodnotyOmezeni.join(' ');
+        o.omezeniProPromennou = this._valueOf(this.listPromennych, item.omezeniProPromennou);
+      }
+      
+      return o;
+    }, this);
+
+    return vysledek;
+  }
+  
+  upravPromennou(original: Promenna, cil: Promenna) {
+    Object.assign(original, cil);
+
+    original.omezeni = cil.omezeni.map( function(item) {
+      const o =  Object.assign({}, item);
+      
+      if (this.jeJednoducheOmezeni(o.typOmezeni)) {
+        o.hodnotyOmezeni = item.hodnotyOmezeni.map(
+          (promenna: Promenna) => promenna.nazev
+        );
+      } else {
+        const dvojiceHodnot = item.hodnotyOmezeni.match(/\s*(\d+\s*,\s*\d+)/g);
+        o.hodnotyOmezeni = dvojiceHodnot.map(
+          (dvojice: string) => dvojice.split(',').map(Number)
+        );
+        o.omezeniProPromennou = item.omezeniProPromennou.nazev;
+      }
+      
+      return o;
+    }, this);
+
+    return original;
+  }
+  
+  // TODO zbavit se tohoto - upravit patricne atributy omezeni
+  jeJednoducheOmezeni(typOmezeni: string) {
+    return typOmezeni === '<' || typOmezeni === '>' || typOmezeni === '==' || typOmezeni === '!=';
   }
 
   generateIdentifier() {
@@ -1564,19 +1630,19 @@ export class MainPageComponent implements OnInit {
     });
 
     const nextFunction = function () {
-      const modelManager = self.graf.model.undoManager; 
+      const modelManager = self.graf.model.undoManager;
       if (modelManager.canRedo()) {
         modelManager.redo();
         return;
       }
-      
+
       const krok = modelManager.historyIndex + 1;
         if (krok === self.postup.length) {
             return;
         }
 
         const node = self.postup[krok];
-      
+
         myDiagram.startTransaction('make new node');
         myDiagram.model.addNodeData({key: (krok + 1), parent: node.rodic, name: node.hodnota, end: node.stav, title: node.nazev});
         for (var i = 0; i < node.hodnotaDomenKroku.length; i++) {
@@ -1585,16 +1651,16 @@ export class MainPageComponent implements OnInit {
         document.getElementById('krok').innerHTML = node.popis;
         myDiagram.commitTransaction('make new node');
     };
-    
+
     document.getElementById('next').addEventListener('click', nextFunction);
     document.getElementById('next10').addEventListener('click', function () {
         for (var i = 0; i < 10; i++) {
             nextFunction();
         }
     });
-    
+
     var prevFunction = function () {
-      const modelManager = self.graf.model.undoManager; 
+      const modelManager = self.graf.model.undoManager;
       if (modelManager.canUndo()) {
         modelManager.undo();
         return;
@@ -1620,7 +1686,7 @@ export class MainPageComponent implements OnInit {
     const nodeDataArray = [{key: 0, name: 'root'}];
     this.graf.model = new go.TreeModel(nodeDataArray);
   }
-  
+
   // TODO directive
   convertFromString(value: string) {
     const result =  value.split(',').map(function(item, index, array) {
@@ -1628,16 +1694,23 @@ export class MainPageComponent implements OnInit {
       if (!isNaN(converted)) {
         return converted;
       }
-      
+
       if (index === array.length - 1 && item === '-') {
         return item;
       }
-      
+
       return null;
     }).filter(function(item, index, array) {
       return item || (index === array.length - 1);
     });
-    
+
     return result;
+  }
+  
+  // TODO vyresit jinak
+  toSelectItems(pole: Array<string>) {
+    return pole.map(function(hodnota: string) {
+      return  {label: hodnota, value: hodnota};
+    });
   }
 }

@@ -180,3 +180,15 @@
   outline-color: #a94442;
 
 }
+
+.input-form label {
+	min-width: 3em;
+}
+
+.input-form input, .input-form textarea, /deep/ .input-form .ui-multiselect {
+	width: 100%;
+}
+
+.spacer {
+	margin-top: 2em;
+}
