@@ -12,8 +12,8 @@ import { NumbersConvertorDirective } from './convertor/numbersconvertor.directiv
 import { PromennaComponent } from './promenna/promenna.component';
 import { FormsModule } from '@angular/forms';
 import { DropdownModule } from 'primeng/dropdown';
+import {InputTextareaModule} from 'primeng/inputtextarea';
 import { MultiSelectModule } from 'primeng/multiselect';
-import { OmezeniPromenneComponent } from './omezeni-promenne/omezeni-promenne.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 
@@ -25,7 +25,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     BackjumpingComponent,
     PromennaComponent,
     NumbersConvertorDirective,
-    OmezeniPromenneComponent,
   ],
   imports: [
     BrowserModule,
@@ -34,6 +33,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     FormsModule,
     HttpModule,
     DropdownModule,
+    InputTextareaModule,
     MultiSelectModule,
   ],
   providers: [],

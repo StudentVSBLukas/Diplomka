@@ -172,13 +172,9 @@
 	background-color: LightGray;
 }
 
-.ng-invalid:not(form)  {
-/*   border-left: 5px solid #a94442; */
-}
-
-.ng-invalid:not(form):focus  {
-  outline-color: #a94442;
-
+/deep/ .ui-inputtext.ng-dirty.ng-invalid, /deep/ p-dropdown.ng-dirty.ng-invalid > .ui-dropdown, /deep/ p-multiselect.ng-dirty.ng-invalid > .ui-multiselect {
+	border-left-color: #f44336;
+    border-bottom-color: #f44336;
 }
 
 .input-form label {

@@ -58,9 +58,6 @@ export class MainPageComponent implements OnInit {
   // TODO Modalni dialog komponenta
   vybranaPromenna;
   filtrovanePromenne;
-
-  index;
-  selectedAlgorithm = 'Backtracking';
   typyOmezeni = [
     {label: '<', value: '<'},
     {label: '>', value: '>'},
@@ -69,6 +66,8 @@ export class MainPageComponent implements OnInit {
     {label: 'p', value: 'p'},
     {label: 'z', value: 'z'}
   ];
+
+  selectedAlgorithm = 'Backtracking';
   
 
   postup;
@@ -114,6 +113,10 @@ export class MainPageComponent implements OnInit {
     this.filtrovanePromenne = this.listPromennych.filter(
       (p: Promenna) => p.nazev !== this.vybranaPromenna.nazev
     );
+  }
+  
+  resetDialogOmezeni() {
+    this.openDialogOmezeni(this._valueOf(this.listPromennych, this.vybranaPromenna.nazev));
   }
 
   submitDialogOmezeni() {
@@ -1707,10 +1710,8 @@ export class MainPageComponent implements OnInit {
     return result;
   }
   
-  // TODO vyresit jinak
-  toSelectItems(pole: Array<string>) {
-    return pole.map(function(hodnota: string) {
-      return  {label: hodnota, value: hodnota};
-    });
+  // TODO odstranit
+  debug(o: any) {
+    return true;
   }
 }

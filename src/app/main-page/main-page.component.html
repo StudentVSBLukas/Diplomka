@@ -62,35 +62,53 @@
 	                        <button type="button" class="close" aria-label="Close" (click)="closeDialogOmezeni()">
 	                            <span aria-hidden="true">&times;</span>
 	                        </button>
-	                        <h4 class="modal-title">Model Title</h4>
+	                        <h4 class="modal-title">Omezení promìnné {{vybranaPromenna.nazev}}</h4>
 	                    </div>
+	                    <form  (ngSubmit)="submitDialogOmezeni()" #omezeniForm="ngForm">
 	                    <div class="modal-body input-form">
-	                        <div *ngFor="let omezeni of vybranaPromenna.omezeni; index as i" class="row">
+	                        <div *ngFor="let omezeni of vybranaPromenna.omezeni; index as i" class="row form-group">
 	                        	<div *ngIf="!omezeni.omezeniProPromennou">
-	                        		<div class="col-sm-11">
-	                        			<label for="omezeni{{i}}" style="min-width: 3em">{{vybranaPromenna.nazev}} {{omezeni.typOmezeni}}</label>
+	                        		<div [class]="hodnotaOmezeni.invalid && (hodnotaOmezeni.dirty || hodnotaOmezeni.touched) ? 'text text-danger' : ''">
+		                        		<div class="col-sm-1">
+		                        			<label for="omezeni{{i}}">{{vybranaPromenna.nazev}} {{omezeni.typOmezeni}}</label>
+		                        		</div>
+		                        		<div class="col-sm-10">
+		                        			<span *ngIf="hodnotaOmezeni.invalid && (hodnotaOmezeni.dirty || hodnotaOmezeni.touched)">
+		                        				Hodnota je povinná
+		                        			</span>
+		                        		</div>
 	                        		</div>
 		                        	<div class="col-sm-1">
 		                        		<i class="fa fa-remove text-danger clickable rowHover" (click)="odeberOmezeni(vybranaPromenna, omezeni)"></i>
 		                        	</div>
 		                        	
 									<div class="col-sm-12">		                        	
-		                        		<p-multiSelect id="omezeni{{i}}" [(ngModel)]="omezeni.hodnotyOmezeni" [options]="filtrovanePromenne" optionLabel="nazev" maxSelectedLabels="30" required></p-multiSelect>
+		                        		<p-multiSelect id="omezeni{{i}}" name="omezeni{{i}}" #hodnotaOmezeni="ngModel" [(ngModel)]="omezeni.hodnotyOmezeni" [options]="filtrovanePromenne" optionLabel="nazev" maxSelectedLabels="30" required></p-multiSelect>
 		                        	</div>
 		                        </div>
 		                        
-		                        <div *ngIf="omezeni.omezeniProPromennou">
-		                        	<div class="col-sm-11">
-	                        			<label for="omezeni{{i}}" style="min-width: 3em">{{vybranaPromenna.nazev}} {{omezeni.typOmezeni}} {{omezeni.omezeniProPromennou.nazev}}</label>
+		                        <div *ngIf="omezeni.omezeniProPromennou" class="form-group">
+		                        	<div class="col-sm-1">
+	                        			<label for="omezeni{{i}}">{{vybranaPromenna.nazev}} {{omezeni.typOmezeni}} {{omezeni.omezeniProPromennou.nazev}}</label>
+	                        		</div>
+	                        		<div class="col-sm-10">
+	                        			<span *ngIf="domenaOmezeni.invalid && (domenaOmezeni.dirty || domenaOmezeni.touched)" class="text text-danger">
+	                        				<span *ngIf="domenaOmezeni.errors.required">Hodnota je povinná</span>
+	                        				<span *ngIf="domenaOmezeni.errors.pattern">Je možné zadat pouze dvojice èísel oddìlené mezerou</span>
+	                        			</span>
 	                        		</div>
 		                        	<div class="col-sm-1">
 		                        		<i class="fa fa-remove text-danger clickable rowHover" (click)="odeberOmezeni(vybranaPromenna, omezeni)"></i>
 		                        	</div>
 		                        	
 									<div class="col-sm-12">		                        	
-		                        		<textarea id="omezeni{{i}}" rows="4" [(ngModel)]="omezeni.hodnotyOmezeni" required></textarea>
+		                        		<textarea id="omezeni{{i}}" name="omezeni{{i}}" #domenaOmezeni="ngModel" pInputTextarea rows="4" [(ngModel)]="omezeni.hodnotyOmezeni" required pattern="^(\s*\d+\s*,\s*\d+\s*)*$"></textarea>
 		                        	</div>
 		                        </div>
+	                        </div>
+	                        
+	                        <div *ngIf="vybranaPromenna.omezeni?.length === 0" class="row form-group">
+	                        	Promìnná nemá žádné omezení. Pøidejte jej níže.
 	                        </div>
 	                        
 	                        <div class="spacer">
@@ -101,9 +119,11 @@
 	                    </div>
 	                    
 	                    <div class="modal-footer">
-	                        <button type="button" class="btn btn-default" (click)="submitDialogOmezeni()">OK</button>
-	                        <button type="button" class="btn btn-default" (click)="closeDialogOmezeni()">Cancel</button>
+	                        <button type="submit" class="btn btn-success" [disabled]="!omezeniForm.form.valid">Uložit</button>
+	                        <button type="button" class="btn btn-danger" (click)="resetDialogOmezeni()">Vrátit</button>
+	                        <button type="button" class="btn btn-default" (click)="closeDialogOmezeni()">Zrušit</button>
 	                    </div>
+	                    </form>
 	                </div>
 	                <!-- /.modal-content -->
 	            </div>
