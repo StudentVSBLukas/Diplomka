@@ -70,7 +70,7 @@
 	                        	<div *ngIf="!omezeni.omezeniProPromennou">
 	                        		<div [class]="hodnotaOmezeni.invalid && (hodnotaOmezeni.dirty || hodnotaOmezeni.touched) ? 'text text-danger' : ''">
 		                        		<div class="col-sm-1">
-		                        			<label for="omezeni{{i}}">{{vybranaPromenna.nazev}} {{omezeni.typOmezeni}}</label>
+		                        			<label for="omezeni{{omezeni.id}}">{{vybranaPromenna.nazev}} {{omezeni.typOmezeni}}</label>
 		                        		</div>
 		                        		<div class="col-sm-10">
 		                        			<span *ngIf="hodnotaOmezeni.invalid && (hodnotaOmezeni.dirty || hodnotaOmezeni.touched)">
@@ -83,13 +83,13 @@
 		                        	</div>
 		                        	
 									<div class="col-sm-12">		                        	
-		                        		<p-multiSelect id="omezeni{{i}}" name="omezeni{{i}}" #hodnotaOmezeni="ngModel" [(ngModel)]="omezeni.hodnotyOmezeni" [options]="filtrovanePromenne" optionLabel="nazev" maxSelectedLabels="30" required></p-multiSelect>
+		                        		<p-multiSelect id="omezeni{{omezeni.id}}" name="omezeni{{omezeni.id}}" #hodnotaOmezeni="ngModel" [(ngModel)]="omezeni.hodnotyOmezeni" [options]="filtrovanePromenne" optionLabel="nazev" maxSelectedLabels="30" required></p-multiSelect>
 		                        	</div>
 		                        </div>
 		                        
 		                        <div *ngIf="omezeni.omezeniProPromennou" class="form-group">
 		                        	<div class="col-sm-1">
-	                        			<label for="omezeni{{i}}">{{vybranaPromenna.nazev}} {{omezeni.typOmezeni}} {{omezeni.omezeniProPromennou.nazev}}</label>
+	                        			<label for="omezeni{{omezeni.id}}">{{vybranaPromenna.nazev}} {{omezeni.typOmezeni}} {{omezeni.omezeniProPromennou.nazev}}</label>
 	                        		</div>
 	                        		<div class="col-sm-10">
 	                        			<span *ngIf="domenaOmezeni.invalid && (domenaOmezeni.dirty || domenaOmezeni.touched)" class="text text-danger">
@@ -102,7 +102,7 @@
 		                        	</div>
 		                        	
 									<div class="col-sm-12">		                        	
-		                        		<textarea id="omezeni{{i}}" name="omezeni{{i}}" #domenaOmezeni="ngModel" pInputTextarea rows="4" [(ngModel)]="omezeni.hodnotyOmezeni" required pattern="^(\s*\d+\s*,\s*\d+\s*)*$"></textarea>
+		                        		<textarea id="omezeni{{omezeni.id}}" name="omezeni{{omezeni.id}}" #domenaOmezeni="ngModel" pInputTextarea rows="4" [(ngModel)]="omezeni.hodnotyOmezeni" required pattern="^(\s*\d+\s*,\s*\d+\s*)*$"></textarea>
 		                        	</div>
 		                        </div>
 	                        </div>
@@ -119,6 +119,7 @@
 	                    </div>
 	                    
 	                    <div class="modal-footer">
+	                        <button type="button" class="btn btn-danger" (click)="debug(omezeniForm)">Debug</button>
 	                        <button type="submit" class="btn btn-success" [disabled]="!omezeniForm.form.valid">Uložit</button>
 	                        <button type="button" class="btn btn-danger" (click)="resetDialogOmezeni()">Vrátit</button>
 	                        <button type="button" class="btn btn-default" (click)="closeDialogOmezeni()">Zrušit</button>

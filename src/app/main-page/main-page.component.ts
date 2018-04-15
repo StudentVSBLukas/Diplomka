@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {SelectItem} from 'primeng/api';
 import * as go from 'gojs';
 
+
 export class Promenna {
   nazev;
   domena: Array<Number>;
@@ -21,11 +22,15 @@ export class Promenna {
 }
 
 export class Omezeni {
+  static id_sequence = 0;
+  
   // TODO predelat na Enum a zmenit i atribut ve tride Omezeni
+  id;
   typOmezeni;
   hodnotyOmezeni;
   omezeniProPromennou;
   constructor(typOmezeni: string, hodnotyOmezeni: any[] = [], omezeniProPromennou: string = null) {
+    this.id = Omezeni.id_sequence++;
     this.typOmezeni = typOmezeni;
     this.hodnotyOmezeni = hodnotyOmezeni;
     this.omezeniProPromennou = omezeniProPromennou;
@@ -81,15 +86,12 @@ export class MainPageComponent implements OnInit {
       this.listPromennych.push(new Promenna(this.generateIdentifier(), [i + 1, i + 2, i + 4], null));
     }
 
+    // TODO odstranit zakladni nastaveni vstupu
     const a = this.listPromennych[0];
     const ogt = new Omezeni('<', ['B'], null);
     const one = new Omezeni('!=', ['C'], null);
     const op = new Omezeni('p', [[4, 5], [2, 1]], 'B');
     a.omezeni = [ogt, one, op];
-
-
-    this.backtracking(3, this.listPromennych);
-    this.initGraph();
   }
 
   algorithmSelect(event: any) {
@@ -219,6 +221,8 @@ export class MainPageComponent implements OnInit {
 
 
   run() {
+    this._resetStavPromennych();
+    
     switch (this.selectedAlgorithm) {
       case 'Backtracking' : this.backtracking(1, this.listPromennych); break;
       case 'Backjumping' : this.backjumping(1, this.listPromennych); break;
@@ -1688,6 +1692,13 @@ export class MainPageComponent implements OnInit {
   reloadGraph() {
     const nodeDataArray = [{key: 0, name: 'root'}];
     this.graf.model = new go.TreeModel(nodeDataArray);
+  }
+  
+  _resetStavPromennych() {
+    this.listPromennych.forEach( function(item: Promenna){
+      item.pozice = -1;
+      item.zalohaDomeny = [];
+    });
   }
 
   // TODO directive
