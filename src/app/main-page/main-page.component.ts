@@ -999,6 +999,8 @@ export class MainPageComponent implements OnInit {
         zpracovavanaPromenna.pozice = -1;
         zpracovavanaPromenna.domena = zpracovavanaPromenna.zalohaDomeny.slice();
         promenna--;
+        const vracenaPromenna = seznamPromennych[promenna];
+        if (vracenaPromenna) { vracenaPromenna.domena.splice(vracenaPromenna.pozice, 1); }
         continue;
       }
 
@@ -1011,15 +1013,16 @@ export class MainPageComponent implements OnInit {
       postupTvoreniGrafu.push(krokAlgoritmu);
 
       var splneniOmezeni = this._porovnej(zpracovavanaPromenna, seznamPromennych);
-      zpracovavanaPromenna.domena.splice(zpracovavanaPromenna.pozice, 1);
       if (splneniOmezeni.length > 0) {
         krokAlgoritmu.popis += splneniOmezeni;
         krokAlgoritmu.stav = 'deadend';
+        zpracovavanaPromenna.domena.splice(zpracovavanaPromenna.pozice, 1);
       } else {
         if (promenna === (seznamPromennych.length - 1)) {
           pocetReseni++;
           krokAlgoritmu.stav = 'reseni';
           krokAlgoritmu.popis = 'NALEZENO Ĺ�EĹ ENĂŤ';
+          zpracovavanaPromenna.domena.splice(zpracovavanaPromenna.pozice, 1);
         } else {
           promenna++;
         }
