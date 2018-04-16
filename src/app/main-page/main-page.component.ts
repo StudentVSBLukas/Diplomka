@@ -247,11 +247,13 @@ export class MainPageComponent implements OnInit {
     );
     
     switch (this.selectedAlgorithm) {
-      case 'Backtracking' : this.backtracking(this.pocetReseni, zadani); break;
-      case 'Backjumping' : this.backjumping(this.pocetReseni, zadani); break;
-      case 'Forward Check' : this.forwardChecking(this.pocetReseni, zadani); break;
-      case 'Arc Consistency' : this.arcConsistency(this.pocetReseni, zadani); break;
-      // TODO constraint recording implementation case 'Constraint Recording' : this.(1, this.listPromennych); break;
+      case 'Backtracking' : this.postup = this.backtracking(this.pocetReseni, zadani); break;
+      case 'Backjumping' : this.postup = this.backjumping(this.pocetReseni, zadani); break;
+      case 'Forward Check' : this.postup = this.forwardChecking(this.pocetReseni, zadani); break;
+      case 'Arc Consistency' : this.postup = this.arcConsistency(this.pocetReseni, zadani); break;
+      case 'Random' : this.postup = this.randomBacktracking(this.pocetReseni, zadani); break;
+      case 'Dynamic order' : this.postup = this.dynamicOrderBacktracking(this.pocetReseni, zadani); break;
+      case 'iConsistency' : this.postup = this.iConsistency(this.pocetReseni, 3, zadani); break; // TODO vyresit iPocet
       default:
     }
 
@@ -304,8 +306,7 @@ export class MainPageComponent implements OnInit {
       }
 
     }
-    //smazat
-    this.postup=postupTvoreniGrafu;
+
     return postupTvoreniGrafu;
   }
 
@@ -965,7 +966,7 @@ export class MainPageComponent implements OnInit {
     return seznamPromennych;
   }
 
-  randomBacktracking(pozadovanychReseni, seznamPromennych) {
+  randomBacktracking(pozadovanychReseni, seznamPromennych: Array<Promenna>) {
 // TODO Test ze zadani
 //    seznamPromennych = [];
 //    // seznamPromennych.push(new Promenna("A", [1,2,3,4,5], []))
@@ -982,6 +983,11 @@ export class MainPageComponent implements OnInit {
 //    seznamPromennych[3].zalohaDomeny = seznamPromennych[3].domena.slice();
 //    seznamPromennych[4].zalohaDomeny = seznamPromennych[4].domena.slice();
     this._prevodOmezeni(seznamPromennych);
+    
+    // Zaloha domeny - vzdy se vracime k vstupnimu stavu
+    seznamPromennych.forEach(
+      (p: Promenna) => p.zalohaDomeny = p.domena.slice() 
+    );
 
     var postupTvoreniGrafu = new Array();
     var pocetReseni = 0;
