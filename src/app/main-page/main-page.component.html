@@ -1,17 +1,8 @@
 <div>
     <div id="menu" class="border container-fluid">
-        <form id="nastaveni">
-            <h3>NastavenÌ</h3>
-            <div class="gridNastaveni">
-                <label for="pocetReseni">Poƒçet ≈ôe≈°en√≠</label>
-                <input id="pocetReseni" type="number" name="pocetReseni" [(ngModel)]="pocetReseni" #pocetReseniControl="ngModel" required min="1" />
-            </div>
-        </form>
-
-        <hr>
         <div id="vstupy">
         	<div class="row-layout">
-        		<h3>Promƒõnn√©</h3>
+        		<h3>Zad·nÌ</h3>
         		<i class="fa fa-fw fa-plus clickable" (click)="pridejPromennou()"></i>
         	</div>
             
@@ -28,7 +19,7 @@
 	                    <div class="col-sm-1"></div>
 	                	<div class="col-sm-11">
 	                     	 <span class="operator">=</span> &#123;
-	                     	 <input name="domena{{r.nazev}}" [(ngModel)]="r.domena" required pattern="^(-?\d+,? ?)*-?\d+$" #domenaControl="ngModel" />
+	                     	 <input name="domena{{r.nazev}}" [(ngModel)]="r.domena" required numbersConvertor pattern="^(-?\d+,? ?)*-?\d+$" #domenaControl="ngModel" />
 	                     	 &#125;
 	                    </div>
 	                    <div class="clearfix"></div>
@@ -51,9 +42,33 @@
                 </div>
             </form>
         </div>
+
+        <hr>
+        <h3>Proveden√≠</h3>
+        <div class="gridAlgoritmu">
+        	<label for="pocetReseni">PoËet ¯eöenÌ</label>
+            <input id="pocetReseni" type="number" name="pocetReseni" [(ngModel)]="pocetReseni" #pocetReseniControl="ngModel" min="0" placeholder="NeomezenÏ" />
+            
+            <label for="vyberAlgoritmu">Algoritmus</label>
+            <select class="vyberAlgoritmu" [(ngModel)]="selectedAlgorithm">
+                <option value="Backtracking">Backtracking</option>
+                <option value="Backjumping">Backjumping</option>
+                <option value="Forward Check">Forward Check</option>
+                <option value="Arc Consistency">Arc Consistency</option>
+                <option value="Constraint Recording">Constraint Recording</option>
+            </select>
+            <button (click)="run()">Spocti</button>
+        </div>
         
-        
-        <div *ngIf="vybranaPromenna">
+<!-- TODO Co s tim? -->
+<!--         <p id="vykonanyAlgoritmus">&nbsp;</p> -->
+<!--         <div class="border" style="height: 30%"> -->
+<!--                 <app-algoritm [pocetPromennych]="pocetPromennych" *ngIf="(selectedAlgorithm=='Backtracking')"></app-algoritm> -->
+<!--             <app-backjumping *ngIf="(selectedAlgorithm=='Backjumping')"></app-backjumping> -->
+<!--         </div> -->
+    </div>
+    
+    <div *ngIf="vybranaPromenna">
 	        <div class="backdrop"></div>
 	        <div class="modal" tabindex="-1" role="dialog" style="display: block">
 	            <div class="modal-dialog" role="document">
@@ -133,36 +148,8 @@
 	        </div>
         </div>
         <!-- /.modal !-->
-
-        <div id="algoritmy">
-        </div>
-
-        <div id="dynamic"></div>
-
-        <hr>
-        <h3>Proveden√≠</h3>
-        <div class="gridAlgoritmu">
-            <select class="select" (change)="algorithmSelect($event)">
-                <option value="Backtracking">Backtracking</option>
-                <option value="Backjumping">Backjumping</option>
-                <option value="Forward Check">Forward Check</option>
-                <option value="Arc Consistency">Arc Consistency</option>
-                <option value="Constraint Recording">Constraint Recording</option>
-            </select>
-            <button (click)="run()">Spocti</button>
-            <!-- <input type="submit" value="backtracking" onclick="Backtracking.spusteni('backtracking')" />
-            <input type="submit" value="backjumping" onclick="Backtracking.spusteni('backjumping')" />
-            <input type="submit" value="forward check" onclick="Backtracking.spusteni('forwardChecking')" />
-            <input type="submit" value="arc consistency" onclick="Backtracking.spusteni('arcConsistency')" />
-            <input type="submit" value="constraintRecording" onclick="Backtracking.spusteni('constraintRecording')" />
-            -->
-        </div>
-        <p id="vykonanyAlgoritmus">&nbsp;</p>
-        <div class="border" style="height: 30%">
-                <app-algoritm [pocetPromennych]="pocetPromennych" *ngIf="(selectedAlgorithm=='Backtracking')"></app-algoritm>
-            <app-backjumping *ngIf="(selectedAlgorithm=='Backjumping')"></app-backjumping>
-        </div>
-    </div>
+        
+        
     <div id="graf" class="border table-layout">
         <div id="myDiagramDiv" style="width: 100%; height: 600px"></div>
 

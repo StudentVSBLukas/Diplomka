@@ -10,7 +10,7 @@ export class Promenna {
   aktivni: boolean;
   pozice;
   zalohaDomeny;
-  constructor(nazev, domena, omezeni: Omezeni[] = []) {
+  constructor(nazev, domena: number[] = [], omezeni: Omezeni[] = []) {
     this.nazev = nazev;
     this.domena = domena || [];
     this.omezeni = omezeni || [];
@@ -23,7 +23,10 @@ export class Promenna {
   }
   
   clone(): Promenna {
-    const clone = new Promenna(this.nazev, this.domena);
+    const clone = new Promenna(this.nazev);
+    clone.domena = this.domena.map(
+      promenna => promenna
+    );
     clone.omezeni = this.omezeni.map( function(omezeni) {
       const cloneOmezeni = Object.assign({}, omezeni);
       cloneOmezeni.hodnotyOmezeni = omezeni.hodnotyOmezeni.map(
@@ -112,10 +115,6 @@ export class MainPageComponent implements OnInit {
     a.omezeni = [ogt, one, op];
     
     this.initGraph();
-  }
-
-  algorithmSelect(event: any) {
-    this.selectedAlgorithm = event.target.value;
   }
 
   pridejPromennou() {
@@ -248,10 +247,10 @@ export class MainPageComponent implements OnInit {
     );
     
     switch (this.selectedAlgorithm) {
-      case 'Backtracking' : this.backtracking(1, zadani); break;
-      case 'Backjumping' : this.backjumping(1, zadani); break;
-      case 'Forward Check' : this.forwardChecking(1, zadani); break;
-      case 'Arc Consistency' : this.arcConsistency(1, zadani); break;
+      case 'Backtracking' : this.backtracking(this.pocetReseni, zadani); break;
+      case 'Backjumping' : this.backjumping(this.pocetReseni, zadani); break;
+      case 'Forward Check' : this.forwardChecking(this.pocetReseni, zadani); break;
+      case 'Arc Consistency' : this.arcConsistency(this.pocetReseni, zadani); break;
       // TODO constraint recording implementation case 'Constraint Recording' : this.(1, this.listPromennych); break;
       default:
     }
@@ -261,18 +260,19 @@ export class MainPageComponent implements OnInit {
 
 
   backtracking(pozadovanychReseni, seznamPromennych) {
+// TODO Test ze zadani
 //    seznamPromennych = [];
 //    seznamPromennych.push(new Promenna('A', [1, 5], []));
 //    seznamPromennych.push(new Promenna('B', [4, 2], [new Omezeni('p', [[4, 5], [2, 1]], 'A')]));
 //    seznamPromennych.push(new Promenna('C', [3], [new Omezeni('>', ['A', 'B'], null)]));
 //    seznamPromennych.push(new Promenna('D', [4], [new Omezeni('p', [[4, 5], [4, 1]], 'A'), new Omezeni('p', [[4, 4]], 'B')]));
 //    seznamPromennych.push(new Promenna('E', [5], [new Omezeni('>', ['A'], null)]));
-     this._prevodOmezeni(seznamPromennych);
+    this._prevodOmezeni(seznamPromennych);
 
     var postupTvoreniGrafu = new Array();
     var pocetReseni = 0;
     var promenna = 0;
-    while (promenna >= 0 && pocetReseni < pozadovanychReseni) {
+    while (promenna >= 0 && (!pozadovanychReseni || pocetReseni < pozadovanychReseni)) {
       var zpracovavanaPromenna = seznamPromennych[promenna];
       zpracovavanaPromenna.pozice++;
       if (zpracovavanaPromenna.pozice > zpracovavanaPromenna.domena.length - 1) {
@@ -310,6 +310,7 @@ export class MainPageComponent implements OnInit {
   }
 
   backjumping(pozadovanychReseni, seznamPromennych) {
+// TODO Test ze zadani
 //    seznamPromennych = [];
 //    seznamPromennych.push(new Promenna('A', [1, 4], []));
 //    seznamPromennych.push(new Promenna('B', [2], []));
@@ -317,7 +318,7 @@ export class MainPageComponent implements OnInit {
 //    seznamPromennych.push(new Promenna('D', [4], [new Omezeni('=', ['A'], null)]));
 //    seznamPromennych.push(new Promenna('E', [5], []));
 
-    //    this._prevodOmezeni(seznamPromennych);
+    this._prevodOmezeni(seznamPromennych);
 
     var leafend = new Array();
     for (var i = 0; i < seznamPromennych.length; i++) {
@@ -326,7 +327,7 @@ export class MainPageComponent implements OnInit {
     var postupTvoreniGrafu = new Array();
     var pocetReseni = 0;
     var promenna = 0;
-    while (pocetReseni < pozadovanychReseni) {
+    while ((!pozadovanychReseni || pocetReseni < pozadovanychReseni)) {
       var zpracovavanaPromenna = seznamPromennych[promenna];
       if (promenna === 0) {
         zpracovavanaPromenna.pozice++;
@@ -414,6 +415,7 @@ export class MainPageComponent implements OnInit {
   }
 
   forwardChecking(pozadovanychReseni, seznamPromennych) {
+// TODO Test ze zadani
 //    seznamPromennych = [];
 //    seznamPromennych.push(new Promenna('A', [5, 4], []));
 //    seznamPromennych.push(new Promenna('B', [2], []));
@@ -421,7 +423,7 @@ export class MainPageComponent implements OnInit {
 //    seznamPromennych.push(new Promenna('D', [4], []));
 //    seznamPromennych.push(new Promenna('E', [1, 2, 3, 4, 5], [new Omezeni('=', ['A', 'D'], null)]));
 
-    // this._prevodOmezeni(seznamPromennych);
+    this._prevodOmezeni(seznamPromennych);
 
     var vstup = new Array();
     for (var i = 0; i < seznamPromennych.length; i++) {
@@ -431,7 +433,7 @@ export class MainPageComponent implements OnInit {
     var postupTvoreniGrafu = new Array();
     var pocetReseni = 0;
     var promenna = 0;
-    while (promenna >= 0 && pocetReseni < pozadovanychReseni) {
+    while (promenna >= 0 && (!pozadovanychReseni || pocetReseni < pozadovanychReseni)) {
       var hodnotyDomen = new Array();
       var zpracovavanaPromenna = seznamPromennych[promenna];
       zpracovavanaPromenna.pozice++;
@@ -635,6 +637,7 @@ export class MainPageComponent implements OnInit {
   }
 
   arcConsistency(pozadovanychReseni, seznamPromennych) {
+// TODO Test ze zadani
 //    seznamPromennych = [];
 //    seznamPromennych.push(new Promenna('A', [5], []));
 //    // seznamPromennych.push(new Promenna("A", [5, 4], []))
@@ -646,7 +649,7 @@ export class MainPageComponent implements OnInit {
 //    seznamPromennych.push(new Promenna('E', [4, 5], [new Omezeni('z', [[5, 5]], 'A'), new Omezeni('z', [[4, 4]], 'D')]));
 
 
-    // this._prevodOmezeni(seznamPromennych);
+    this._prevodOmezeni(seznamPromennych);
 
     var vstup = new Array();
     for (var i = 0; i < seznamPromennych.length; i++) {
@@ -963,25 +966,27 @@ export class MainPageComponent implements OnInit {
   }
 
   randomBacktracking(pozadovanychReseni, seznamPromennych) {
-    seznamPromennych = [];
-    // seznamPromennych.push(new Promenna("A", [1,2,3,4,5], []))
-    // seznamPromennych.push(new Promenna("B", [1,2,3,4,5], [new Omezeni("=", ["A"], null)]))
-    seznamPromennych.push(new Promenna('A', [1, 2], []));
-    seznamPromennych.push(new Promenna('B', [4, 5], [new Omezeni('=', ['A'], null)]));
-    seznamPromennych.push(new Promenna('C', [1, 2, 3, 4, 5], []));
-    seznamPromennych.push(new Promenna('D', [1, 2, 3, 4, 5], []));
-    seznamPromennych.push(new Promenna('E', [1, 2, 3, 4, 5], [new Omezeni('>', ['A'], null)]));
-    //this._prevodOmezeni(seznamPromennych);
-    seznamPromennych[0].zalohaDomeny = seznamPromennych[0].domena.slice();
-    seznamPromennych[1].zalohaDomeny = seznamPromennych[1].domena.slice();
-    seznamPromennych[2].zalohaDomeny = seznamPromennych[2].domena.slice();
-    seznamPromennych[3].zalohaDomeny = seznamPromennych[3].domena.slice();
-    seznamPromennych[4].zalohaDomeny = seznamPromennych[4].domena.slice();
+// TODO Test ze zadani
+//    seznamPromennych = [];
+//    // seznamPromennych.push(new Promenna("A", [1,2,3,4,5], []))
+//    // seznamPromennych.push(new Promenna("B", [1,2,3,4,5], [new Omezeni("=", ["A"], null)]))
+//    seznamPromennych.push(new Promenna('A', [1, 2], []));
+//    seznamPromennych.push(new Promenna('B', [4, 5], [new Omezeni('=', ['A'], null)]));
+//    seznamPromennych.push(new Promenna('C', [1, 2, 3, 4, 5], []));
+//    seznamPromennych.push(new Promenna('D', [1, 2, 3, 4, 5], []));
+//    seznamPromennych.push(new Promenna('E', [1, 2, 3, 4, 5], [new Omezeni('>', ['A'], null)]));
+//    //this._prevodOmezeni(seznamPromennych);
+//    seznamPromennych[0].zalohaDomeny = seznamPromennych[0].domena.slice();
+//    seznamPromennych[1].zalohaDomeny = seznamPromennych[1].domena.slice();
+//    seznamPromennych[2].zalohaDomeny = seznamPromennych[2].domena.slice();
+//    seznamPromennych[3].zalohaDomeny = seznamPromennych[3].domena.slice();
+//    seznamPromennych[4].zalohaDomeny = seznamPromennych[4].domena.slice();
+    this._prevodOmezeni(seznamPromennych);
 
     var postupTvoreniGrafu = new Array();
     var pocetReseni = 0;
     var promenna = 0;
-    while (promenna >= 0 && pocetReseni < pozadovanychReseni) {
+    while (promenna >= 0 && (!pozadovanychReseni || pocetReseni < pozadovanychReseni)) {
       var zpracovavanaPromenna = seznamPromennych[promenna];
       zpracovavanaPromenna.pozice = Math.floor(Math.random() * zpracovavanaPromenna.domena.length);
       if (zpracovavanaPromenna.domena.length == 0) {
@@ -1018,20 +1023,21 @@ export class MainPageComponent implements OnInit {
     return postupTvoreniGrafu;
   }
 
-  DynamicOrderBacktracking(pozadovanychReseni, seznamPromennych) {
-    seznamPromennych = [];
-    seznamPromennych.push(new Promenna('A', [1, 2, 3, 4, 5], []));
-    seznamPromennych.push(new Promenna('B', [4, 3, 2], []));
-    seznamPromennych.push(new Promenna('C', [3, 1], []));
-    seznamPromennych.push(new Promenna('D', [4], []));
-    seznamPromennych.push(new Promenna('E', [1, 5], []));
+  dynamicOrderBacktracking(pozadovanychReseni, seznamPromennych) {
+// TODO Test ze zadani
+//    seznamPromennych = [];
+//    seznamPromennych.push(new Promenna('A', [1, 2, 3, 4, 5], []));
+//    seznamPromennych.push(new Promenna('B', [4, 3, 2], []));
+//    seznamPromennych.push(new Promenna('C', [3, 1], []));
+//    seznamPromennych.push(new Promenna('D', [4], []));
+//    seznamPromennych.push(new Promenna('E', [1, 5], []));
 
-    // this._prevodOmezeni(seznamPromennych);
+    this._prevodOmezeni(seznamPromennych);
 
     var postupTvoreniGrafu = new Array();
     var pocetReseni = 0;
     var promenna = 0;
-    while (promenna >= 0 && pocetReseni < pozadovanychReseni) {
+    while (promenna >= 0 && (!pozadovanychReseni || pocetReseni < pozadovanychReseni)) {
       seznamPromennych = this._dynamicOrder(promenna, seznamPromennych);
       var zpracovavanaPromenna = seznamPromennych[promenna];
       zpracovavanaPromenna.pozice++;
@@ -1068,24 +1074,25 @@ export class MainPageComponent implements OnInit {
   }
 
   iConsistency(pocetReseni, iPocet, seznamPromennych) {
-    seznamPromennych = [];
-    // seznamPromennych.push(new Promenna("A", [1, 2], []))
-    // seznamPromennych.push(new Promenna("B", [3, 4], []))
-    // seznamPromennych.push(new Promenna("C", [5, 6], []))
-    // seznamPromennych.push(new Promenna("D", [7, 8], []))
-    // seznamPromennych.push(new Promenna("E", [9, 0], [new Omezeni("=", ["A", "B", "D"], null)]))
-    seznamPromennych.push(new Promenna('A', [1], []));
-    seznamPromennych.push(new Promenna('B', [2], []));
-    seznamPromennych.push(new Promenna('C', [3, 4], []));
-    seznamPromennych.push(new Promenna('D', [4, 5], []));
-    seznamPromennych.push(new Promenna('E', [4, 5], [new Omezeni('=', ['C', 'D'], null)]));
-    iPocet = 3;
+// TODO Test ze zadani
+//    seznamPromennych = [];
+//    // seznamPromennych.push(new Promenna("A", [1, 2], []))
+//    // seznamPromennych.push(new Promenna("B", [3, 4], []))
+//    // seznamPromennych.push(new Promenna("C", [5, 6], []))
+//    // seznamPromennych.push(new Promenna("D", [7, 8], []))
+//    // seznamPromennych.push(new Promenna("E", [9, 0], [new Omezeni("=", ["A", "B", "D"], null)]))
+//    seznamPromennych.push(new Promenna('A', [1], []));
+//    seznamPromennych.push(new Promenna('B', [2], []));
+//    seznamPromennych.push(new Promenna('C', [3, 4], []));
+//    seznamPromennych.push(new Promenna('D', [4, 5], []));
+//    seznamPromennych.push(new Promenna('E', [4, 5], [new Omezeni('=', ['C', 'D'], null)]));
+//    iPocet = 3;
 
     this._prevodOmezeni(seznamPromennych);
 
     iPocet--;
     if (iPocet < 1) {
-      //CHYBOVA HLASKA ZE CISLO MUSI BYT ASPON 1
+      // TODO CHYBOVA HLASKA ZE CISLO MUSI BYT ASPON 1
     }
     //Zjisteni u kazde promenne, s jakymi promennymi musi splnovat omezeni
     var seznamVsechPromennychOmezeni = [];
@@ -1249,6 +1256,8 @@ export class MainPageComponent implements OnInit {
   }
 
   testPrevoduOmezeni() {
+    
+// TODO Test ze zadani
     var seznamPromennych = [];
     seznamPromennych.push(new Promenna('A', [1, 2, 3, 4, 5], [new Omezeni('p', [[1, 2], [3, 4]], 'C')]));
     // seznamPromennych.push(new Promenna("A", [1,2,3,4, 5], [new Omezeni("=",["C","E"],null)]))
