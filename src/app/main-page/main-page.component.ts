@@ -7,17 +7,35 @@ export class Promenna {
   nazev;
   domena: Array<Number>;
   omezeni;
+  aktivni: boolean;
   pozice;
   zalohaDomeny;
-  constructor(nazev, domena, omezeni) {
+  constructor(nazev, domena, omezeni: Omezeni[] = []) {
     this.nazev = nazev;
     this.domena = domena || [];
     this.omezeni = omezeni || [];
+    this.aktivni = true;
     this.pozice = -1;
     this.zalohaDomeny = [];
   }
   vratPrirazenouHodnotu() {
     return this.domena[this.pozice];
+  }
+  
+  clone(): Promenna {
+    const clone = new Promenna(this.nazev, this.domena);
+    clone.omezeni = this.omezeni.map( function(omezeni) {
+      const cloneOmezeni = Object.assign({}, omezeni);
+      cloneOmezeni.hodnotyOmezeni = omezeni.hodnotyOmezeni.map(
+        // TODO odstranit s jeJednoducheOmezeni()
+        hodnota => typeof hodnota === 'string' ? hodnota : Object.assign({}, hodnota)
+      );
+      cloneOmezeni.omezeniProPromennou = omezeni.omezeniProPromennou;
+      
+      return cloneOmezeni;
+    }, this);
+  
+    return clone;
   }
 }
 
@@ -66,8 +84,8 @@ export class MainPageComponent implements OnInit {
   typyOmezeni = [
     {label: '<', value: '<'},
     {label: '>', value: '>'},
-    {label: '==', value: '=='},
-    {label: '!=', value: '!='},
+    {label: '=', value: '='},
+    {label: '!', value: '!'},
     {label: 'p', value: 'p'},
     {label: 'z', value: 'z'}
   ];
@@ -89,9 +107,11 @@ export class MainPageComponent implements OnInit {
     // TODO odstranit zakladni nastaveni vstupu
     const a = this.listPromennych[0];
     const ogt = new Omezeni('<', ['B'], null);
-    const one = new Omezeni('!=', ['C'], null);
+    const one = new Omezeni('!', ['C'], null);
     const op = new Omezeni('p', [[4, 5], [2, 1]], 'B');
     a.omezeni = [ogt, one, op];
+    
+    this.initGraph();
   }
 
   algorithmSelect(event: any) {
@@ -194,7 +214,7 @@ export class MainPageComponent implements OnInit {
   
   // TODO zbavit se tohoto - upravit patricne atributy omezeni
   jeJednoducheOmezeni(typOmezeni: string) {
-    return typOmezeni === '<' || typOmezeni === '>' || typOmezeni === '==' || typOmezeni === '!=';
+    return typOmezeni === '<' || typOmezeni === '>' || typOmezeni === '=' || typOmezeni === '!';
   }
 
   generateIdentifier() {
@@ -221,13 +241,17 @@ export class MainPageComponent implements OnInit {
 
 
   run() {
-    this._resetStavPromennych();
+    const zadani = this.listPromennych.filter(
+      (promenna: Promenna) => promenna.aktivni  
+    ).map(
+      (promenna: Promenna) => promenna.clone()
+    );
     
     switch (this.selectedAlgorithm) {
-      case 'Backtracking' : this.backtracking(1, this.listPromennych); break;
-      case 'Backjumping' : this.backjumping(1, this.listPromennych); break;
-      case 'Forward Check' : this.forwardChecking(1, this.listPromennych); break;
-      case 'Arc Consistency' : this.arcConsistency(1, this.listPromennych); break;
+      case 'Backtracking' : this.backtracking(1, zadani); break;
+      case 'Backjumping' : this.backjumping(1, zadani); break;
+      case 'Forward Check' : this.forwardChecking(1, zadani); break;
+      case 'Arc Consistency' : this.arcConsistency(1, zadani); break;
       // TODO constraint recording implementation case 'Constraint Recording' : this.(1, this.listPromennych); break;
       default:
     }
@@ -243,7 +267,7 @@ export class MainPageComponent implements OnInit {
 //    seznamPromennych.push(new Promenna('C', [3], [new Omezeni('>', ['A', 'B'], null)]));
 //    seznamPromennych.push(new Promenna('D', [4], [new Omezeni('p', [[4, 5], [4, 1]], 'A'), new Omezeni('p', [[4, 4]], 'B')]));
 //    seznamPromennych.push(new Promenna('E', [5], [new Omezeni('>', ['A'], null)]));
-    // this._prevodOmezeni(seznamPromennych);
+     this._prevodOmezeni(seznamPromennych);
 
     var postupTvoreniGrafu = new Array();
     var pocetReseni = 0;
@@ -1293,7 +1317,7 @@ export class MainPageComponent implements OnInit {
                   }
                 }
                 if (!zmeneno) {
-                  porovnavanaPromenna.omezeni = new Omezeni('<', [promenna.nazev], null);
+                  porovnavanaPromenna.omezeni.push(new Omezeni('>', [promenna.nazev], null));
                 }
                 zmeneno = false;
                 omezeni.hodnotyOmezeni.splice(l, 1);
@@ -1317,7 +1341,7 @@ export class MainPageComponent implements OnInit {
                   }
                 }
                 if (!zmeneno) {
-                  porovnavanaPromenna.omezeni = new Omezeni('>', [promenna.nazev], null);
+                  porovnavanaPromenna.omezeni.push(new Omezeni('<', [promenna.nazev], null));
                 }
                 zmeneno = false;
                 omezeni.hodnotyOmezeni.splice(l, 1);
@@ -1341,7 +1365,7 @@ export class MainPageComponent implements OnInit {
                   }
                 }
                 if (!zmeneno) {
-                  porovnavanaPromenna.omezeni = new Omezeni('=', [promenna.nazev], null);
+                  porovnavanaPromenna.omezeni.push(new Omezeni('=', [promenna.nazev], null));
                 }
                 zmeneno = false;
                 omezeni.hodnotyOmezeni.splice(l, 1);
@@ -1365,7 +1389,7 @@ export class MainPageComponent implements OnInit {
                   }
                 }
                 if (!zmeneno) {
-                  porovnavanaPromenna.omezeni = new Omezeni('!', [promenna.nazev], null);
+                  porovnavanaPromenna.omezeni.push(new Omezeni('!', [promenna.nazev], null));
                 }
                 zmeneno = false;
                 omezeni.hodnotyOmezeni.splice(l, 1);
