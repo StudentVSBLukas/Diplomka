@@ -66,52 +66,54 @@
 	                    </div>
 	                    <form  (ngSubmit)="submitDialogOmezeni()" #omezeniForm="ngForm">
 	                    <div class="modal-body input-form">
-	                        <div *ngFor="let omezeni of vybranaPromenna.omezeni; index as i" class="row form-group">
-	                        	<div *ngIf="!omezeni.omezeniProPromennou">
-	                        		<div [class]="hodnotaOmezeni.invalid && (hodnotaOmezeni.dirty || hodnotaOmezeni.touched) ? 'text text-danger' : ''">
-		                        		<div class="col-sm-1">
-		                        			<label for="omezeni{{omezeni.id}}">{{vybranaPromenna.nazev}} {{omezeni.typOmezeni}}</label>
+	                    	<div class="modal-scroll grid-container">
+		                        <div *ngFor="let omezeni of vybranaPromenna.omezeni; index as i" class="row form-group">
+		                        	<div *ngIf="!omezeni.omezeniProPromennou">
+		                        		<div [class]="hodnotaOmezeni.invalid && (hodnotaOmezeni.dirty || hodnotaOmezeni.touched) ? 'text text-danger' : ''">
+			                        		<div class="col-sm-1">
+			                        			<label for="omezeni{{omezeni.id}}">{{vybranaPromenna.nazev}} {{omezeni.typOmezeni}}</label>
+			                        		</div>
+			                        		<div class="col-sm-10">
+			                        			<span *ngIf="hodnotaOmezeni.invalid && (hodnotaOmezeni.dirty || hodnotaOmezeni.touched)">
+			                        				Hodnota je povinná
+			                        			</span>
+			                        		</div>
+		                        		</div>
+			                        	<div class="col-sm-1">
+			                        		<i class="fa fa-remove text-danger clickable rowHover" (click)="odeberOmezeni(vybranaPromenna, omezeni)"></i>
+			                        	</div>
+			                        	
+										<div class="col-sm-12">		                        	
+			                        		<p-multiSelect id="omezeni{{omezeni.id}}" name="omezeni{{omezeni.id}}" #hodnotaOmezeni="ngModel" [(ngModel)]="omezeni.hodnotyOmezeni" [options]="filtrovanePromenne" optionLabel="nazev" maxSelectedLabels="30" required></p-multiSelect>
+			                        	</div>
+			                        </div>
+			                        
+			                        <div *ngIf="omezeni.omezeniProPromennou" class="form-group">
+			                        	<div class="col-sm-1">
+		                        			<label for="omezeni{{omezeni.id}}">{{vybranaPromenna.nazev}} {{omezeni.typOmezeni}} {{omezeni.omezeniProPromennou.nazev}}</label>
 		                        		</div>
 		                        		<div class="col-sm-10">
-		                        			<span *ngIf="hodnotaOmezeni.invalid && (hodnotaOmezeni.dirty || hodnotaOmezeni.touched)">
-		                        				Hodnota je povinná
+		                        			<span *ngIf="domenaOmezeni.invalid && (domenaOmezeni.dirty || domenaOmezeni.touched)" class="text text-danger">
+		                        				<span *ngIf="domenaOmezeni.errors.required">Hodnota je povinná</span>
+		                        				<span *ngIf="domenaOmezeni.errors.pattern">Je možné zadat pouze dvojice èísel oddìlené mezerou</span>
 		                        			</span>
 		                        		</div>
-	                        		</div>
-		                        	<div class="col-sm-1">
-		                        		<i class="fa fa-remove text-danger clickable rowHover" (click)="odeberOmezeni(vybranaPromenna, omezeni)"></i>
-		                        	</div>
-		                        	
-									<div class="col-sm-12">		                        	
-		                        		<p-multiSelect id="omezeni{{omezeni.id}}" name="omezeni{{omezeni.id}}" #hodnotaOmezeni="ngModel" [(ngModel)]="omezeni.hodnotyOmezeni" [options]="filtrovanePromenne" optionLabel="nazev" maxSelectedLabels="30" required></p-multiSelect>
-		                        	</div>
+			                        	<div class="col-sm-1">
+			                        		<i class="fa fa-remove text-danger clickable rowHover" (click)="odeberOmezeni(vybranaPromenna, omezeni)"></i>
+			                        	</div>
+			                        	
+										<div class="col-sm-12">		                        	
+			                        		<textarea id="omezeni{{omezeni.id}}" name="omezeni{{omezeni.id}}" #domenaOmezeni="ngModel" pInputTextarea rows="4" [(ngModel)]="omezeni.hodnotyOmezeni" required pattern="^(\s*\d+\s*,\s*\d+\s*)*$"></textarea>
+			                        	</div>
+			                        </div>
 		                        </div>
 		                        
-		                        <div *ngIf="omezeni.omezeniProPromennou" class="form-group">
-		                        	<div class="col-sm-1">
-	                        			<label for="omezeni{{omezeni.id}}">{{vybranaPromenna.nazev}} {{omezeni.typOmezeni}} {{omezeni.omezeniProPromennou.nazev}}</label>
-	                        		</div>
-	                        		<div class="col-sm-10">
-	                        			<span *ngIf="domenaOmezeni.invalid && (domenaOmezeni.dirty || domenaOmezeni.touched)" class="text text-danger">
-	                        				<span *ngIf="domenaOmezeni.errors.required">Hodnota je povinná</span>
-	                        				<span *ngIf="domenaOmezeni.errors.pattern">Je možné zadat pouze dvojice èísel oddìlené mezerou</span>
-	                        			</span>
-	                        		</div>
-		                        	<div class="col-sm-1">
-		                        		<i class="fa fa-remove text-danger clickable rowHover" (click)="odeberOmezeni(vybranaPromenna, omezeni)"></i>
-		                        	</div>
-		                        	
-									<div class="col-sm-12">		                        	
-		                        		<textarea id="omezeni{{omezeni.id}}" name="omezeni{{omezeni.id}}" #domenaOmezeni="ngModel" pInputTextarea rows="4" [(ngModel)]="omezeni.hodnotyOmezeni" required pattern="^(\s*\d+\s*,\s*\d+\s*)*$"></textarea>
-		                        	</div>
+		                        <div *ngIf="vybranaPromenna.omezeni?.length === 0" class="row form-group">
+		                        	Promìnná nemá žádné omezení. Pøidejte jej níže.
 		                        </div>
 	                        </div>
 	                        
-	                        <div *ngIf="vybranaPromenna.omezeni?.length === 0" class="row form-group">
-	                        	Promìnná nemá žádné omezení. Pøidejte jej níže.
-	                        </div>
-	                        
-	                        <div class="spacer">
+	                        <div class="spacer grid-container">
 	                        	<p-dropdown #newTypOmezeni [options]="typyOmezeni" placeholder="Typ"></p-dropdown>
 	                        	<p-dropdown [disabled]="!newTypOmezeni.value || jeJednoducheOmezeni(newTypOmezeni.value)" #newCilovaPromenna [options]="filtrovanePromenne" optionLabel="nazev" placeholder="Cil"></p-dropdown>
 	                        	<button type="button" class="btn btn-default" [disabled]="!(newTypOmezeni.value && (jeJednoducheOmezeni(newTypOmezeni.value) || newCilovaPromenna.value))" (click)="pridejOmezeni(vybranaPromenna, newTypOmezeni.value, newCilovaPromenna.value)"><i class="fa fa-plus" ></i> Pøidat omezení</button>

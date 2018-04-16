@@ -188,3 +188,16 @@
 .spacer {
 	margin-top: 2em;
 }
+
+.modal-scroll {
+	max-height: calc(80vh - 60px - 7em);
+    overflow-y: auto;
+}
+
+
+.grid-container {
+	padding-left: 15px;
+	padding-right: 15px;
+}
+
+
