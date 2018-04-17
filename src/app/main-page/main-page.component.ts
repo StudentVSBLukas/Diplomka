@@ -199,7 +199,7 @@ export class MainPageComponent implements OnInit {
           (promenna: Promenna) => promenna.nazev
         );
       } else {
-        const dvojiceHodnot = item.hodnotyOmezeni.match(/\s*(\d+\s*,\s*\d+)/g);
+        const dvojiceHodnot = item.hodnotyOmezeni.match(/\s*(-?\d+\s*,\s*-?\d+)/g);
         o.hodnotyOmezeni = dvojiceHodnot.map(
           (dvojice: string) => dvojice.split(',').map(Number)
         );
