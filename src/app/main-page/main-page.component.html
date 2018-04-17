@@ -50,7 +50,7 @@
             <input id="pocetReseni" type="number" name="pocetReseni" [(ngModel)]="pocetReseni" #pocetReseniControl="ngModel" min="0" placeholder="Neomezenì" />
             
             <label for="vyberAlgoritmu">Algoritmus</label>
-            <select class="vyberAlgoritmu" [(ngModel)]="selectedAlgorithm">
+            <select id="vyberAlgoritmu" name="vyberAlgoritmu" #vyberAlgoritmu="ngModel" class="vyberAlgoritmu" [(ngModel)]="selectedAlgorithm">
                 <option value="Backtracking">Backtracking</option>
                 <option value="Backjumping">Backjumping</option>
                 <option value="Forward Check">Forward Check</option>
@@ -59,6 +59,11 @@
                 <option value="Dynamic order">Dynamic order</option>
                 <option value="iConsistency">iConsistency</option>
             </select>
+            
+            <div *ngIf="vyberAlgoritmu.value === 'iConsistency'">
+            	<label for="iConsistency">iConsistency</label>
+            	<input id="iConsistency" type="number" name="iConsistency" [(ngModel)]="iConsistencyFaktor" #pocetReseniControl="ngModel" min="1" />
+            </div>
             <button (click)="run()">Spocti</button>
         </div>
         
