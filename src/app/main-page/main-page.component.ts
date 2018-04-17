@@ -95,7 +95,15 @@ export class MainPageComponent implements OnInit {
 
   selectedAlgorithm = 'Backtracking';
   iConsistencyFaktor = 1;
-  
+  algoritmy = [
+    {label: 'Backtracking', value: 'Backtracking'},
+    {label: 'Backjumping', value: 'Backjumping'},
+    {label: 'Forward Check', value: 'Forward Check'},
+    {label: 'Arc Consistency', value: 'Arc Consistency'},
+    {label: 'Random', value: 'Random'},
+    {label: 'Dynamic order', value: 'Dynamic order'},
+    {label: 'iConsistency', value: 'iConsistency'}
+  ];
 
   postup;
   graf;

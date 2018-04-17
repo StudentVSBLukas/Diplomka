@@ -1,71 +1,92 @@
 <div>
-    <div id="menu" class="border container-fluid">
-        <div id="vstupy">
-        	<div class="row-layout">
-        		<h3>Zadání</h3>
-        		<i class="fa fa-fw fa-plus clickable" (click)="pridejPromennou()"></i>
-        	</div>
-            
-            <form id="promenneBlok">
-                <div *ngFor="let r of listPromennych, index as i" class="row">
-	                	<div class="col-sm-1">{{r.nazev}}</div>
-	                    <div class="col-sm-11">
-	                    	<i class="fa fa-cog clickable" (click)="openDialogOmezeni(r)"></i>
-	                    	<i class="fa fa-ban text-danger clickable rowHover"></i>
-	                    	<i class="fa fa-remove text-danger clickable rowHover" (click)="odeberPromennou(r)"></i>
-	                    </div>
-	                    <div class="clearfix"></div>
-	                    
-	                    <div class="col-sm-1"></div>
-	                	<div class="col-sm-11">
-	                     	 <span class="operator">=</span> &#123;
-	                     	 <input name="domena{{r.nazev}}" [(ngModel)]="r.domena" required numbersConvertor pattern="^(-?\d+,? ?)*-?\d+$" #domenaControl="ngModel" />
-	                     	 &#125;
-	                    </div>
-	                    <div class="clearfix"></div>
-	                    
-	                    <div class="col-sm-1"></div>
-	                	<div class="col-sm-11">
-	                		<div *ngIf="domenaControl.invalid && (domenaControl.dirty || domenaControl.touched)" class="text text-danger">
-	                			Povolena jsou celá èísla oddìlená èárkou
-	                		</div>
-	                    </div>
-                    
-                    <div *ngFor="let o of r.omezeni" class="">
-                    	<div class="col-sm-1"></div>
-	                	<div class="col-sm-11">
-                    		<span class="operator">{{o.typOmezeni}}{{o.omezeniProPromennou}}</span> {{o.hodnotyOmezeni}}
-                    	</div>
-                    </div>
+    <div id="vstupy" class="form">
+        <form class="input-form">
+	     	<div class="row-layout container-fluid form-header">
+	     		<h3>Zadání</h3>
+	     		<i class="fa fa-fw fa-plus clickable" (click)="pridejPromennou()"></i>
+	     	</div>
 
-                    
-                </div>
-            </form>
-        </div>
+			<div class="promenne-scroll container-fluid">
+	            <div *ngFor="let r of listPromennych, index as i" class="row form-group">
+	            	<fieldset [disabled]="!r.aktivni">
+		             	<div class="col-sm-1">{{r.nazev}}</div>
+			                <div class="col-sm-11" *ngIf="r.aktivni">
+			                	<i class="fa fa-cog clickable" (click)="openDialogOmezeni(r)"></i>
+			                	<i class="fa fa-ban text-danger clickable rowHover" (click)="r.aktivni = false"></i>
+			                	<i class="fa fa-remove text-danger clickable rowHover" (click)="odeberPromennou(r)"></i>
+			                </div>
+			                <div class="col-sm-11" *ngIf="!r.aktivni">
+			                	<i class="fa fa-cog clickable" style="visibility: hidden"></i>
+			                	<i class="fa fa-check-circle text-success clickable rowHover" (click)="r.aktivni = true"></i>
+			                </div>
+			                <div class="clearfix"></div>
+			                
+			                <div class="col-sm-1"></div>
+			            	<div class="col-sm-11">
+			                 	 <span class="operator">=</span> &#123;
+			                 	 <input name="domena{{r.nazev}}" [(ngModel)]="r.domena" required numbersConvertor pattern="^(-?\d+,? ?)*-?\d+$" #domenaControl="ngModel" class="surrounded" />
+			                 	 &#125;
+			                </div>
+		                 	<div class="clearfix"></div>
+		                 
+		                 	<div class="col-sm-1"></div>
+			             	<div class="col-sm-11">
+			             		<div *ngIf="domenaControl.invalid && (domenaControl.dirty || domenaControl.touched)" class="text text-danger">
+			             			Povolena jsou celá èísla oddìlená èárkou
+			             		</div>
+			                </div>
+		                
+			                <div *ngFor="let o of r.omezeni" class="">
+			                 	<div class="col-sm-1"></div>
+			              	<div class="col-sm-11">
+		                 		<span class="operator">{{o.typOmezeni}}{{o.omezeniProPromennou}}</span> {{o.hodnotyOmezeni}}
+		                 	</div>
+		                 </div>
+		         	</fieldset>
+	            </div>
+	        </div>
+        </form>
 
         <hr>
-        <h3>ProvedenÃ­</h3>
-        <div class="gridAlgoritmu">
-        	<label for="pocetReseni">Poèet øešení</label>
-            <input id="pocetReseni" type="number" name="pocetReseni" [(ngModel)]="pocetReseni" #pocetReseniControl="ngModel" min="0" placeholder="Neomezenì" />
-            
-            <label for="vyberAlgoritmu">Algoritmus</label>
-            <select id="vyberAlgoritmu" name="vyberAlgoritmu" #vyberAlgoritmu="ngModel" class="vyberAlgoritmu" [(ngModel)]="selectedAlgorithm">
-                <option value="Backtracking">Backtracking</option>
-                <option value="Backjumping">Backjumping</option>
-                <option value="Forward Check">Forward Check</option>
-                <option value="Arc Consistency">Arc Consistency</option>
-                <option value="Random">Random</option>
-                <option value="Dynamic order">Dynamic order</option>
-                <option value="iConsistency">iConsistency</option>
-            </select>
-            
-            <div *ngIf="vyberAlgoritmu.value === 'iConsistency'">
-            	<label for="iConsistency">iConsistency</label>
-            	<input id="iConsistency" type="number" name="iConsistency" [(ngModel)]="iConsistencyFaktor" #pocetReseniControl="ngModel" min="1" />
-            </div>
-            <button (click)="run()">Spocti</button>
-        </div>
+        <form  (ngSubmit)="run()" #provedeniForm="ngForm" class="input-form ">
+        	<div class="container-fluid form-header">
+	        	<h3>ProvedenÃ­</h3>
+	        </div>
+	        <div class="container-fluid">
+		        <div class="row form-group">
+		        	<div class="col-sm-4">
+		        		<label for="pocetReseni">Poèet øešení</label>
+		        	</div>
+		        	<div class="col-sm-8">
+		            	<input id="pocetReseni" type="number" name="pocetReseni" [(ngModel)]="pocetReseni" #pocetReseniControl="ngModel" min="0" placeholder="Neomezenì" />
+		            </div>
+		        </div>
+		            
+		        <div class="row form-group">
+		            <div class="col-sm-4">
+		            	<label for="vyberAlgoritmu">Algoritmus</label>
+		            </div>
+		            <div class="col-sm-8">
+		            	<p-dropdown name="vyberAlgoritmu" #vyberAlgoritmu="ngModel" [(ngModel)]="selectedAlgorithm" [options]="algoritmy" required></p-dropdown>
+		            </div>
+			    </div>
+		            
+		        <div class="row form-group">
+		        	<div class="col-sm-4">
+		        		<label for="iConsistency">iConsistency</label>
+		        	</div>
+		        	<div class="col-sm-8">
+		        		<input id="iConsistency" type="number" name="iConsistency" [(ngModel)]="iConsistencyFaktor" #pocetReseniControl="ngModel" [disabled]="vyberAlgoritmu.value !== 'iConsistency'" required min="1" />
+		        	</div>
+		        </div>
+		        
+		        <div class="row form-group form-submit">
+		        	<div class="col-sm-12">
+		        		<button type="submit" class="btn btn-success" [disabled]="!provedeniForm.form.valid">Spoèti</button>
+		            </div>
+		        </div>
+		    </div>
+	    </form>
         
 <!-- TODO Co s tim? -->
 <!--         <p id="vykonanyAlgoritmus">&nbsp;</p> -->
@@ -75,12 +96,14 @@
 <!--         </div> -->
     </div>
     
+    <div id="vstupySeparator"></div>
+    
     <div *ngIf="vybranaPromenna">
 	        <div class="backdrop"></div>
 	        <div class="modal" tabindex="-1" role="dialog" style="display: block">
 	            <div class="modal-dialog" role="document">
-	                <div class="modal-content">
-	                    <div class="modal-header">
+	                <div class="modal-content form">
+	                    <div class="modal-header form-header">
 	                        <button type="button" class="close" aria-label="Close" (click)="closeDialogOmezeni()">
 	                            <span aria-hidden="true">&times;</span>
 	                        </button>
@@ -88,7 +111,7 @@
 	                    </div>
 	                    <form  (ngSubmit)="submitDialogOmezeni()" #omezeniForm="ngForm">
 	                    <div class="modal-body input-form">
-	                    	<div class="modal-scroll grid-container">
+	                    	<div class="modal-scroll container-fluid">
 		                        <div *ngFor="let omezeni of vybranaPromenna.omezeni; index as i" class="row form-group">
 		                        	<div *ngIf="!omezeni.omezeniProPromennou">
 		                        		<div [class]="hodnotaOmezeni.invalid && (hodnotaOmezeni.dirty || hodnotaOmezeni.touched) ? 'text text-danger' : ''">
@@ -110,7 +133,7 @@
 			                        	</div>
 			                        </div>
 			                        
-			                        <div *ngIf="omezeni.omezeniProPromennou" class="form-group">
+			                        <div *ngIf="omezeni.omezeniProPromennou">
 			                        	<div class="col-sm-1">
 		                        			<label for="omezeni{{omezeni.id}}">{{vybranaPromenna.nazev}} {{omezeni.typOmezeni}} {{omezeni.omezeniProPromennou.nazev}}</label>
 		                        		</div>
@@ -135,7 +158,7 @@
 		                        </div>
 	                        </div>
 	                        
-	                        <div class="spacer grid-container">
+	                        <div class="spacer container-fluid">
 	                        	<p-dropdown #newTypOmezeni [options]="typyOmezeni" placeholder="Typ"></p-dropdown>
 	                        	<p-dropdown [disabled]="!newTypOmezeni.value || jeJednoducheOmezeni(newTypOmezeni.value)" #newCilovaPromenna [options]="filtrovanePromenne" optionLabel="nazev" placeholder="Cil"></p-dropdown>
 	                        	<button type="button" class="btn btn-default" [disabled]="!(newTypOmezeni.value && (jeJednoducheOmezeni(newTypOmezeni.value) || newCilovaPromenna.value))" (click)="pridejOmezeni(vybranaPromenna, newTypOmezeni.value, newCilovaPromenna.value)"><i class="fa fa-plus" ></i> Pøidat omezení</button>
@@ -157,7 +180,7 @@
         <!-- /.modal !-->
         
         
-    <div id="graf" class="border table-layout">
+    <div id="graf">
         <div id="myDiagramDiv" style="width: 100%; height: 600px"></div>
 
         <div id="krok">
@@ -176,7 +199,8 @@
             </div>
             <div>
                 <button id="zoomToFit">Zoom to Fit</button>
-                <button id="vis" onclick="zobrazeniAktualnichHodnotDomen()">skrÃ½t</button>
+<!-- TODO Co to delalo? -->
+<!--                 <button id="vis" onclick="zobrazeniAktualnichHodnotDomen()">skrÃ½t</button> -->
                 <button id="centerRoot">PÅ™iblÃ­Å¾enÃ­</button>
             </div>
         </div>

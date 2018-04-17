@@ -2,6 +2,26 @@
     box-sizing: border-box;
 }
 
+#vstupy {
+	float: left;
+	width: 31em;
+	height: 100vh;
+}
+
+#vstupySeparator {
+	float: left;
+	width: 30px;
+	height: 100vh;
+/* 	background-color: Gainsboro; */
+}
+
+#graf {
+	float: left;
+	width: calc(100% - 31em - 35px);
+	height: 100vh;
+	position: relative;
+}
+
 /* #overlay{
     width: 100%;
     height: 100%;
@@ -35,13 +55,6 @@
 #div.info {
     width: 100%;
     border: 1px
-}
-
-#graf {
-    float: left;
-    width: 68%;
-    height: 100%;
-    position: relative;
 }
 
 #krok {
@@ -83,32 +96,6 @@
 	margin-left: 0.5em;
 }
 
-.table-layout {
-    display: table;
-    width: 100%;
-}
-
-.table-layout > div {
-	display: table-row;
-}
-
-.table-layout > div > div {
-    display: table-cell;
-}
-
-.table-layout > div > div.min {
-	width: 1px;
-	white-space: nowrap;
-}
-
-.table-layout .rowHover, .row .rowHover {
-	visibility: hidden;
-}
-
-.table-layout > div:hover .rowHover, .row:hover .rowHover {
-	visibility: visible;
-}
-
 .tooltip{
     position: relative;
     display: inline-block;
@@ -128,41 +115,6 @@
     opacity: 1;
 }
 
-.gridNastaveni{
-    display: grid;
-    grid-template-columns: 150px 200px;
-}
-
-.gridPromennych{
-    display: grid;
-    grid-template-columns: 15px 155px 45px 70px;
-}
-
-.gridAlgoritmu{
-    display: grid;
-    grid-template-columns: 50% 50%;
-}
-
-.gridOmezeniZakladni{
-    display: grid;
-    grid-template-columns: 20px 15px 80%;
-}
-
-.gridOmezeniDvojice{
-    display: grid;
-    grid-template-columns: 20px 15px 30px 4px 55% 25px 25px;
-}
-
-.gridSoucasneDomeny{
-    display: grid;
-    grid-template-columns: 175px 175px 175px 175px 175px;
-    grid-template-rows: 25px 25px 25px 25px 25px;
-    grid-auto-flow: column;
-    z-index: 10; 
-    position: absolute; 
-    left: 10px
-}
-
 .clickable {
 	padding: 0.25em;
 	cursor: pointer;
@@ -172,17 +124,29 @@
 	background-color: LightGray;
 }
 
+.invisible {
+	visibility: hidden;
+}
+
 /deep/ .ui-inputtext.ng-dirty.ng-invalid, /deep/ p-dropdown.ng-dirty.ng-invalid > .ui-dropdown, /deep/ p-multiselect.ng-dirty.ng-invalid > .ui-multiselect {
 	border-left-color: #f44336;
     border-bottom-color: #f44336;
+}
+
+.form {
+	background-color: #f0f7fd;
 }
 
 .input-form label {
 	min-width: 3em;
 }
 
-.input-form input, .input-form textarea, /deep/ .input-form .ui-multiselect {
+.input-form input, .input-form label, .input-form textarea, /deep/ .input-form .ui-multiselect, /deep/ .input-form .ui-dropdown {
 	width: 100%;
+}
+
+.input-form input.surrounded {
+	width: calc(100% - 3.5em);
 }
 
 .spacer {
@@ -194,10 +158,28 @@
     overflow-y: auto;
 }
 
+.promenne-scroll {
+	max-height: calc(100vh - 28em);
+    overflow-y: auto;
+}
+
 
 .grid-container {
 	padding-left: 15px;
 	padding-right: 15px;
+}
+
+fieldset:disabled {
+	color: gray;
+}
+
+.form-header {
+	margin-bottom: 1em;
+	background-color: #A5D2FF;
+}
+
+.form-submit {
+	text-align: right;
 }
 
 
