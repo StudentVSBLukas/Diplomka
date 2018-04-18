@@ -21,30 +21,12 @@ export class Promenna {
   vratPrirazenouHodnotu() {
     return this.domena[this.pozice];
   }
-  
-  clone(): Promenna {
-    const clone = new Promenna(this.nazev);
-    clone.domena = this.domena.map(
-      promenna => promenna
-    );
-    clone.omezeni = this.omezeni.map( function(omezeni) {
-      const cloneOmezeni = Object.assign({}, omezeni);
-      cloneOmezeni.hodnotyOmezeni = omezeni.hodnotyOmezeni.map(
-        // TODO odstranit s jeJednoducheOmezeni()
-        hodnota => typeof hodnota === 'string' ? hodnota : Object.assign({}, hodnota)
-      );
-      cloneOmezeni.omezeniProPromennou = omezeni.omezeniProPromennou;
-      
-      return cloneOmezeni;
-    }, this);
-  
-    return clone;
-  }
+
 }
 
 export class Omezeni {
   static id_sequence = 0;
-  
+
   // TODO predelat na Enum a zmenit i atribut ve tride Omezeni
   id;
   typOmezeni;
@@ -80,7 +62,7 @@ export class MainPageComponent implements OnInit {
   pocetReseni;
 
   listPromennych = [];
-  
+
   // TODO Modalni dialog komponenta
   vybranaPromenna;
   filtrovanePromenne;
@@ -122,7 +104,7 @@ export class MainPageComponent implements OnInit {
     const one = new Omezeni('!', ['C'], null);
     const op = new Omezeni('p', [[4, 5], [2, 1]], 'B');
     a.omezeni = [ogt, one, op];
-    
+
     this.initGraph();
   }
 
@@ -137,14 +119,14 @@ export class MainPageComponent implements OnInit {
       this.listPromennych.splice(index, 1);
     }
   }
-  
+
   openDialogOmezeni(promenna: Promenna) {
     this.vybranaPromenna = this.prevedPromennou(promenna);
     this.filtrovanePromenne = this.listPromennych.filter(
       (p: Promenna) => p.nazev !== this.vybranaPromenna.nazev
     );
   }
-  
+
   resetDialogOmezeni() {
     this.openDialogOmezeni(this._valueOf(this.listPromennych, this.vybranaPromenna.nazev));
   }
@@ -155,11 +137,11 @@ export class MainPageComponent implements OnInit {
 
     this.vybranaPromenna = null;
   }
-  
+
   closeDialogOmezeni() {
     this.vybranaPromenna = null;
   }
-  
+
   // TODO presunout na Promennou (spravny typ na vybranaPromenna)
   odeberOmezeni(promenna: Promenna, omezeni: Omezeni) {
     const index = promenna.omezeni.indexOf(omezeni);
@@ -167,7 +149,7 @@ export class MainPageComponent implements OnInit {
       promenna.omezeni.splice(index, 1);
     }
   }
-  
+
   pridejOmezeni(promenna: Promenna, typ: string, cilovaPromenna: Promenna) {
     const omezeni = new Omezeni(typ);
     omezeni.omezeniProPromennou = cilovaPromenna;
@@ -180,7 +162,7 @@ export class MainPageComponent implements OnInit {
 
     vysledek.omezeni = p.omezeni.map( function(item) {
       const o =  Object.assign({}, item);
-      
+
       if (this.jeJednoducheOmezeni(o.typOmezeni)) {
         o.hodnotyOmezeni = item.hodnotyOmezeni.map(
           (hodnota: string) => this._valueOf(this.listPromennych, hodnota)
@@ -189,19 +171,19 @@ export class MainPageComponent implements OnInit {
         o.hodnotyOmezeni = item.hodnotyOmezeni.join(' ');
         o.omezeniProPromennou = this._valueOf(this.listPromennych, item.omezeniProPromennou);
       }
-      
+
       return o;
     }, this);
 
     return vysledek;
   }
-  
+
   upravPromennou(original: Promenna, cil: Promenna) {
     Object.assign(original, cil);
 
     original.omezeni = cil.omezeni.map( function(item) {
       const o =  Object.assign({}, item);
-      
+
       if (this.jeJednoducheOmezeni(o.typOmezeni)) {
         o.hodnotyOmezeni = item.hodnotyOmezeni.map(
           (promenna: Promenna) => promenna.nazev
@@ -213,13 +195,13 @@ export class MainPageComponent implements OnInit {
         );
         o.omezeniProPromennou = item.omezeniProPromennou.nazev;
       }
-      
+
       return o;
     }, this);
 
     return original;
   }
-  
+
   // TODO zbavit se tohoto - upravit patricne atributy omezeni
   jeJednoducheOmezeni(typOmezeni: string) {
     return typOmezeni === '<' || typOmezeni === '>' || typOmezeni === '=' || typOmezeni === '!';
@@ -249,12 +231,8 @@ export class MainPageComponent implements OnInit {
 
 
   run() {
-    const zadani = this.listPromennych.filter(
-      (promenna: Promenna) => promenna.aktivni  
-    ).map(
-      (promenna: Promenna) => promenna.clone()
-    );
-    
+    const zadani = this.pripravAktivniPromenne();
+
     switch (this.selectedAlgorithm) {
       case 'Backtracking' : this.postup = this.backtracking(this.pocetReseni, zadani); break;
       case 'Backjumping' : this.postup = this.backjumping(this.pocetReseni, zadani); break;
@@ -267,6 +245,44 @@ export class MainPageComponent implements OnInit {
     }
 
     this.reloadGraph();
+  }
+
+  /*
+   * Filtruje neaktivní proměnné a jejich omezení
+   */
+  pripravAktivniPromenne() {
+    // Filtruje neaktivni promenne
+    const zadani = this.listPromennych.filter(
+      (p: Promenna) => p.aktivni
+    ).map(function(p: Promenna) {
+      const kopiePromenne = new Promenna(p.nazev);
+      kopiePromenne.domena = p.domena.slice();
+    
+      // Filtruje omezeni s neaktivnimi promennymi
+      kopiePromenne.omezeni = p.omezeni.filter(
+        (o: Omezeni) => !o.omezeniProPromennou || this._valueOf(o.omezeniProPromennou).aktivni
+      ).map(function(o) {
+        const kopieOmezeni = Object.assign({}, o);
+        if (this.jeJednoducheOmezeni(o.typOmezeni)) {
+          kopieOmezeni.hodnotyOmezeni = o.hodnotyOmezeni.filter(
+            (hodnota: string) => this._valueOf(this.listPromennych, hodnota).aktivni
+          );
+        } else {
+          kopieOmezeni.hodnotyOmezeni = o.hodnotyOmezeni.map(
+            hodnota => Object.assign({}, hodnota)
+          );
+          kopieOmezeni.omezeniProPromennou = o.omezeniProPromennou;
+        }
+        
+        return kopieOmezeni;
+      }, this).filter(
+        (o: Omezeni) => o.hodnotyOmezeni.length
+      );
+      
+      return kopiePromenne;
+    }, this);
+
+    return zadani;
   }
 
 
@@ -753,7 +769,7 @@ export class MainPageComponent implements OnInit {
         i = -1;
       }
     }
-    
+
     return this.backtracking(pozadovanychReseni, seznamPromennych);
   }
 
@@ -970,7 +986,7 @@ export class MainPageComponent implements OnInit {
     seznamPromennych[idA] = promennaA;
     seznamPromennych[idB] = promennaB;
   }
-  
+
   _arcConsistencyFail(promenna: Promenna, popis: String) {
       const krokAlgoritmu = new KrokAlgoritmu();
       krokAlgoritmu.popis = popis;
@@ -979,11 +995,11 @@ export class MainPageComponent implements OnInit {
       krokAlgoritmu.hodnota = null;
       krokAlgoritmu.rodic = 0;
       krokAlgoritmu.stav = 'deadend';
-     
+
      return [krokAlgoritmu];
   }
 
-  randomBacktracking(pozadovanychReseni, seznamPromennych: Array<Promenna>) {
+  randomBacktracking(pozadovanychReseni, seznamPromennych) {
 // TODO Test ze zadani
 //    seznamPromennych = [];
 //    // seznamPromennych.push(new Promenna("A", [1,2,3,4,5], []))
@@ -1000,10 +1016,10 @@ export class MainPageComponent implements OnInit {
 //    seznamPromennych[3].zalohaDomeny = seznamPromennych[3].domena.slice();
 //    seznamPromennych[4].zalohaDomeny = seznamPromennych[4].domena.slice();
     this._prevodOmezeni(seznamPromennych);
-    
+
     // Zaloha domeny - vzdy se vracime k vstupnimu stavu
     seznamPromennych.forEach(
-      (p: Promenna) => p.zalohaDomeny = p.domena.slice() 
+      (p: Promenna) => p.zalohaDomeny = p.domena.slice()
     );
 
     var postupTvoreniGrafu = new Array();
@@ -1187,7 +1203,7 @@ export class MainPageComponent implements OnInit {
         provedenaZmenaDomeny = true;
       }
     }
-    
+
     for (let i = 0; i < seznamPromennych.length; i++) {
       seznamPromennych[i].pozice = -1;
     }
@@ -1285,7 +1301,7 @@ export class MainPageComponent implements OnInit {
   }
 
   testPrevoduOmezeni() {
-    
+
 // TODO Test ze zadani
     var seznamPromennych = [];
     seznamPromennych.push(new Promenna('A', [1, 2, 3, 4, 5], [new Omezeni('p', [[1, 2], [3, 4]], 'C')]));
@@ -1756,7 +1772,7 @@ export class MainPageComponent implements OnInit {
     const nodeDataArray = [{key: 0, name: 'root'}];
     this.graf.model = new go.TreeModel(nodeDataArray);
   }
-  
+
   _resetStavPromennych() {
     this.listPromennych.forEach( function(item: Promenna){
       item.pozice = -1;
@@ -1783,7 +1799,7 @@ export class MainPageComponent implements OnInit {
 
     return result;
   }
-  
+
   // TODO odstranit
   debug(o: any) {
     return true;

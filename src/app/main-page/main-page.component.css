@@ -159,7 +159,7 @@
 }
 
 .promenne-scroll {
-	max-height: calc(100vh - 28em);
+	max-height: calc(100vh - 24em);
     overflow-y: auto;
 }
 
@@ -175,7 +175,8 @@ fieldset:disabled {
 
 .form-header {
 	margin-bottom: 1em;
-	background-color: #A5D2FF;
+	background-color: #cde6fc;
+	border-bottom: 1px solid #81b2dd;
 }
 
 .form-submit {
