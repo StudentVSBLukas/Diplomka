@@ -183,4 +183,10 @@ fieldset:disabled {
 	text-align: right;
 }
 
+/* Workaround PrimeNG chyby */
+/* https://github.com/primefaces/primeng/issues/1974 */
+/deep/ #modalAppendTo .ui-multiselect-panel {
+	z-index: 10000 !important;
+	width: 538px;
+}
 
