@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import {SelectItem} from 'primeng/api';
 import * as go from 'gojs';
 
@@ -87,8 +87,10 @@ export class MainPageComponent implements OnInit {
     {label: 'iConsistency', value: 'iConsistency'}
   ];
 
-  postup;
+
+  // Komponenta graf
   graf;
+  postup;
 
   constructor() { }
 
@@ -104,8 +106,6 @@ export class MainPageComponent implements OnInit {
     const one = new Omezeni('!', ['C'], null);
     const op = new Omezeni('p', [[4, 5], [2, 1]], 'B');
     a.omezeni = [ogt, one, op];
-
-    this.initGraph();
   }
 
   pridejPromennou() {
@@ -257,10 +257,10 @@ export class MainPageComponent implements OnInit {
     ).map(function(p: Promenna) {
       const kopiePromenne = new Promenna(p.nazev);
       kopiePromenne.domena = p.domena.slice();
-    
+
       // Filtruje omezeni s neaktivnimi promennymi
       kopiePromenne.omezeni = p.omezeni.filter(
-        (o: Omezeni) => !o.omezeniProPromennou || this._valueOf(o.omezeniProPromennou).aktivni
+        (o: Omezeni) => !o.omezeniProPromennou || this._valueOf(this.listPromennych, o.omezeniProPromennou).aktivni
       ).map(function(o) {
         const kopieOmezeni = Object.assign({}, o);
         if (this.jeJednoducheOmezeni(o.typOmezeni)) {
@@ -273,12 +273,12 @@ export class MainPageComponent implements OnInit {
           );
           kopieOmezeni.omezeniProPromennou = o.omezeniProPromennou;
         }
-        
+
         return kopieOmezeni;
       }, this).filter(
         (o: Omezeni) => o.hodnotyOmezeni.length
       );
-      
+
       return kopiePromenne;
     }, this);
 
@@ -1617,25 +1617,6 @@ export class MainPageComponent implements OnInit {
 
 
   initGraph(){
-    // var $ = go.GraphObject.make;
-    // var myDiagram =
-    //   $(go.Diagram, "myDiagramDiv",
-    //     {
-    //       initialContentAlignment: go.Spot.Center, // center Diagram contents
-    //       "undoManager.isEnabled": true // enable Ctrl-Z to undo and Ctrl-Y to redo
-    //     });
-
-    // var myModel = $(go.Model);
-    // // in the model data, each node is represented by a JavaScript object:
-    // myModel.nodeDataArray = [
-    //   { key: "Alpha" },
-    //   { key: "Beta" },
-    //   { key: "Gamma" }
-    // ];
-    // myDiagram.model = myModel;
-
-
-
     var postup = new Array();
     postup=this.postup;
     var $ = go.GraphObject.make;
@@ -1702,102 +1683,94 @@ export class MainPageComponent implements OnInit {
             $(go.Link,
                     {routing: go.Link.Orthogonal, corner: 5, selectable: false},
                     $(go.Shape, {strokeWidth: 3, stroke: '#424242'}));
-
-    this.reloadGraph();
-
-    const self = this;
-    document.getElementById('zoomToFit').addEventListener('click', function () {
-        myDiagram.zoomToFit();
-    });
-    document.getElementById('centerRoot').addEventListener('click', function () {
-        myDiagram.scale = myDiagram.scale * 1.1;
-        myDiagram.scrollToRect(myDiagram.findNodeForKey(0).actualBounds);
-    });
-
-    const nextFunction = function () {
-      const modelManager = self.graf.model.undoManager;
-      if (modelManager.canRedo()) {
-        modelManager.redo();
-        return;
-      }
-
-      const krok = modelManager.historyIndex + 1;
-        if (krok === self.postup.length) {
-            return;
-        }
-
-        const node = self.postup[krok];
-
-        myDiagram.startTransaction('make new node');
-        myDiagram.model.addNodeData({key: (krok + 1), parent: node.rodic, name: node.hodnota, end: node.stav, title: node.nazev});
-        for (var i = 0; i < node.hodnotaDomenKroku.length; i++) {
-//          TODO zjistit a dodelat - vyuzito pouze u Forward Checkingu
-//            document.getElementById('domena' + i).nodeValue = node.hodnotaDomenKroku[i];
-        }
-        document.getElementById('krok').innerHTML = node.popis;
-        myDiagram.commitTransaction('make new node');
-    };
-
-    document.getElementById('next').addEventListener('click', nextFunction);
-    document.getElementById('next10').addEventListener('click', function () {
-        for (var i = 0; i < 10; i++) {
-            nextFunction();
-        }
-    });
-
-    var prevFunction = function () {
-      const modelManager = self.graf.model.undoManager;
-      if (modelManager.canUndo()) {
-        modelManager.undo();
-        return;
-      }
-    };
-
-    document.getElementById('previous').addEventListener('click', prevFunction);
-    document.getElementById('previous10').addEventListener('click', function () {
-        for (var i = 0; i < 10; i++) {
-            prevFunction();
-        }
-    });
-
-    document.getElementById('whole').addEventListener('click', function () {
-      const modelManager = self.graf.model.undoManager;
-      while (modelManager.historyIndex + 1 < self.postup.length) {
-        nextFunction();
-      }
-    });
   }
 
   reloadGraph() {
+    if (!this.postup) {
+      return;
+    }
+    if(!this.graf) {
+      this.initGraph();
+    }
+
     const nodeDataArray = [{key: 0, name: 'root'}];
     this.graf.model = new go.TreeModel(nodeDataArray);
   }
 
-  _resetStavPromennych() {
-    this.listPromennych.forEach( function(item: Promenna){
-      item.pozice = -1;
-      item.zalohaDomeny = [];
-    });
+  krokuj() {
+      const modelManager = this.graf.model.undoManager;
+      if (modelManager.canRedo()) {
+        modelManager.redo();
+        return true;
+      }
+
+      const krok = modelManager.historyIndex + 1;
+        if (krok === this.postup.length) {
+            return false;
+        }
+
+        const node = this.postup[krok];
+
+        this.graf.startTransaction('make new node');
+        this.graf.model.addNodeData({key: (krok + 1), parent: node.rodic, name: node.hodnota, end: node.stav, title: node.nazev});
+        for (let i = 0; i < node.hodnotaDomenKroku.length; i++) {
+//          TODO zjistit a dodelat - vyuzito pouze u Forward Checkingu
+//            document.getElementById('domena' + i).nodeValue = node.hodnotaDomenKroku[i];
+        }
+        this.graf.commitTransaction('make new node');
+
+    return true;
   }
 
-  // TODO directive
-  convertFromString(value: string) {
-    const result =  value.split(',').map(function(item, index, array) {
-      const converted = parseInt(item.trim(), 10);
-      if (!isNaN(converted)) {
-        return converted;
+  krokujReseni() {
+    while (this.krokuj()) {
+      const krok = this.postup[this.graf.model.undoManager.historyIndex];
+      if (krok.stav === 'reseni') {
+        break;
+      }
+    }
+  }
+
+  krokujCele() {
+    while (this.krokuj()) {};
+  }
+
+  odkrokuj() {
+      const modelManager = this.graf.model.undoManager;
+      if (modelManager.canUndo()) {
+        modelManager.undo();
+        return true;
       }
 
-      if (index === array.length - 1 && item === '-') {
-        return item;
+    return false;
+  }
+
+  odkrokujReseni() {
+    while (this.odkrokuj()) {
+      const krok = this.graf.model.undoManager.historyIndex;
+      if (krok >= 0 && this.postup[krok].stav === 'reseni') {
+        break;
       }
+    }
+  }
 
-      return null;
-    }).filter(function(item, index, array) {
-      return item || (index === array.length - 1);
-    });
+  odkrokujCele() {
+    while (this.odkrokuj()) {};
+  }
 
-    return result;
+  zoomIn() {
+    this.graf.scale = this.graf.scale * 1.1;
+    this.graf.scrollToRect(this.graf.findNodeForKey(0).actualBounds);
+  }
+
+  zoomOut() {
+    this.graf.scale = this.graf.scale / 1.1;
+    this.graf.scrollToRect(this.graf.findNodeForKey(0).actualBounds);
+  }
+
+
+  center() {
+    this.graf.zoomToFit();
   }
 
   // TODO odstranit

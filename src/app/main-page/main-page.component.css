@@ -22,53 +22,51 @@
 	position: relative;
 }
 
-/* #overlay{
-    width: 100%;
-    height: 100%;
-    position:  fixed;
-    top: 0;
-    left: 0;
-    background-image: url(overlay.png);
-} */
-
-#boxFrame{
-    width: 100%;
-    position:  fixed;
-    top: 10%;
-    left: 35%
+#navod {
+	margin-top: 5em;
+	text-align: center;
+	color: grey;
 }
 
-#box{
-    width: 310px;
-    padding: 10px;
-    margin: auto;
-    background-color: lawngreen;
-    border: 3px solid blue;
-    font-size: 10px;
+#navod > i {
+	font-size: 10em;
+    margin-bottom: 0.5em;
 }
 
-#div.container {
-    width: 100%;
-    border: 1px
+#navod > span {
+	display: block;
+	font-size: 2em;
+	line-height: 1.45;
 }
 
-#div.info {
-    width: 100%;
-    border: 1px
+.graf-plocha {
+	width: 100%;
+	height: calc(100vh - 5em);
 }
-
-#krok {
-    height: 2em;
+.graf-navigation {
+    height: 4.5em;
     text-align: center;
 }
 
-#navigace {
-    height: 4em;
-    text-align: center;
+.graf-navigation button {
+    margin: 0 0.25em;
 }
 
-#navigace button {
-    margin: 0 2px;
+.graf-navigation .graf-step {
+	display: inline-block;
+	width: 3em;
+}
+
+.graf-zoom {
+	position: absolute;
+	top: 30px;
+	right: 30px;
+	z-index: 5;
+}
+
+.graf-zoom button{
+	display: block;
+	margin-bottom: 0.5em;
 }
 
 #menu {

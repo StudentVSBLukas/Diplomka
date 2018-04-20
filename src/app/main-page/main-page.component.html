@@ -2,7 +2,7 @@
     <div id="vstupy" class="form">
         <form class="input-form">
 	     	<div class="row-layout container-fluid form-header">
-	     		<h3>Zad·nÌ</h3>
+	     		<h3>Zad√°n√≠</h3>
 	     		<i class="fa fa-fw fa-plus clickable" (click)="pridejPromennou()"></i>
 	     	</div>
 
@@ -32,7 +32,7 @@
 		                 	<div class="col-sm-1"></div>
 			             	<div class="col-sm-11">
 			             		<div *ngIf="domenaControl.invalid && (domenaControl.dirty || domenaControl.touched)" class="text text-danger">
-			             			Povolena jsou cel· ËÌsla oddÏlen· Ë·rkou
+			             			Povolena jsou cel√° ƒç√≠sla oddƒõlen√° ƒç√°rkou
 			             		</div>
 			                </div>
 		                
@@ -49,15 +49,15 @@
 
         <form  (ngSubmit)="run()" #provedeniForm="ngForm" class="input-form ">
         	<div class="container-fluid form-header">
-	        	<h3>Proveden√≠</h3>
+	        	<h3>ProvedenƒÇ¬≠</h3>
 	        </div>
 	        <div class="container-fluid">
 		        <div class="row form-group">
 		        	<div class="col-sm-4">
-		        		<label for="pocetReseni">PoËet ¯eöenÌ</label>
+		        		<label for="pocetReseni">Poƒçet ≈ôe≈°en√≠</label>
 		        	</div>
 		        	<div class="col-sm-8">
-		            	<input id="pocetReseni" type="number" name="pocetReseni" [(ngModel)]="pocetReseni" #pocetReseniControl="ngModel" min="0" placeholder="NeomezenÏ" />
+		            	<input id="pocetReseni" type="number" name="pocetReseni" [(ngModel)]="pocetReseni" #pocetReseniControl="ngModel" min="0" placeholder="Neomezenƒõ" />
 		            </div>
 		        </div>
 		            
@@ -81,7 +81,7 @@
 		        
 		        <div class="row form-group form-submit">
 		        	<div class="col-sm-12">
-		        		<button type="submit" class="btn btn-success" [disabled]="!provedeniForm.form.valid">SpoËti</button>
+		        		<button type="submit" class="btn btn-success" [disabled]="!provedeniForm.form.valid">Spoƒçti</button>
 		            </div>
 		        </div>
 		    </div>
@@ -106,7 +106,7 @@
 	                        <button type="button" class="close" aria-label="Close" (click)="closeDialogOmezeni()">
 	                            <span aria-hidden="true">&times;</span>
 	                        </button>
-	                        <h4 class="modal-title">OmezenÌ promÏnnÈ {{vybranaPromenna.nazev}}</h4>
+	                        <h4 class="modal-title">Omezen√≠ promƒõnn√© {{vybranaPromenna.nazev}}</h4>
 	                    </div>
 	                    <form  (ngSubmit)="submitDialogOmezeni()" #omezeniForm="ngForm">
 	                    <div class="modal-body input-form">
@@ -119,7 +119,7 @@
 			                        		</div>
 			                        		<div class="col-sm-10">
 			                        			<span *ngIf="hodnotaOmezeni.invalid && (hodnotaOmezeni.dirty || hodnotaOmezeni.touched)">
-			                        				Hodnota je povinn·
+			                        				Hodnota je povinn√°
 			                        			</span>
 			                        		</div>
 		                        		</div>
@@ -138,8 +138,8 @@
 		                        		</div>
 		                        		<div class="col-sm-10">
 		                        			<span *ngIf="domenaOmezeni.invalid && (domenaOmezeni.dirty || domenaOmezeni.touched)" class="text text-danger">
-		                        				<span *ngIf="domenaOmezeni.errors.required">Hodnota je povinn·</span>
-		                        				<span *ngIf="domenaOmezeni.errors.pattern">Je moûnÈ zadat pouze dvojice ËÌsel oddÏlenÈ mezerou</span>
+		                        				<span *ngIf="domenaOmezeni.errors.required">Hodnota je povinn√°</span>
+		                        				<span *ngIf="domenaOmezeni.errors.pattern">Je mo≈æn√© zadat pouze dvojice ƒç√≠sel oddƒõlen√© mezerou</span>
 		                        			</span>
 		                        		</div>
 			                        	<div class="col-sm-1">
@@ -153,21 +153,21 @@
 		                        </div>
 		                        
 		                        <div *ngIf="vybranaPromenna.omezeni?.length === 0" class="row form-group">
-		                        	PromÏnn· nem· û·dnÈ omezenÌ. P¯idejte jej nÌûe.
+		                        	Promƒõnn√° nem√° ≈æ√°dn√© omezen√≠. P≈ôidejte jej n√≠≈æe.
 		                        </div>
 	                        </div>
 	                        
 	                        <div class="spacer container-fluid">
 	                        	<p-dropdown #newTypOmezeni [options]="typyOmezeni" placeholder="Typ"></p-dropdown>
 	                        	<p-dropdown [disabled]="!newTypOmezeni.value || jeJednoducheOmezeni(newTypOmezeni.value)" #newCilovaPromenna [options]="filtrovanePromenne" optionLabel="nazev" placeholder="Cil"></p-dropdown>
-	                        	<button type="button" class="btn btn-default" [disabled]="!(newTypOmezeni.value && (jeJednoducheOmezeni(newTypOmezeni.value) || newCilovaPromenna.value))" (click)="pridejOmezeni(vybranaPromenna, newTypOmezeni.value, newCilovaPromenna.value)"><i class="fa fa-plus" ></i> P¯idat omezenÌ</button>
+	                        	<button type="button" class="btn btn-default" [disabled]="!(newTypOmezeni.value && (jeJednoducheOmezeni(newTypOmezeni.value) || newCilovaPromenna.value))" (click)="pridejOmezeni(vybranaPromenna, newTypOmezeni.value, newCilovaPromenna.value)"><i class="fa fa-plus" ></i> P≈ôidat omezen√≠</button>
 	                        </div>
 	                    </div>
 	                    
 	                    <div class="modal-footer">
-	                        <button type="submit" class="btn btn-success" [disabled]="!omezeniForm.form.valid">Uloûit</button>
-	                        <button type="button" class="btn btn-danger" (click)="resetDialogOmezeni()">Vr·tit</button>
-	                        <button type="button" class="btn btn-default" (click)="closeDialogOmezeni()">Zruöit</button>
+	                        <button type="submit" class="btn btn-success" [disabled]="!omezeniForm.form.valid">Ulo≈æit</button>
+	                        <button type="button" class="btn btn-danger" (click)="resetDialogOmezeni()">Vr√°tit</button>
+	                        <button type="button" class="btn btn-default" (click)="closeDialogOmezeni()">Zru≈°it</button>
 	                    </div>
 	                    </form>
 	                </div>
@@ -181,28 +181,37 @@
     <div id="modalAppendTo" #modalAppendTo></div>  
         
     <div id="graf">
-        <div id="myDiagramDiv" style="width: 100%; height: 600px"></div>
+		<!-- Kvuli GoJS knihovne a registraci listeneru na DOm je nutne skryvat hidden a ne ngIf -->
+    	<div>
+	        <div id="myDiagramDiv" [class]="postup? 'graf-plocha' : 'graf-plocha hidden'"></div>
+	
+			<!--  TODO po presunuti grafu do samostatne komponenty neni nutne -->
+			<div *ngIf="postup">
+		        <div class="graf-navigation">
+		            <div >
+		                <button (click)="odkrokujCele()">&lt;&lt;&lt;&lt;</button>
+		                <button (click)="odkrokujReseni()">&lt;&lt;</button>
+		                <button (click)="odkrokuj()">&lt;&lt;</button>
+		                <span class="graf-step">{{graf.model.undoManager.historyIndex + 1}}</span> / <span class="graf-step">{{postup?.length}}</span>
+		                <button (click)="krokuj()">&gt;&gt;</button>
+		                <button (click)="krokujReseni()">&gt;&gt;</button>
+		                <button (click)="krokujCele()">&gt;&gt;&gt;&gt;</button>
+		            </div>
+		        </div>
 
-        <div id="krok">
-
+	            <div class="graf-zoom">
+	                <button (click)="zoomIn()"><i class="fa fa-plus"></i></button>
+	                <button (click)="center()"><i class="fa fa-crosshairs"></i></button>
+	                <button (click)="zoomOut()"><i class="fa fa-minus"></i></button>
+	            </div>
+	        </div>
         </div>
-
-        <div id="navigace">
-            <div>
-                <button id="previous10">-10
-                    &lt;&lt;</button>
-                        <button id="previous">
-                            &lt;&lt;</button>
-                                <button id="whole">Vykreslen√≠</button>
-                                <button id="next">&gt;&gt;</button>
-                                <button id="next10">+10 &gt;&gt;</button>
-            </div>
-            <div>
-                <button id="zoomToFit">Zoom to Fit</button>
-<!-- TODO Co to delalo? -->
-<!--                 <button id="vis" onclick="zobrazeniAktualnichHodnotDomen()">skr√Ωt</button> -->
-                <button id="centerRoot">P≈ôibl√≠≈æen√≠</button>
-            </div>
+        <div id="navod" *ngIf="!postup">
+        	<i class="fa fa-5x fa-edit"></i>
+        		<span>Definujte promƒõnn√© a jejich omezen√≠</span>
+        		<span>Vyberte algoritmus</span>
+        		<span>Spus≈•te v√Ωpoƒçet</span>
         </div>
     </div>
 </div>
+
