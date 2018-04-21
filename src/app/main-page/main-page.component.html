@@ -187,16 +187,17 @@
 	
 			<!--  TODO po presunuti grafu do samostatne komponenty neni nutne -->
 			<div *ngIf="postup">
+				<div class="graf-podrobnosti">
+					{{aktualniKrok?.popis}}
+				</div>
 		        <div class="graf-navigation">
-		            <div >
-		                <button (click)="odkrokujCele()">&lt;&lt;&lt;&lt;</button>
-		                <button (click)="odkrokujReseni()">&lt;&lt;</button>
-		                <button (click)="odkrokuj()">&lt;&lt;</button>
-		                <span class="graf-step">{{graf.model.undoManager.historyIndex + 1}}</span> / <span class="graf-step">{{postup?.length}}</span>
-		                <button (click)="krokuj()">&gt;&gt;</button>
-		                <button (click)="krokujReseni()">&gt;&gt;</button>
-		                <button (click)="krokujCele()">&gt;&gt;&gt;&gt;</button>
-		            </div>
+	                <button (click)="odkrokujCele()">&lt;&lt;&lt;&lt;</button>
+	                <button (click)="odkrokujReseni()">&lt;&lt;</button>
+	                <button (click)="odkrokuj()">&lt;</button>
+	                <span class="graf-step">{{graf.model.undoManager.historyIndex + 1}}</span> / <span class="graf-step">{{postup?.length}}</span>
+	                <button (click)="krokuj()">&gt;</button>
+	                <button (click)="krokujReseni()">&gt;&gt;</button>
+	                <button (click)="krokujCele()">&gt;&gt;&gt;&gt;</button>
 		        </div>
 
 	            <div class="graf-zoom">
@@ -204,13 +205,23 @@
 	                <button (click)="center()"><i class="fa fa-crosshairs"></i></button>
 	                <button (click)="zoomOut()"><i class="fa fa-minus"></i></button>
 	            </div>
+	            
+	            <div class="graf-domena">
+	            	<h4>Popis domény</h4>
+	            	<div class="table-layout">
+		            	<div *ngFor="let p of aktualniKrok?.hodnotaDomenKroku">
+		            		<div>{{p.nazev}}</div>
+		            		<div><span>= &#123;</span>{{p.domena}}<span>&#125;</span></div>
+		            	</div>
+		            </div>
+	            </div>
 	        </div>
         </div>
         <div id="navod" *ngIf="!postup">
         	<i class="fa fa-5x fa-edit"></i>
-        		<span>Definujte proměnné a jejich omezení</span>
-        		<span>Vyberte algoritmus</span>
-        		<span>Spusťte výpočet</span>
+        		<span>Definujte proměnné a jejich omezení.</span>
+        		<span>Vyberte algoritmus.</span>
+        		<span>Spusťte výpočet.</span>
         </div>
     </div>
 </div>

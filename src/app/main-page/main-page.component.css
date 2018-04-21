@@ -12,7 +12,6 @@
 	float: left;
 	width: 30px;
 	height: 100vh;
-/* 	background-color: Gainsboro; */
 }
 
 #graf {
@@ -41,10 +40,18 @@
 
 .graf-plocha {
 	width: 100%;
-	height: calc(100vh - 5em);
+	height: calc(100vh - 10em);
 }
+
+.graf-podrobnosti {
+	height: 2em;
+	margin-top: 1em;
+    text-align: center;
+}
+
 .graf-navigation {
-    height: 4.5em;
+    height: 4em;
+    margin-top: 1em;
     text-align: center;
 }
 
@@ -57,10 +64,20 @@
 	width: 3em;
 }
 
+.graf-domena {
+	position: absolute;
+	top: 10px;
+	left: 10px;
+	z-index: 5;
+	background-color: white;
+	min-width: 180px;
+	padding-top: 15px;
+}
+
 .graf-zoom {
 	position: absolute;
-	top: 30px;
-	right: 30px;
+	top: 10px;
+	right: 10px;
 	z-index: 5;
 }
 
@@ -94,6 +111,18 @@
 	margin-left: 0.5em;
 }
 
+.table-layout {
+	display: table;
+}
+
+.table-layout > div {
+	display: table-row;
+}
+
+.table-layout > div > div {
+	display: table-cell;
+}
+
 .tooltip{
     position: relative;
     display: inline-block;
@@ -111,6 +140,14 @@
 .tooltip:hover .tooltiptext{
     visibility: visible;
     opacity: 1;
+}
+
+.row .rowHover {
+	visibility: hidden;
+}
+
+.row:hover .rowHover {
+	visibility: visible;
 }
 
 .clickable {

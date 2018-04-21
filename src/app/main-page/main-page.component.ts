@@ -91,6 +91,7 @@ export class MainPageComponent implements OnInit {
   // Komponenta graf
   graf;
   postup;
+  aktualniKrok;
 
   constructor() { }
 
@@ -655,9 +656,11 @@ export class MainPageComponent implements OnInit {
   }
 
   _forwardChechHodnotaDomen(seznamPromennych) {
-    var hodnotyDomen = new Array();
-    for (var i = 0; i < seznamPromennych.length; i++) {
-      hodnotyDomen.push(seznamPromennych[i].domena.slice());
+    const hodnotyDomen = new Array();
+    for (let i = 0; i < seznamPromennych.length; i++) {
+      const promenna = seznamPromennych[i];
+      const kopie = new Promenna(promenna.nazev, promenna.domena.slice());
+      hodnotyDomen.push(kopie);
     }
     return hodnotyDomen;
   }
@@ -1699,25 +1702,20 @@ export class MainPageComponent implements OnInit {
 
   krokuj() {
       const modelManager = this.graf.model.undoManager;
+      const krok = modelManager.historyIndex + 1;
+      if (krok === this.postup.length) {
+          return false;
+      }
+      
+      this.aktualniKrok = this.postup[krok];
       if (modelManager.canRedo()) {
         modelManager.redo();
         return true;
       }
 
-      const krok = modelManager.historyIndex + 1;
-        if (krok === this.postup.length) {
-            return false;
-        }
-
-        const node = this.postup[krok];
-
-        this.graf.startTransaction('make new node');
-        this.graf.model.addNodeData({key: (krok + 1), parent: node.rodic, name: node.hodnota, end: node.stav, title: node.nazev});
-        for (let i = 0; i < node.hodnotaDomenKroku.length; i++) {
-//          TODO zjistit a dodelat - vyuzito pouze u Forward Checkingu
-//            document.getElementById('domena' + i).nodeValue = node.hodnotaDomenKroku[i];
-        }
-        this.graf.commitTransaction('make new node');
+      this.graf.startTransaction('make new node');
+      this.graf.model.addNodeData({key: (krok + 1), parent: this.aktualniKrok.rodic, name: this.aktualniKrok.hodnota, end: this.aktualniKrok.stav, title: this.aktualniKrok.popis});
+      this.graf.commitTransaction('make new node');
 
     return true;
   }
@@ -1737,6 +1735,13 @@ export class MainPageComponent implements OnInit {
 
   odkrokuj() {
       const modelManager = this.graf.model.undoManager;
+      const krok = modelManager.historyIndex - 1;
+      if (krok >= 0) {
+          this.aktualniKrok = this.postup[krok];
+      } else {
+          this.aktualniKrok = null;
+      }
+    
       if (modelManager.canUndo()) {
         modelManager.undo();
         return true;
