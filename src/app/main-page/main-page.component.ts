@@ -1,4 +1,5 @@
 import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
+import { TranslateService, TranslatePipe } from '@ngx-translate/core';
 import {SelectItem} from 'primeng/api';
 import * as go from 'gojs';
 
@@ -47,6 +48,7 @@ export class KrokAlgoritmu {
   rodic;
   popis;
   stav;
+  omezeni;
   hodnotaDomenKroku = new Array();
 };
 
@@ -67,25 +69,25 @@ export class MainPageComponent implements OnInit {
   vybranaPromenna;
   filtrovanePromenne;
   typyOmezeni = [
-    {label: '<', value: '<'},
-    {label: '>', value: '>'},
-    {label: '=', value: '='},
-    {label: '!', value: '!'},
-    {label: 'p', value: 'p'},
-    {label: 'z', value: 'z'}
+    {label: 'omezeni.typ.<', value: '<'},
+    {label: 'omezeni.typ.>', value: '>'},
+    {label: 'omezeni.typ.=', value: '='},
+    {label: 'omezeni.typ.!', value: '!'},
+    {label: 'omezeni.typ.p', value: 'p'},
+    {label: 'omezeni.typ.z', value: 'z'}
   ];
 
-  selectedAlgorithm = 'Backtracking';
-  iConsistencyFaktor = 1;
   algoritmy = [
-    {label: 'Backtracking', value: 'Backtracking'},
-    {label: 'Backjumping', value: 'Backjumping'},
-    {label: 'Forward Check', value: 'Forward Check'},
-    {label: 'Arc Consistency', value: 'Arc Consistency'},
-    {label: 'Random', value: 'Random'},
-    {label: 'Dynamic order', value: 'Dynamic order'},
-    {label: 'iConsistency', value: 'iConsistency'}
+    {label: 'provedeni.typ.backtracking', value: 'backtracking'},
+    {label: 'provedeni.typ.backjumping', value: 'backjumping'},
+    {label: 'provedeni.typ.forwardCheck', value: 'forwardCheck'},
+    {label: 'provedeni.typ.arcConsistency', value: 'arcConsistency'},
+    {label: 'provedeni.typ.random', value: 'random'},
+    {label: 'provedeni.typ.dynamicOrder', value: 'dynamicOrder'},
+    {label: 'provedeni.typ.iConsistency', value: 'iConsistency'}
   ];
+  selectedAlgorithm = this.algoritmy[0].value;
+  iConsistencyFaktor = 1;
 
 
   // Komponenta graf
@@ -93,7 +95,10 @@ export class MainPageComponent implements OnInit {
   postup;
   aktualniKrok;
 
-  constructor() { }
+  constructor(private translate: TranslateService) {
+      translate.setDefaultLang('cz');
+      translate.use('cz');
+  }
 
 
   ngOnInit() {
@@ -235,12 +240,12 @@ export class MainPageComponent implements OnInit {
     const zadani = this.pripravAktivniPromenne();
 
     switch (this.selectedAlgorithm) {
-      case 'Backtracking' : this.postup = this.backtracking(this.pocetReseni, zadani); break;
-      case 'Backjumping' : this.postup = this.backjumping(this.pocetReseni, zadani); break;
-      case 'Forward Check' : this.postup = this.forwardChecking(this.pocetReseni, zadani); break;
-      case 'Arc Consistency' : this.postup = this.arcConsistency(this.pocetReseni, zadani); break;
-      case 'Random' : this.postup = this.randomBacktracking(this.pocetReseni, zadani); break;
-      case 'Dynamic order' : this.postup = this.dynamicOrderBacktracking(this.pocetReseni, zadani); break;
+      case 'backtracking' : this.postup = this.backtracking(this.pocetReseni, zadani); break;
+      case 'backjumping' : this.postup = this.backjumping(this.pocetReseni, zadani); break;
+      case 'forwardCheck' : this.postup = this.forwardChecking(this.pocetReseni, zadani); break;
+      case 'arcConsistency' : this.postup = this.arcConsistency(this.pocetReseni, zadani); break;
+      case 'random' : this.postup = this.randomBacktracking(this.pocetReseni, zadani); break;
+      case 'dynamicOrder' : this.postup = this.dynamicOrderBacktracking(this.pocetReseni, zadani); break;
       case 'iConsistency' : this.postup = this.iConsistency(this.pocetReseni, this.iConsistencyFaktor, zadani); break;
       default:
     }
@@ -309,25 +314,26 @@ export class MainPageComponent implements OnInit {
         continue;
       }
 
-      var krokAlgoritmu = new KrokAlgoritmu();
-      krokAlgoritmu.popis = 'VĂ˝bÄ›r hodnoty z domĂ©ny promÄ›nnĂ© ' + zpracovavanaPromenna.nazev;
+      const krokAlgoritmu = new KrokAlgoritmu();
       krokAlgoritmu.nazev = zpracovavanaPromenna.nazev;
       krokAlgoritmu.promenna = promenna;
       krokAlgoritmu.hodnota = zpracovavanaPromenna.domena[zpracovavanaPromenna.pozice];
       krokAlgoritmu.rodic = this._lastIndex(promenna - 1, postupTvoreniGrafu) + 1;
       postupTvoreniGrafu.push(krokAlgoritmu);
 
-      var splneniOmezeni = this._porovnej(zpracovavanaPromenna, seznamPromennych);
-      if (splneniOmezeni.length > 0) {
-        krokAlgoritmu.popis += splneniOmezeni;
+      const poruseneOmezeni = this._porovnej(zpracovavanaPromenna, seznamPromennych);
+      if (poruseneOmezeni) {
+        krokAlgoritmu.popis = 'popis.backtracking.deadend';
+        krokAlgoritmu.omezeni = poruseneOmezeni;
         krokAlgoritmu.stav = 'deadend';
       } else {
         if (promenna === (seznamPromennych.length - 1)) {
           pocetReseni++;
+          krokAlgoritmu.popis = 'popis.backtracking.reseni';
           krokAlgoritmu.stav = 'reseni';
-          krokAlgoritmu.popis = 'NALEZENO Ĺ�EĹ ENĂŤ';
         } else {
           promenna++;
+          krokAlgoritmu.popis = 'popis.backtracking.uzel';
         }
       }
 
@@ -361,19 +367,19 @@ export class MainPageComponent implements OnInit {
         if (zpracovavanaPromenna.pozice === zpracovavanaPromenna.domena.length) {
           break;
         }
-        var krokAlgoritmu = new KrokAlgoritmu();
-        krokAlgoritmu.popis = 'VĂ˝bÄ›r hodnoty z domĂ©ny promÄ›nnĂ© ' + zpracovavanaPromenna.nazev;
-        krokAlgoritmu.nazev = zpracovavanaPromenna.nazev;
-        krokAlgoritmu.promenna = promenna;
-        krokAlgoritmu.hodnota = zpracovavanaPromenna.domena[zpracovavanaPromenna.pozice];
-        krokAlgoritmu.rodic = 0;
-        postupTvoreniGrafu.push(krokAlgoritmu);
+        var krokAlgoritmu2 = new KrokAlgoritmu();
+        krokAlgoritmu2.nazev = zpracovavanaPromenna.nazev;
+        krokAlgoritmu2.promenna = promenna;
+        krokAlgoritmu2.hodnota = zpracovavanaPromenna.domena[zpracovavanaPromenna.pozice];
+        krokAlgoritmu2.rodic = 0;
+        postupTvoreniGrafu.push(krokAlgoritmu2);
         if (promenna === seznamPromennych.length - 1) {
           pocetReseni++;
-          krokAlgoritmu.stav = 'reseni';
-          krokAlgoritmu.popis = 'NALEZENO Ĺ�EĹ ENĂŤ';
+          krokAlgoritmu2.stav = 'reseni';
+          krokAlgoritmu2.popis = 'popis.backjumping.reseni';
           leafend[promenna] = true;
         } else {
+          krokAlgoritmu2.popis = 'popis.backjumping.uzel';
           leafend[promenna] = true;
           promenna++;
         }
@@ -406,33 +412,31 @@ export class MainPageComponent implements OnInit {
             seznamPromennych[i].pozice = -1;
             leafend[i] = false;
           }
-          if (krokAlgoritmu.stav !== 'reseni') {
-            krokAlgoritmu.stav = 'deadend';
-          }
           promenna = backjump;
         } else {
-          var krokAlgoritmu = new KrokAlgoritmu();
-          krokAlgoritmu.popis = 'VĂ˝bÄ›r hodnoty z domĂ©ny promÄ›nnĂ© ' + zpracovavanaPromenna.nazev;
-          krokAlgoritmu.nazev = zpracovavanaPromenna.nazev;
-          krokAlgoritmu.promenna = promenna;
-          krokAlgoritmu.hodnota = zpracovavanaPromenna.domena[zpracovavanaPromenna.pozice];
-          krokAlgoritmu.rodic = this._lastIndex(promenna - 1, postupTvoreniGrafu) + 1;
-          var splneniOmezeni = this._porovnej(zpracovavanaPromenna, seznamPromennych);
-          if (!(splneniOmezeni.length > 0)) {
+          var krokAlgoritmu2 = new KrokAlgoritmu();
+          krokAlgoritmu2.nazev = zpracovavanaPromenna.nazev;
+          krokAlgoritmu2.promenna = promenna;
+          krokAlgoritmu2.hodnota = zpracovavanaPromenna.domena[zpracovavanaPromenna.pozice];
+          krokAlgoritmu2.rodic = this._lastIndex(promenna - 1, postupTvoreniGrafu) + 1;
+          const poruseneOmezeni = this._porovnej(zpracovavanaPromenna, seznamPromennych);
+          if (!poruseneOmezeni) {
             if (promenna === seznamPromennych.length - 1) {
               pocetReseni++;
-              krokAlgoritmu.stav = 'reseni';
-              krokAlgoritmu.popis = 'NALEZENO Ĺ�EĹ ENĂŤ';
+              krokAlgoritmu2.stav = 'reseni';
+              krokAlgoritmu2.popis = 'popis.backjumping.reseni';
               leafend[promenna] = true;
             } else {
+              krokAlgoritmu2.popis = 'popis.backjumping.uzel';
               leafend[promenna] = true;
               promenna++;
             }
-            postupTvoreniGrafu.push(krokAlgoritmu);
+            postupTvoreniGrafu.push(krokAlgoritmu2);
           } else {
-            krokAlgoritmu.popis += splneniOmezeni;
-            krokAlgoritmu.stav = 'deadend';
-            postupTvoreniGrafu.push(krokAlgoritmu);
+            krokAlgoritmu2.popis = 'popis.backjumping.deadend';
+            krokAlgoritmu2.omezeni = poruseneOmezeni;
+            krokAlgoritmu2.stav = 'deadend';
+            postupTvoreniGrafu.push(krokAlgoritmu2);
 
           }
         }
@@ -473,30 +477,32 @@ export class MainPageComponent implements OnInit {
         continue;
       }
 
-      var krokAlgoritmu = new KrokAlgoritmu();
-      krokAlgoritmu.popis = 'VĂ˝bÄ›r hodnoty z domĂ©ny promÄ›nnĂ© ' + zpracovavanaPromenna.nazev;
+      const krokAlgoritmu = new KrokAlgoritmu();
       krokAlgoritmu.nazev = zpracovavanaPromenna.nazev;
       krokAlgoritmu.promenna = promenna;
       krokAlgoritmu.hodnota = zpracovavanaPromenna.domena[zpracovavanaPromenna.pozice];
       krokAlgoritmu.rodic = this._lastIndex(promenna - 1, postupTvoreniGrafu) + 1;
 
 
-      var splneniOmezeni = this._porovnej(zpracovavanaPromenna, seznamPromennych);
-      if (splneniOmezeni.length > 0) {
-        krokAlgoritmu.popis += splneniOmezeni;
+      const poruseneOmezeni = this._porovnej(zpracovavanaPromenna, seznamPromennych);
+      if (poruseneOmezeni) {
+        krokAlgoritmu.popis = 'popis.forwardCheck.deadend';
+        krokAlgoritmu.omezeni = poruseneOmezeni;
         krokAlgoritmu.stav = 'deadend';
       } else {
         if (promenna === (seznamPromennych.length - 1)) {
           pocetReseni++;
           krokAlgoritmu.stav = 'reseni';
-          krokAlgoritmu.popis = 'NALEZENO Ĺ�EĹ ENĂŤ';
+          krokAlgoritmu.popis = 'popis.forwardCheck.reseni';
           krokAlgoritmu.hodnotaDomenKroku = this._forwardChechHodnotaDomen(seznamPromennych);
         } else {
           var tmp = this._forwardCheck(promenna + 1, zpracovavanaPromenna.domena[zpracovavanaPromenna.pozice], seznamPromennych, vstup);
           if (tmp[0] === null) {
+            krokAlgoritmu.popis = 'popis.forwardCheck.checkFail';
             krokAlgoritmu.stav = 'deadend';
           } else {
             seznamPromennych = tmp[0];
+            krokAlgoritmu.popis = 'popis.forwardCheck.uzel';
             promenna++;
           }
           krokAlgoritmu.hodnotaDomenKroku = tmp[1];
@@ -791,7 +797,7 @@ export class MainPageComponent implements OnInit {
         promennaA.domena.splice(i, 1);
         i--;
         if (promennaA.domena.length === 0) {
-          return 'U promÄ›nnĂ© ' + promennaA.nazev + ' vznikla prĂˇzdnĂˇ domĂ©na, tudĂ­Ĺľ pro tento problĂ©m neexistuje Ĺ™eĹˇenĂ­';
+          return 'popis.arcConsistency.prazdnaDomena';
         }
       }
     }
@@ -813,7 +819,7 @@ export class MainPageComponent implements OnInit {
         promennaA.domena.splice(i, 1);
         i--;
         if (promennaA.domena.length === 0) {
-          return 'U promÄ›nnĂ© ' + promennaA.nazev + ' vznikla prĂˇzdnĂˇ domĂ©na, tudĂ­Ĺľ pro tento problĂ©m neexistuje Ĺ™eĹˇenĂ­';
+          return 'popis.arcConsistency.prazdnaDomena';
         }
       }
     }
@@ -835,7 +841,7 @@ export class MainPageComponent implements OnInit {
         promennaA.domena.splice(i, 1);
         i--;
         if (promennaA.domena.length === 0) {
-          return 'U promÄ›nnĂ© ' + promennaA.nazev + ' vznikla prĂˇzdnĂˇ domĂ©na, tudĂ­Ĺľ pro tento problĂ©m neexistuje Ĺ™eĹˇenĂ­';
+          return 'popis.arcConsistency.prazdnaDomena';
         }
       }
     }
@@ -857,7 +863,7 @@ export class MainPageComponent implements OnInit {
         promennaA.domena.splice(i, 1);
         i--;
         if (promennaA.domena.length === 0) {
-          return 'U promÄ›nnĂ© ' + promennaA.nazev + ' vznikla prĂˇzdnĂˇ domĂ©na, tudĂ­Ĺľ pro tento problĂ©m neexistuje Ĺ™eĹˇenĂ­';
+          return 'popis.arcConsistency.prazdnaDomena';
         }
       }
     }
@@ -901,13 +907,13 @@ export class MainPageComponent implements OnInit {
         promennaA.domena.splice(i, 1);
         i--;
         if (promennaA.domena.length === 0) {
-          return 'U promÄ›nnĂ© ' + promennaA.nazev + ' vznikla prĂˇzdnĂˇ domĂ©na, tudĂ­Ĺľ pro tento problĂ©m neexistuje Ĺ™eĹˇenĂ­';
+          return 'popis.arcConsistency.prazdnaDomena';
         }
       } else if (remove && volani === 2) {
         promennaB.domena.splice(i, 1);
         i--;
         if (promennaB.domena.length === 0) {
-          return 'U promÄ›nnĂ© ' + promennaA.nazev + ' vznikla prĂˇzdnĂˇ domĂ©na, tudĂ­Ĺľ pro tento problĂ©m neexistuje Ĺ™eĹˇenĂ­';
+          return 'popis.arcConsistency.prazdnaDomena';
         }
       }
     }
@@ -975,13 +981,13 @@ export class MainPageComponent implements OnInit {
       if (remove && volani === 1) {
         promennaA.domena.splice(i, 1);
         if (promennaA.domena.length === 0) {
-          return 'U promÄ›nnĂ© ' + promennaA.nazev + ' vznikla prĂˇzdnĂˇ domĂ©na, tudĂ­Ĺľ pro tento problĂ©m neexistuje Ĺ™eĹˇenĂ­';
+          return 'popis.arcConsistency.prazdnaDomena';
         }
         i--;
       } else if (remove && volani === 2) {
         promennaB.domena.splice(i, 1);
         if (promennaB.domena.length === 0) {
-          return 'U promÄ›nnĂ© ' + promennaB.nazev + ' vznikla prĂˇzdnĂˇ domĂ©na, tudĂ­Ĺľ pro tento problĂ©m neexistuje Ĺ™eĹˇenĂ­';
+          return 'popis.arcConsistency.prazdnaDomena';
         }
         i--;
       }
@@ -1040,27 +1046,28 @@ export class MainPageComponent implements OnInit {
         continue;
       }
 
-      var krokAlgoritmu = new KrokAlgoritmu();
-      krokAlgoritmu.popis = 'VĂ˝bÄ›r hodnoty z domĂ©ny promÄ›nnĂ© ' + zpracovavanaPromenna.nazev;
+      const krokAlgoritmu = new KrokAlgoritmu();
       krokAlgoritmu.nazev = zpracovavanaPromenna.nazev;
       krokAlgoritmu.promenna = promenna;
       krokAlgoritmu.hodnota = zpracovavanaPromenna.domena[zpracovavanaPromenna.pozice];
       krokAlgoritmu.rodic = this._lastIndex(promenna - 1, postupTvoreniGrafu) + 1;
       postupTvoreniGrafu.push(krokAlgoritmu);
 
-      var splneniOmezeni = this._porovnej(zpracovavanaPromenna, seznamPromennych);
-      if (splneniOmezeni.length > 0) {
-        krokAlgoritmu.popis += splneniOmezeni;
+      const poruseneOmezeni = this._porovnej(zpracovavanaPromenna, seznamPromennych);
+      if (poruseneOmezeni) {
+        krokAlgoritmu.popis = 'popis.random.deadend';
+        krokAlgoritmu.omezeni = poruseneOmezeni;
         krokAlgoritmu.stav = 'deadend';
         zpracovavanaPromenna.domena.splice(zpracovavanaPromenna.pozice, 1);
       } else {
         if (promenna === (seznamPromennych.length - 1)) {
           pocetReseni++;
           krokAlgoritmu.stav = 'reseni';
-          krokAlgoritmu.popis = 'NALEZENO Ĺ�EĹ ENĂŤ';
+          krokAlgoritmu.popis = 'popis.random.reseni';
           zpracovavanaPromenna.domena.splice(zpracovavanaPromenna.pozice, 1);
         } else {
           promenna++;
+          krokAlgoritmu.popis = 'popis.random.uzel';
         }
       }
 
@@ -1092,25 +1099,26 @@ export class MainPageComponent implements OnInit {
         continue;
       }
 
-      var krokAlgoritmu = new KrokAlgoritmu();
-      krokAlgoritmu.popis = 'VĂ˝bÄ›r hodnoty z domĂ©ny promÄ›nnĂ© ' + zpracovavanaPromenna.nazev;
+      const krokAlgoritmu = new KrokAlgoritmu();
       krokAlgoritmu.nazev = zpracovavanaPromenna.nazev;
       krokAlgoritmu.promenna = promenna;
       krokAlgoritmu.hodnota = zpracovavanaPromenna.domena[zpracovavanaPromenna.pozice];
       krokAlgoritmu.rodic = this._lastIndex(promenna - 1, postupTvoreniGrafu) + 1;
       postupTvoreniGrafu.push(krokAlgoritmu);
 
-      var splneniOmezeni = this._porovnej(zpracovavanaPromenna, seznamPromennych);
-      if (splneniOmezeni.length > 0) {
-        krokAlgoritmu.popis += splneniOmezeni;
+      const poruseneOmezeni = this._porovnej(zpracovavanaPromenna, seznamPromennych);
+      if (poruseneOmezeni) {
+        krokAlgoritmu.popis = 'popis.dynamicOrder.deadend';
+        krokAlgoritmu.omezeni = poruseneOmezeni;
         krokAlgoritmu.stav = 'deadend';
       } else {
         if (promenna === (seznamPromennych.length - 1)) {
           pocetReseni++;
           krokAlgoritmu.stav = 'reseni';
-          krokAlgoritmu.popis = 'NALEZENO Ĺ�EĹ ENĂŤ';
+          krokAlgoritmu.popis = 'popis.dynamicOrder.reseni';
         } else {
           promenna++;
+          krokAlgoritmu.popis = 'popis.dynamicOrder.uzel';
         }
       }
 
@@ -1533,7 +1541,8 @@ export class MainPageComponent implements OnInit {
             var porovnavanaPromenna = omezeni.hodnotyOmezeni[j];
             var porovnavanaHodnota = this._valueOf(seznamPromennych, porovnavanaPromenna).vratPrirazenouHodnotu();
             if (!(cislo < porovnavanaHodnota)) {
-              return ', nesplnÄ›nĂ­ podmĂ­nky ' + promenna.nazev + '<' + porovnavanaPromenna + ' (' + cislo + '<' + porovnavanaHodnota + ')';
+              omezeni.omezeniProPromennou = porovnavanaPromenna;
+              return omezeni;
             }
           }
           break;
@@ -1542,7 +1551,8 @@ export class MainPageComponent implements OnInit {
             var porovnavanaPromenna = omezeni.hodnotyOmezeni[j];
             var porovnavanaHodnota = this._valueOf(seznamPromennych, porovnavanaPromenna).vratPrirazenouHodnotu();
             if (!(cislo > porovnavanaHodnota)) {
-              return ', nesplnÄ›nĂ­ podmĂ­nky ' + promenna.nazev + '>' + porovnavanaPromenna + ' (' + cislo + '>' + porovnavanaHodnota + ')';
+              omezeni.omezeniProPromennou = porovnavanaPromenna;
+              return omezeni;
             }
           }
           break;
@@ -1551,7 +1561,8 @@ export class MainPageComponent implements OnInit {
             var porovnavanaPromenna = omezeni.hodnotyOmezeni[j];
             var porovnavanaHodnota = this._valueOf(seznamPromennych, porovnavanaPromenna).vratPrirazenouHodnotu();
             if (cislo !== porovnavanaHodnota) {
-              return ', nesplnÄ›nĂ­ podmĂ­nky ' + promenna.nazev + '=' + porovnavanaPromenna + ' (' + cislo + '=' + porovnavanaHodnota + ')';
+              omezeni.omezeniProPromennou = porovnavanaPromenna;
+              return omezeni;
             }
           }
           break;
@@ -1560,7 +1571,8 @@ export class MainPageComponent implements OnInit {
             var porovnavanaPromenna = omezeni.hodnotyOmezeni[j];
             var porovnavanaHodnota = this._valueOf(seznamPromennych, porovnavanaPromenna).vratPrirazenouHodnotu();
             if (cislo === porovnavanaHodnota) {
-              return ', nesplnÄ›nĂ­ podmĂ­nky ' + promenna.nazev + 'â‰ ' + porovnavanaPromenna + ' (' + cislo + 'â‰ ' + porovnavanaHodnota + ')';
+              omezeni.omezeniProPromennou = porovnavanaPromenna;
+              return omezeni;
             }
           }
           break;
@@ -1577,7 +1589,7 @@ export class MainPageComponent implements OnInit {
             }
           }
           if (!nalezeno) {
-            return ',  nesplnÄ›nĂ­ podmĂ­nky ' + promenna.nazev + 'p' + porovnavanaPromenna + ' (' + cislo + 'p' + porovnavanaHodnota + ')';
+            return omezeni;
           }
           break;
         case 'z':
@@ -1585,13 +1597,12 @@ export class MainPageComponent implements OnInit {
           var porovnavanaHodnota = this._valueOf(seznamPromennych, porovnavanaPromenna).vratPrirazenouHodnotu();
           for (var j = 0; j < omezeni.hodnotyOmezeni.length; j++) {
             if (cislo === parseInt(omezeni.hodnotyOmezeni[j][0]) && porovnavanaHodnota === parseInt(omezeni.hodnotyOmezeni[j][1])) {
-              return ',  nesplnÄ›nĂ­ podmĂ­nky ' + promenna.nazev + 'z' + porovnavanaPromenna + ' (' + cislo + 'z' + porovnavanaHodnota + ')';
+              return omezeni;
             }
           }
           break;
       }
     }
-    return '';
   }
 
 
@@ -1635,28 +1646,32 @@ export class MainPageComponent implements OnInit {
                                         {angle: 90, nodeSpacing: 10, layerSpacing: 40, layerStyle: go.TreeLayout.LayerUniform})
                     });
     this.graf = myDiagram;
-    var reseni = '#72E91B';
-    var deadEnd = '#FFB40E';
 
-    function endColor(end) {
-        if (end === 'reseni') {
-            return reseni;
+    const self = this;
+    function valueConverter(krok) {
+      return krok.hodnota;
+    }
+    function colorConverter(krok) {
+        const stav = krok.stav;
+
+        if (stav === 'reseni') {
+            return '#72E91B';
         }
-        if (end === 'deadend') {
-            return deadEnd;
+        if (stav === 'deadend') {
+            return '#FFB40E';
         }
-        if (end === 'nic') {
+        if (stav === 'nic') {
             return 'gray';
         }
+
+      return 'lightgray';
     }
 
-    function tooltipTextConverter(prvek) {
-        var str = prvek.title;
-
-        return str;
+    function tooltipConverter(krok) {
+        return self.translate.instant(krok.popis, krok);
     }
 
-    var tooltiptemplate =
+    const tooltipTemplate =
             $(go.Adornment, 'Auto',
                     $(go.Shape, 'Rectangle',
                             {fill: 'whitesmoke', stroke: 'black'}),
@@ -1664,23 +1679,23 @@ export class MainPageComponent implements OnInit {
                             {font: 'bold 8pt Helvetica, bold Arial, sans-serif',
                                 wrap: go.TextBlock.WrapFit,
                                 margin: 5},
-                            new go.Binding('text', '', tooltipTextConverter))
+                            new go.Binding('text', 'krok', tooltipConverter))
                     );
 
     myDiagram.nodeTemplate =
             $(go.Node, 'Auto',
-                    {deletable: false, toolTip: tooltiptemplate},
+                    {deletable: false, toolTip: tooltipTemplate},
                     new go.Binding('text', 'name'),
                     $(go.Shape, 'Rectangle',
                             {fill: 'lightgray',
                                 stroke: 'full', strokeWidth: 1,
                                 alignment: go.Spot.Center},
-                            new go.Binding('fill', 'end', endColor)),
+                            new go.Binding('fill', 'krok', colorConverter)),
                     $(go.TextBlock,
                             {font: '700 15px Droid Serif, sans-serif',
                                 textAlign: 'center',
-                                margin: 8, maxSize: new go.Size(80, NaN)},
-                            new go.Binding('text', 'name'))
+                                margin: 8, maxSize: new go.Size(150, NaN)},
+                            new go.Binding('text', 'krok', valueConverter))
                     );
     myDiagram.linkTemplate =
             $(go.Link,
@@ -1696,7 +1711,10 @@ export class MainPageComponent implements OnInit {
       this.initGraph();
     }
 
-    const nodeDataArray = [{key: 0, name: 'root'}];
+    const krok = new KrokAlgoritmu();
+    krok.hodnota = this.translate.instant('provedeni.typ.' + this.selectedAlgorithm);
+    krok.popis = 'popis.start';
+    const nodeDataArray = [{key: 0, krok: krok}];
     this.graf.model = new go.TreeModel(nodeDataArray);
   }
 
@@ -1706,7 +1724,7 @@ export class MainPageComponent implements OnInit {
       if (krok === this.postup.length) {
           return false;
       }
-      
+
       this.aktualniKrok = this.postup[krok];
       if (modelManager.canRedo()) {
         modelManager.redo();
@@ -1714,7 +1732,7 @@ export class MainPageComponent implements OnInit {
       }
 
       this.graf.startTransaction('make new node');
-      this.graf.model.addNodeData({key: (krok + 1), parent: this.aktualniKrok.rodic, name: this.aktualniKrok.hodnota, end: this.aktualniKrok.stav, title: this.aktualniKrok.popis});
+      this.graf.model.addNodeData({key: (krok + 1), parent: this.aktualniKrok.rodic, krok: this.aktualniKrok});
       this.graf.commitTransaction('make new node');
 
     return true;
@@ -1741,7 +1759,7 @@ export class MainPageComponent implements OnInit {
       } else {
           this.aktualniKrok = null;
       }
-    
+
       if (modelManager.canUndo()) {
         modelManager.undo();
         return true;
@@ -1776,6 +1794,11 @@ export class MainPageComponent implements OnInit {
 
   center() {
     this.graf.zoomToFit();
+  }
+
+
+  lokalizuj(jazyk: string) {
+     this.translate.use(jazyk);
   }
 
   // TODO odstranit

@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { HttpModule } from '@angular/http';
+import { HttpModule, Http } from '@angular/http';
 
 import { AppRoutingModule } from './app-routing.module';
 
@@ -12,10 +12,15 @@ import { NumbersConvertorDirective } from './convertor/numbersconvertor.directiv
 import { PromennaComponent } from './promenna/promenna.component';
 import { FormsModule } from '@angular/forms';
 import { DropdownModule } from 'primeng/dropdown';
-import {InputTextareaModule} from 'primeng/inputtextarea';
+import { InputTextareaModule } from 'primeng/inputtextarea';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
+export function HttpLoaderFactory(http: Http) {
+    return new TranslateHttpLoader(http);
+}
 
 @NgModule({
   declarations: [
@@ -35,6 +40,13 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     DropdownModule,
     InputTextareaModule,
     MultiSelectModule,
+    TranslateModule.forRoot({
+            loader: {
+                provide: TranslateLoader,
+                useFactory: HttpLoaderFactory,
+                deps: [Http]
+            }
+        }),
   ],
   providers: [],
   bootstrap: [AppComponent]

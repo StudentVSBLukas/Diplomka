@@ -21,6 +21,18 @@
 	position: relative;
 }
 
+.jazyky {
+	position: absolute;
+	top: 0;
+	right: 0;
+}
+
+.jazyky img {
+	padding: 3px 0;
+	margin: 0 5px;
+	cursor: pointer;
+}
+
 #navod {
 	margin-top: 5em;
 	text-align: center;
@@ -209,6 +221,7 @@ fieldset:disabled {
 }
 
 .form-header {
+	position: relative;
 	margin-bottom: 1em;
 	background-color: #cde6fc;
 	border-bottom: 1px solid #81b2dd;

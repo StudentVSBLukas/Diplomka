@@ -2,8 +2,12 @@
     <div id="vstupy" class="form">
         <form class="input-form">
 	     	<div class="row-layout container-fluid form-header">
-	     		<h3>Zadání</h3>
+	     		<h3>{{'promenna.header' | translate}}</h3>
 	     		<i class="fa fa-fw fa-plus clickable" (click)="pridejPromennou()"></i>
+		     	<div class="jazyky">
+		     		<img src="/assets/img/cz.png" (click)="lokalizuj('cz')">
+		     		<img src="/assets/img/gb.png" (click)="lokalizuj('en')">
+		     	</div>
 	     	</div>
 
 			<div class="promenne-scroll container-fluid">
@@ -16,7 +20,7 @@
 			                	<i class="fa fa-remove text-danger clickable rowHover" (click)="odeberPromennou(r)"></i>
 			                </div>
 			                <div class="col-sm-11" *ngIf="!r.aktivni">
-			                	<i class="fa fa-cog clickable" style="visibility: hidden"></i>
+			                	<i class="fa fa-cog clickable" class="invisible"></i>
 			                	<i class="fa fa-check-circle text-success clickable rowHover" (click)="r.aktivni = true"></i>
 			                </div>
 			                <div class="clearfix"></div>
@@ -32,7 +36,7 @@
 		                 	<div class="col-sm-1"></div>
 			             	<div class="col-sm-11">
 			             		<div *ngIf="domenaControl.invalid && (domenaControl.dirty || domenaControl.touched)" class="text text-danger">
-			             			Povolena jsou celá čísla oddělená čárkou
+			             			{{'promenna.validace.pattern' | translate}}
 			             		</div>
 			                </div>
 		                
@@ -49,30 +53,37 @@
 
         <form  (ngSubmit)="run()" #provedeniForm="ngForm" class="input-form ">
         	<div class="container-fluid form-header">
-	        	<h3>ProvedenĂ­</h3>
+	        	<h3>{{'provedeni.header' | translate}}</h3>
 	        </div>
 	        <div class="container-fluid">
 		        <div class="row form-group">
 		        	<div class="col-sm-4">
-		        		<label for="pocetReseni">Počet řešení</label>
+		        		<label for="pocetReseni">{{'provedeni.pocet' | translate}}</label>
 		        	</div>
 		        	<div class="col-sm-8">
-		            	<input id="pocetReseni" type="number" name="pocetReseni" [(ngModel)]="pocetReseni" #pocetReseniControl="ngModel" min="0" placeholder="Neomezeně" />
+		            	<input id="pocetReseni" type="number" name="pocetReseni" [(ngModel)]="pocetReseni" #pocetReseniControl="ngModel" min="0" placeholder="{{'provedeni.pocetPlaceholder' | translate}}" />
 		            </div>
 		        </div>
 		            
 		        <div class="row form-group">
 		            <div class="col-sm-4">
-		            	<label for="vyberAlgoritmu">Algoritmus</label>
+		            	<label for="vyberAlgoritmu">{{'provedeni.algoritmus' | translate}}</label>
 		            </div>
 		            <div class="col-sm-8">
-		            	<p-dropdown name="vyberAlgoritmu" #vyberAlgoritmu="ngModel" [(ngModel)]="selectedAlgorithm" [options]="algoritmy" required></p-dropdown>
+		            	<p-dropdown name="vyberAlgoritmu" #vyberAlgoritmu="ngModel" [(ngModel)]="selectedAlgorithm" [options]="algoritmy" required>
+		            		<ng-template let-item pTemplate="selectedItem">
+                       			{{item.label | translate}}
+						    </ng-template>
+                       		<ng-template let-item pTemplate="item">
+                       			{{item.label | translate}}
+						    </ng-template>
+		            	</p-dropdown>
 		            </div>
 			    </div>
 		            
 		        <div class="row form-group">
 		        	<div class="col-sm-4">
-		        		<label for="iConsistency">iConsistency</label>
+		        		<label for="iConsistency">{{'provedeni.iConsistency' | translate}}</label>
 		        	</div>
 		        	<div class="col-sm-8">
 		        		<input id="iConsistency" type="number" name="iConsistency" [(ngModel)]="iConsistencyFaktor" #pocetReseniControl="ngModel" [disabled]="vyberAlgoritmu.value !== 'iConsistency'" required min="1" />
@@ -81,7 +92,7 @@
 		        
 		        <div class="row form-group form-submit">
 		        	<div class="col-sm-12">
-		        		<button type="submit" class="btn btn-success" [disabled]="!provedeniForm.form.valid">Spočti</button>
+		        		<button type="submit" class="btn btn-success" [disabled]="!provedeniForm.form.valid">{{'provedeni.spust' | translate}}</button>
 		            </div>
 		        </div>
 		    </div>
@@ -106,7 +117,7 @@
 	                        <button type="button" class="close" aria-label="Close" (click)="closeDialogOmezeni()">
 	                            <span aria-hidden="true">&times;</span>
 	                        </button>
-	                        <h4 class="modal-title">Omezení proměnné {{vybranaPromenna.nazev}}</h4>
+	                        <h4 class="modal-title">{{'omezeni.header' | translate:vybranaPromenna}}</h4>
 	                    </div>
 	                    <form  (ngSubmit)="submitDialogOmezeni()" #omezeniForm="ngForm">
 	                    <div class="modal-body input-form">
@@ -119,7 +130,7 @@
 			                        		</div>
 			                        		<div class="col-sm-10">
 			                        			<span *ngIf="hodnotaOmezeni.invalid && (hodnotaOmezeni.dirty || hodnotaOmezeni.touched)">
-			                        				Hodnota je povinná
+			                        				{{'omezeni.validace.required' | translate}}
 			                        			</span>
 			                        		</div>
 		                        		</div>
@@ -138,8 +149,8 @@
 		                        		</div>
 		                        		<div class="col-sm-10">
 		                        			<span *ngIf="domenaOmezeni.invalid && (domenaOmezeni.dirty || domenaOmezeni.touched)" class="text text-danger">
-		                        				<span *ngIf="domenaOmezeni.errors.required">Hodnota je povinná</span>
-		                        				<span *ngIf="domenaOmezeni.errors.pattern">Je možné zadat pouze dvojice čísel oddělené mezerou</span>
+		                        				<span *ngIf="domenaOmezeni.errors.required">{{'omezeni.validace.required' | translate}}</span>
+		                        				<span *ngIf="domenaOmezeni.errors.pattern">{{'omezeni.validace.dvojice' | translate}}</span>
 		                        			</span>
 		                        		</div>
 			                        	<div class="col-sm-1">
@@ -153,21 +164,28 @@
 		                        </div>
 		                        
 		                        <div *ngIf="vybranaPromenna.omezeni?.length === 0" class="row form-group">
-		                        	Proměnná nemá žádné omezení. Přidejte jej níže.
+		                        	{{'omezeni.prazdne' | translate}}
 		                        </div>
 	                        </div>
 	                        
 	                        <div class="spacer container-fluid">
-	                        	<p-dropdown #newTypOmezeni [options]="typyOmezeni" placeholder="Typ"></p-dropdown>
-	                        	<p-dropdown [disabled]="!newTypOmezeni.value || jeJednoducheOmezeni(newTypOmezeni.value)" #newCilovaPromenna [options]="filtrovanePromenne" optionLabel="nazev" placeholder="Cil"></p-dropdown>
-	                        	<button type="button" class="btn btn-default" [disabled]="!(newTypOmezeni.value && (jeJednoducheOmezeni(newTypOmezeni.value) || newCilovaPromenna.value))" (click)="pridejOmezeni(vybranaPromenna, newTypOmezeni.value, newCilovaPromenna.value)"><i class="fa fa-plus" ></i> Přidat omezení</button>
+	                        	<p-dropdown #newTypOmezeni [options]="typyOmezeni" placeholder="{{'omezeni.typPlaceholder' | translate}}">
+	                        		<ng-template let-item pTemplate="selectedItem">
+	                        			{{item.label | translate}}
+								    </ng-template>
+	                        		<ng-template let-item pTemplate="item">
+	                        			{{item.label | translate}}
+								    </ng-template>
+	                        	</p-dropdown>
+	                        	<p-dropdown [disabled]="!newTypOmezeni.value || jeJednoducheOmezeni(newTypOmezeni.value)" #newCilovaPromenna [options]="filtrovanePromenne" optionLabel="nazev" placeholder="{{'omezeni.cilPlaceholder' | translate}}"></p-dropdown>
+	                        	<button type="button" class="btn btn-default" [disabled]="!(newTypOmezeni.value && (jeJednoducheOmezeni(newTypOmezeni.value) || newCilovaPromenna.value))" (click)="pridejOmezeni(vybranaPromenna, newTypOmezeni.value, newCilovaPromenna.value)"><i class="fa fa-plus" ></i> {{'omezeni.pridat' | translate}}</button>
 	                        </div>
 	                    </div>
 	                    
 	                    <div class="modal-footer">
-	                        <button type="submit" class="btn btn-success" [disabled]="!omezeniForm.form.valid">Uložit</button>
-	                        <button type="button" class="btn btn-danger" (click)="resetDialogOmezeni()">Vrátit</button>
-	                        <button type="button" class="btn btn-default" (click)="closeDialogOmezeni()">Zrušit</button>
+	                        <button type="submit" class="btn btn-success" [disabled]="!omezeniForm.form.valid">{{'omezeni.ulozit' | translate}}</button>
+	                        <button type="button" class="btn btn-danger" (click)="resetDialogOmezeni()">{{'omezeni.vratit' | translate}}</button>
+	                        <button type="button" class="btn btn-default" (click)="closeDialogOmezeni()">{{'omezeni.zrusit' | translate}}</button>
 	                    </div>
 	                    </form>
 	                </div>
@@ -181,14 +199,14 @@
     <div id="modalAppendTo" #modalAppendTo></div>  
         
     <div id="graf">
-		<!-- Kvuli GoJS knihovne a registraci listeneru na DOm je nutne skryvat hidden a ne ngIf -->
+		<!-- Kvuli GoJS knihovne a registraci listeneru na DOM je nutne skryvat css tridou a ne ngIf -->
     	<div>
 	        <div id="myDiagramDiv" [class]="postup? 'graf-plocha' : 'graf-plocha hidden'"></div>
 	
 			<!--  TODO po presunuti grafu do samostatne komponenty neni nutne -->
 			<div *ngIf="postup">
 				<div class="graf-podrobnosti">
-					{{aktualniKrok?.popis}}
+					{{aktualniKrok?.popis | translate:aktualniKrok}}
 				</div>
 		        <div class="graf-navigation">
 	                <button (click)="odkrokujCele()">&lt;&lt;&lt;&lt;</button>
@@ -207,7 +225,7 @@
 	            </div>
 	            
 	            <div class="graf-domena">
-	            	<h4>Popis domény</h4>
+	            	<h4>{{'graf.popisDomeny' | translate}}</h4>
 	            	<div class="table-layout">
 		            	<div *ngFor="let p of aktualniKrok?.hodnotaDomenKroku">
 		            		<div>{{p.nazev}}</div>
@@ -219,9 +237,9 @@
         </div>
         <div id="navod" *ngIf="!postup">
         	<i class="fa fa-5x fa-edit"></i>
-        		<span>Definujte proměnné a jejich omezení.</span>
-        		<span>Vyberte algoritmus.</span>
-        		<span>Spusťte výpočet.</span>
+        		<span>{{'graf.navod.1' | translate}}</span>
+        		<span>{{'graf.navod.2' | translate}}</span>
+        		<span>{{'graf.navod.3' | translate}}</span>
         </div>
     </div>
 </div>
