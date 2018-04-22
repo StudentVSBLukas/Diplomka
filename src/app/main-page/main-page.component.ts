@@ -112,6 +112,10 @@ export class MainPageComponent implements OnInit {
     const one = new Omezeni('!', ['C'], null);
     const op = new Omezeni('p', [[4, 5], [2, 1]], 'B');
     a.omezeni = [ogt, one, op];
+    
+//    const c = this.listPromennych[2];
+//    c.domena.push(7);
+//    c.omezeni.push(new Omezeni('z', [[7,5]], 'B'));
   }
 
   pridejPromennou() {
@@ -397,13 +401,15 @@ export class MainPageComponent implements OnInit {
             backjump = promenna - 1;
           } else {
             for (var i = 0; i < zpracovavanaPromenna.omezeni.length; i++) {
-              for (var j = 0; j < zpracovavanaPromenna.omezeni[i].length; j++) {
-                var whereToJump = this._indexOf(seznamPromennych, zpracovavanaPromenna.omezeni[i][j]);
-                if (whereToJump > backjump) {
-                  backjump = whereToJump;
-                }
-                if (zpracovavanaPromenna.typOmezeni[i] === 'p' || zpracovavanaPromenna.typOmezeni[i] === 'z') {
-                  break;
+              const omezeni = zpracovavanaPromenna.omezeni[i];
+              // TODO odstranit spolu s jeJednoducheOmezeni
+              if (omezeni.typOmezeni === 'p' || omezeni.typOmezeni === 'z') {
+                  const jump = this._indexOf(seznamPromennych, omezeni.omezeniProPromennou);
+                  backjump = Math.max(backjump, jump);
+              } else {
+                for (var j = 0; j < omezeni.hodnotyOmezeni.length; j++) {
+                  const jump = this._indexOf(seznamPromennych, omezeni.hodnotyOmezeni[j]);
+                  backjump = Math.max(backjump, jump);
                 }
               }
             }
@@ -584,15 +590,15 @@ export class MainPageComponent implements OnInit {
             }
           }
         } else if (typOmezeni === 'p' || typOmezeni === 'z') {
-          if (seznamPromennych[i].omezeni[l][0] === vstup[promenna - 1]) {
+          if (seznamPromennych[i].omezeni[l].omezeniProPromennou === vstup[promenna - 1]) {
             switch (typOmezeni) {
               case 'p':
                 var nalezeno;
                 for (var k = 0; k < seznamPromennych[i].domena.length; k++) {
                   nalezeno = false;
-                  for (var j = 0; j < seznamPromennych[i].omezeni[l][1].length; j++) {
-                    if (hodnota === parseInt(seznamPromennych[i].omezeni[l][1][j][1])
-                      && seznamPromennych[i].domena[k] === seznamPromennych[i].omezeni[l][1][j][0]) {
+                  for (var j = 0; j < seznamPromennych[i].omezeni[l].hodnotyOmezeni.length; j++) {
+                    const dvojice = seznamPromennych[i].omezeni[l].hodnotyOmezeni[j];
+                    if (hodnota === dvojice[1] && seznamPromennych[i].domena[k] === dvojice[0]) {
                       nalezeno = true;
                     }
                   }
@@ -611,9 +617,9 @@ export class MainPageComponent implements OnInit {
                 for (var k = 0; k < seznamPromennych[i].domena.length; k++) {
                   for (var k = 0; k < seznamPromennych[i].domena.length; k++) {
                     nalezeno = false;
-                    for (var j = 0; j < seznamPromennych[i].omezeni[l][1].length; j++) {
-                      if (hodnota === parseInt(seznamPromennych[i].omezeni[l][1][j][1])
-                        && seznamPromennych[i].domena[k] === seznamPromennych[i].omezeni[l][1][j][0]) {
+                    for (var j = 0; j < seznamPromennych[i].omezeni[l].hodnotyOmezeni.length; j++) {
+                      const dvojice = seznamPromennych[i].omezeni[l].hodnotyOmezeni[j];
+                      if (hodnota === dvojice[1] && seznamPromennych[i].domena[k] === dvojice[0]) {
                         seznamPromennych[i].domena.splice(k, 1);
                         k--;
                         if (seznamPromennych[i].domena.length === 0) {
@@ -686,14 +692,9 @@ export class MainPageComponent implements OnInit {
 
     this._prevodOmezeni(seznamPromennych);
 
-    var vstup = new Array();
-    for (var i = 0; i < seznamPromennych.length; i++) {
-      vstup.push(seznamPromennych[i].nazev);
-    }
-    var pocetVstupu = seznamPromennych.length;
     var zmeneno;
     let selhani: string;
-    for (var i = 0; i < pocetVstupu; i++) {
+    for (var i = 0; i < seznamPromennych.length; i++) {
       zmeneno = false;
       var promenna = seznamPromennych[i];
       for (var j = 0; j < promenna.omezeni.length; j++) {
@@ -701,11 +702,11 @@ export class MainPageComponent implements OnInit {
           case '<':
             for (var k = 0; k < promenna.omezeni[j].hodnotyOmezeni.length; k++) {
               var porovnavanaPromenna = this._valueOf(seznamPromennych, promenna.omezeni[j].hodnotyOmezeni[k]);
-              selhani = this._arcConsistencyGreater(promenna, porovnavanaPromenna, i, vstup.indexOf(promenna.omezeni[j].hodnotyOmezeni[k]), seznamPromennych);
+              selhani = this._arcConsistencyLesser(promenna, porovnavanaPromenna);
               if (selhani) {
                 return this._arcConsistencyFail(promenna, selhani);
               }
-              selhani = this._arcConsistencyGreater(porovnavanaPromenna, promenna, vstup.indexOf(promenna.omezeni[j].hodnotyOmezeni[k]), i, seznamPromennych);
+              selhani = this._arcConsistencyGreater(porovnavanaPromenna, promenna);
               if (selhani) {
                 return this._arcConsistencyFail(promenna, selhani);
               }
@@ -714,11 +715,11 @@ export class MainPageComponent implements OnInit {
           case '>':
             for (var k = 0; k < promenna.omezeni[j].hodnotyOmezeni.length; k++) {
               var porovnavanaPromenna = this._valueOf(seznamPromennych, promenna.omezeni[j].hodnotyOmezeni[k]);
-              selhani = this._arcConsistencyLesser(promenna, porovnavanaPromenna, i, vstup.indexOf(promenna.omezeni[j].hodnotyOmezeni[k]), seznamPromennych);
+              selhani = this._arcConsistencyGreater(promenna, porovnavanaPromenna);
               if (selhani) {
                 return this._arcConsistencyFail(promenna, selhani);
               }
-              selhani = this._arcConsistencyLesser(porovnavanaPromenna, promenna, vstup.indexOf(promenna.omezeni[j].hodnotyOmezeni[k]), i, seznamPromennych);
+              selhani = this._arcConsistencyLesser(porovnavanaPromenna, promenna);
               if (selhani) {
                 return this._arcConsistencyFail(promenna, selhani);
               }
@@ -727,11 +728,11 @@ export class MainPageComponent implements OnInit {
           case '=':
             for (var k = 0; k < promenna.omezeni[j].hodnotyOmezeni.length; k++) {
               var porovnavanaPromenna = this._valueOf(seznamPromennych, promenna.omezeni[j].hodnotyOmezeni[k]);
-              selhani = this._arcConsistencyEqual(promenna, porovnavanaPromenna, i, vstup.indexOf(promenna.omezeni[j].hodnotyOmezeni[k]), seznamPromennych);
+              selhani = this._arcConsistencyEqual(promenna, porovnavanaPromenna);
               if (selhani) {
                 return this._arcConsistencyFail(promenna, selhani);
               }
-              selhani = this._arcConsistencyEqual(porovnavanaPromenna, promenna, vstup.indexOf(promenna.omezeni[j].hodnotyOmezeni[k]), i, seznamPromennych);
+              selhani = this._arcConsistencyEqual(porovnavanaPromenna, promenna);
               if (selhani) {
                 return this._arcConsistencyFail(promenna, selhani);
               }
@@ -740,11 +741,11 @@ export class MainPageComponent implements OnInit {
           case '!':
             for (var k = 0; k < promenna.omezeni[j].hodnotyOmezeni.length; k++) {
               var porovnavanaPromenna = this._valueOf(seznamPromennych, promenna.omezeni[j].hodnotyOmezeni[k]);
-              selhani = this._arcConsistencyNotEqual(promenna, porovnavanaPromenna, i, vstup.indexOf(promenna.omezeni[j].hodnotyOmezeni[k]), seznamPromennych);
+              selhani = this._arcConsistencyNotEqual(promenna, porovnavanaPromenna);
               if (selhani) {
                 return this._arcConsistencyFail(promenna, selhani);
               }
-              selhani = this._arcConsistencyNotEqual(porovnavanaPromenna, promenna, vstup.indexOf(promenna.omezeni[j].hodnotyOmezeni[k]), i, seznamPromennych);
+              selhani = this._arcConsistencyNotEqual(porovnavanaPromenna, promenna);
               if (selhani) {
                 return this._arcConsistencyFail(promenna, selhani);
               }
@@ -752,22 +753,22 @@ export class MainPageComponent implements OnInit {
             break;
           case 'p':
             var porovnavanaPromenna = this._valueOf(seznamPromennych, promenna.omezeni[j].omezeniProPromennou);
-            selhani = this._arcConsistencyPovoleneDvojice(promenna, porovnavanaPromenna, 0, 1, j, 1, i, promenna.omezeni[j][0], seznamPromennych);
+            selhani = this._arcConsistencyPovoleneDvojice(promenna, porovnavanaPromenna, 0, 1, j, 1);
             if (selhani) {
               return this._arcConsistencyFail(promenna, selhani);
             }
-            selhani = this._arcConsistencyPovoleneDvojice(promenna, porovnavanaPromenna, 1, 0, j, 2, i, promenna.omezeni[j][0], seznamPromennych);
+            selhani = this._arcConsistencyPovoleneDvojice(promenna, porovnavanaPromenna, 1, 0, j, 2);
             if (selhani) {
               return this._arcConsistencyFail(promenna, selhani);
             }
             break;
           case 'z':
             var porovnavanaPromenna = this._valueOf(seznamPromennych, promenna.omezeni[j].omezeniProPromennou);
-            selhani = this._arcConsistencyZakazanDvojice(promenna, porovnavanaPromenna, 0, j, 1, i, promenna.omezeni[j][0], seznamPromennych);
+            selhani = this._arcConsistencyZakazanDvojice(promenna, porovnavanaPromenna, 0, j, 1);
             if (selhani) {
               return this._arcConsistencyFail(promenna, selhani);
             }
-            selhani = this._arcConsistencyZakazanDvojice(promenna, porovnavanaPromenna, 0, j, 2, i, promenna.omezeni[j][0], seznamPromennych);
+            selhani = this._arcConsistencyZakazanDvojice(promenna, porovnavanaPromenna, 0, j, 2);
             if (selhani) {
               return this._arcConsistencyFail(promenna, selhani);
             }
@@ -783,7 +784,7 @@ export class MainPageComponent implements OnInit {
   }
 
   // a = prvni promenna prozkoumavanych prvku, b = ddruha promenna
-  _arcConsistencyLesser(promennaA, promennaB, idA, idB, seznamPromennych) {
+  _arcConsistencyLesser(promennaA, promennaB) {
     var remove;
     for (var i = 0; i < promennaA.domena.length; i++) {
       remove = true;
@@ -801,11 +802,9 @@ export class MainPageComponent implements OnInit {
         }
       }
     }
-    seznamPromennych[idA] = promennaA;
-    seznamPromennych[idB] = promennaB;
   }
 
-  _arcConsistencyGreater(promennaA, promennaB, idA, idB, seznamPromennych) {
+  _arcConsistencyGreater(promennaA, promennaB) {
     var remove;
     for (var i = 0; i < promennaA.domena.length; i++) {
       remove = true;
@@ -823,11 +822,9 @@ export class MainPageComponent implements OnInit {
         }
       }
     }
-    seznamPromennych[idA] = promennaA;
-    seznamPromennych[idB] = promennaB;
   }
 
-  _arcConsistencyEqual(promennaA, promennaB, idA, idB, seznamPromennych) {
+  _arcConsistencyEqual(promennaA, promennaB) {
     var remove;
     for (var i = 0; i < promennaA.domena.length; i++) {
       remove = true;
@@ -845,11 +842,9 @@ export class MainPageComponent implements OnInit {
         }
       }
     }
-    seznamPromennych[idA] = promennaA;
-    seznamPromennych[idB] = promennaB;
   }
 
-  _arcConsistencyNotEqual(promennaA, promennaB, idA, idB, seznamPromennych) {
+  _arcConsistencyNotEqual(promennaA, promennaB) {
     var remove;
     for (var i = 0; i < promennaA.domena.length; i++) {
       remove = true;
@@ -867,15 +862,13 @@ export class MainPageComponent implements OnInit {
         }
       }
     }
-    seznamPromennych[idA] = promennaA;
-    seznamPromennych[idB] = promennaB;
   }
 
   // a = prvni promenna prozkoumavanych prvku, b = druha promenna, index = pro
   // ktere omezeni se metoda vykonava, c,d jsou indexy pro hodnotu omezeni pro
   // prvni volani jsou hodnoty c=0,d=1, pro druhe volani jsou tz=tyto hodnoty
   // obracene
-  _arcConsistencyPovoleneDvojice(promennaA, promennaB, c, d, index, volani, idA, idB, seznamPromennych) {
+  _arcConsistencyPovoleneDvojice(promennaA, promennaB, c, d, index, volani) {
     var remove, pomoc;
     var vlastniDvojice = [];
     var indexyHodnot = [];
@@ -888,7 +881,7 @@ export class MainPageComponent implements OnInit {
     }
 
     for (var i = 0; i < promennaA.omezeni[index].hodnotyOmezeni.length; i++) {
-      vlastniDvojice.push(parseInt(promennaA.omezeni[index].hodnotyOmezeni[i][c]));
+      vlastniDvojice.push(promennaA.omezeni[index].hodnotyOmezeni[i][c]);
     }
 
     for (var i = 0; i < domenaA.length; i++) {
@@ -896,7 +889,7 @@ export class MainPageComponent implements OnInit {
       indexyHodnot = this._indexOfAll(vlastniDvojice, domenaA[i]);
       if (indexyHodnot.length > 0) {
         for (var j = 0; j < indexyHodnot.length; j++) {
-          pomoc = parseInt(promennaA.omezeni[index].hodnotyOmezeni[indexyHodnot[j]][d]);
+          pomoc = promennaA.omezeni[index].hodnotyOmezeni[indexyHodnot[j]][d];
           if (domenaB.indexOf(pomoc) !== -1) {
             remove = false;
             break;
@@ -917,11 +910,9 @@ export class MainPageComponent implements OnInit {
         }
       }
     }
-    seznamPromennych[idA] = promennaA;
-    seznamPromennych[idB] = promennaB;
   }
 
-  _arcConsistencyZakazanDvojice(promennaA, promennaB, d, index, volani, idA, idB, seznamPromennych) {
+  _arcConsistencyZakazanDvojice(promennaA, promennaB, d, index, volani) {
     var remove, pomoc;
     var vlastniDvojice = [];
     var indexyHodnot = [];
@@ -936,17 +927,17 @@ export class MainPageComponent implements OnInit {
 
     for (var i = 0; i < domenaA.length; i++) {
       for (var j = 0; j < domenaB.length; j++) {
-        povoleneDvojice.push([parseInt(domenaA[i]), parseInt(domenaB[j])]);
+        povoleneDvojice.push([domenaA[i], domenaB[j]]);
       }
     }
 
     if (volani === 1) {
       for (var i = 0; i < promennaA.omezeni[index].hodnotyOmezeni.length; i++) {
-        vlastniDvojice.push([parseInt(promennaA.omezeni[index].hodnotyOmezeni[i][0]), parseInt(promennaA.omezeni[index].hodnotyOmezeni[i][1])]);
+        vlastniDvojice.push([promennaA.omezeni[index].hodnotyOmezeni[i][0], promennaA.omezeni[index].hodnotyOmezeni[i][1]]);
       }
     } else if (volani === 2) {
       for (var i = 0; i < promennaA.omezeni[index].hodnotyOmezeni.length; i++) {
-        vlastniDvojice.push([parseInt(promennaA.omezeni[index].hodnotyOmezeni[i][1]), parseInt(promennaA.omezeni[index].hodnotyOmezeni[i][0])]);
+        vlastniDvojice.push([promennaA.omezeni[index].hodnotyOmezeni[i][1], promennaA.omezeni[index].hodnotyOmezeni[i][0]]);
       }
     }
 
@@ -968,10 +959,10 @@ export class MainPageComponent implements OnInit {
 
     for (var i = 0; i < domenaA.length; i++) {
       remove = true;
-      indexyHodnot = this._indexOfAll(vlastniDvojice, parseInt(domenaA[i]));
+      indexyHodnot = this._indexOfAll(vlastniDvojice, domenaA[i]);
       if (indexyHodnot.length > 0) {
         for (var j = 0; j < indexyHodnot.length; j++) {
-          pomoc = parseInt(povoleneDvojice[indexyHodnot[j]]);
+          pomoc = povoleneDvojice[indexyHodnot[j]];
           if (domenaB.indexOf(pomoc) !== -1) {
             remove = false;
             break;
@@ -992,8 +983,6 @@ export class MainPageComponent implements OnInit {
         i--;
       }
     }
-    seznamPromennych[idA] = promennaA;
-    seznamPromennych[idB] = promennaB;
   }
 
   _arcConsistencyFail(promenna: Promenna, popis: String) {
@@ -1283,8 +1272,8 @@ export class MainPageComponent implements OnInit {
           var porovnavanaHodnota = this._valueOf(seznamPromennych, porovnavanaPromenna).vratPrirazenouHodnotu();
           var nalezeno = false;
           for (var j = 0; j < omezeni.hodnotyOmezeni.length; j++) {
-            var a = parseInt(omezeni.hodnotyOmezeni[j][0]);
-            var b = parseInt(omezeni.hodnotyOmezeni[j][1]);
+            var a = omezeni.hodnotyOmezeni[j][0];
+            var b = omezeni.hodnotyOmezeni[j][1];
             if (cislo === a && porovnavanaHodnota === b) {
               nalezeno = true;
               break;
@@ -1301,7 +1290,7 @@ export class MainPageComponent implements OnInit {
           }
           var porovnavanaHodnota = this._valueOf(seznamPromennych, porovnavanaPromenna).vratPrirazenouHodnotu();
           for (var j = 0; j < omezeni.hodnotyOmezeni.length; j++) {
-            if (cislo === parseInt(omezeni.hodnotyOmezeni[j][0]) && porovnavanaHodnota === parseInt(omezeni.hodnotyOmezeni[j][1])) {
+            if (cislo === omezeni.hodnotyOmezeni[j][0] && porovnavanaHodnota === omezeni.hodnotyOmezeni[j][1]) {
               return false;
             }
           }
@@ -1581,8 +1570,8 @@ export class MainPageComponent implements OnInit {
           var porovnavanaHodnota = this._valueOf(seznamPromennych, porovnavanaPromenna).vratPrirazenouHodnotu();
           var nalezeno = false;
           for (var j = 0; j < omezeni.hodnotyOmezeni.length; j++) {
-            var a = parseInt(omezeni.hodnotyOmezeni[j][0]);
-            var b = parseInt(omezeni.hodnotyOmezeni[j][1]);
+            var a = omezeni.hodnotyOmezeni[j][0];
+            var b = omezeni.hodnotyOmezeni[j][1];
             if (cislo === a && porovnavanaHodnota === b) {
               nalezeno = true;
               break;
@@ -1596,7 +1585,7 @@ export class MainPageComponent implements OnInit {
           var porovnavanaPromenna = omezeni.omezeniProPromennou;
           var porovnavanaHodnota = this._valueOf(seznamPromennych, porovnavanaPromenna).vratPrirazenouHodnotu();
           for (var j = 0; j < omezeni.hodnotyOmezeni.length; j++) {
-            if (cislo === parseInt(omezeni.hodnotyOmezeni[j][0]) && porovnavanaHodnota === parseInt(omezeni.hodnotyOmezeni[j][1])) {
+            if (cislo === omezeni.hodnotyOmezeni[j][0] && porovnavanaHodnota === omezeni.hodnotyOmezeni[j][1]) {
               return omezeni;
             }
           }
