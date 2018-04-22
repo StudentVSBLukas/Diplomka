@@ -1,7 +1,7 @@
 {
 	"promenna": {
 		"header": "Zadání",
-		"validace.pattern": {
+		"validace": {
 			"pattern": "Povolena jsou celá čísla oddělená čárkou"
 		}
 	},
