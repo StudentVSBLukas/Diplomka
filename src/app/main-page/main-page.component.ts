@@ -1711,10 +1711,10 @@ export class MainPageComponent implements OnInit {
       this.initGraph();
     }
 
-    const krok = new KrokAlgoritmu();
-    krok.hodnota = this.translate.instant('provedeni.typ.' + this.selectedAlgorithm);
-    krok.popis = 'popis.start';
-    const nodeDataArray = [{key: 0, krok: krok}];
+    this.aktualniKrok = new KrokAlgoritmu();
+    this.aktualniKrok.hodnota = this.translate.instant('provedeni.typ.' + this.selectedAlgorithm);
+    this.aktualniKrok.popis = 'popis.start';
+    const nodeDataArray = [{key: 0, krok: this.aktualniKrok}];
     this.graf.model = new go.TreeModel(nodeDataArray);
   }
 

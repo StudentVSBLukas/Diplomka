@@ -28,7 +28,7 @@
 			                <div class="col-sm-1"></div>
 			            	<div class="col-sm-11">
 			                 	 <span class="operator">=</span> &#123;
-			                 	 <input name="domena{{r.nazev}}" [(ngModel)]="r.domena" required numbersConvertor pattern="^(-?\d+,? ?)*-?\d+$" #domenaControl="ngModel" class="surrounded" />
+			                 	 <input name="domena{{r.nazev}}" [(ngModel)]="r.domena" required numbersConvertor pattern="^(-?\d+,? ?)*-?\d+$" #domenaControl="ngModel" class="surrounded" pInputText />
 			                 	 &#125;
 			                </div>
 		                 	<div class="clearfix"></div>
@@ -61,7 +61,7 @@
 		        		<label for="pocetReseni">{{'provedeni.pocet' | translate}}</label>
 		        	</div>
 		        	<div class="col-sm-8">
-		            	<input id="pocetReseni" type="number" name="pocetReseni" [(ngModel)]="pocetReseni" #pocetReseniControl="ngModel" min="0" placeholder="{{'provedeni.pocetPlaceholder' | translate}}" />
+		            	<input id="pocetReseni" type="number" name="pocetReseni" [(ngModel)]="pocetReseni" #pocetReseniControl="ngModel" min="0" placeholder="{{'provedeni.pocetPlaceholder' | translate}}" pInputText />
 		            </div>
 		        </div>
 		            
@@ -86,7 +86,7 @@
 		        		<label for="iConsistency">{{'provedeni.iConsistency' | translate}}</label>
 		        	</div>
 		        	<div class="col-sm-8">
-		        		<input id="iConsistency" type="number" name="iConsistency" [(ngModel)]="iConsistencyFaktor" #pocetReseniControl="ngModel" [disabled]="vyberAlgoritmu.value !== 'iConsistency'" required min="1" />
+		        		<input id="iConsistency" type="number" name="iConsistency" [(ngModel)]="iConsistencyFaktor" #pocetReseniControl="ngModel" [disabled]="vyberAlgoritmu.value !== 'iConsistency'" required min="1" pInputText />
 		        	</div>
 		        </div>
 		        

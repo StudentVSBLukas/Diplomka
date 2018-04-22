@@ -12,6 +12,7 @@ import { NumbersConvertorDirective } from './convertor/numbersconvertor.directiv
 import { PromennaComponent } from './promenna/promenna.component';
 import { FormsModule } from '@angular/forms';
 import { DropdownModule } from 'primeng/dropdown';
+import { InputTextModule } from 'primeng/inputtext';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -38,6 +39,7 @@ export function HttpLoaderFactory(http: Http) {
     FormsModule,
     HttpModule,
     DropdownModule,
+    InputTextModule,
     InputTextareaModule,
     MultiSelectModule,
     TranslateModule.forRoot({
