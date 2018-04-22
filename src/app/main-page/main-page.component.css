@@ -181,7 +181,7 @@
 }
 
 /deep/ input:required, /deep/ .ui-inputtext:required, /deep/ p-dropdown[required] > .ui-dropdown, /deep/ p-multiselect[required] > .ui-multiselect {
-	border-left: 2px solid #f44336;
+	border-left: 2px solid orange;
 }
 
 .form {

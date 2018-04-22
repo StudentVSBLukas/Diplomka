@@ -1,57 +1,8 @@
+import {Promenna, Omezeni, KrokAlgoritmu} from '../data-model';
 import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { TranslateService, TranslatePipe } from '@ngx-translate/core';
 import {SelectItem} from 'primeng/api';
 import * as go from 'gojs';
-
-
-export class Promenna {
-  nazev;
-  domena: Array<Number>;
-  omezeni;
-  aktivni: boolean;
-  pozice;
-  zalohaDomeny;
-  constructor(nazev, domena: number[] = [], omezeni: Omezeni[] = []) {
-    this.nazev = nazev;
-    this.domena = domena || [];
-    this.omezeni = omezeni || [];
-    this.aktivni = true;
-    this.pozice = -1;
-    this.zalohaDomeny = [];
-  }
-  vratPrirazenouHodnotu() {
-    return this.domena[this.pozice];
-  }
-
-}
-
-export class Omezeni {
-  static id_sequence = 0;
-
-  // TODO predelat na Enum a zmenit i atribut ve tride Omezeni
-  id;
-  typOmezeni;
-  hodnotyOmezeni;
-  omezeniProPromennou;
-  constructor(typOmezeni: string, hodnotyOmezeni: any[] = [], omezeniProPromennou: string = null) {
-    this.id = Omezeni.id_sequence++;
-    this.typOmezeni = typOmezeni;
-    this.hodnotyOmezeni = hodnotyOmezeni;
-    this.omezeniProPromennou = omezeniProPromennou;
-  }
-}
-
-export class KrokAlgoritmu {
-  promenna;
-  nazev;
-  hodnota;
-  rodic;
-  popis;
-  stav;
-  omezeni;
-  hodnotaDomenKroku = new Array();
-};
-
 
 @Component({
   selector: 'app-main-page',
@@ -704,11 +655,11 @@ export class MainPageComponent implements OnInit {
               var porovnavanaPromenna = this._valueOf(seznamPromennych, promenna.omezeni[j].hodnotyOmezeni[k]);
               selhani = this._arcConsistencyLesser(promenna, porovnavanaPromenna);
               if (selhani) {
-                return this._arcConsistencyFail(promenna, selhani);
+                return this._arcConsistencyFail(seznamPromennych, promenna, selhani);
               }
               selhani = this._arcConsistencyGreater(porovnavanaPromenna, promenna);
               if (selhani) {
-                return this._arcConsistencyFail(promenna, selhani);
+                return this._arcConsistencyFail(seznamPromennych, promenna, selhani);
               }
             }
             break;
@@ -717,11 +668,11 @@ export class MainPageComponent implements OnInit {
               var porovnavanaPromenna = this._valueOf(seznamPromennych, promenna.omezeni[j].hodnotyOmezeni[k]);
               selhani = this._arcConsistencyGreater(promenna, porovnavanaPromenna);
               if (selhani) {
-                return this._arcConsistencyFail(promenna, selhani);
+                return this._arcConsistencyFail(seznamPromennych, promenna, selhani);
               }
               selhani = this._arcConsistencyLesser(porovnavanaPromenna, promenna);
               if (selhani) {
-                return this._arcConsistencyFail(promenna, selhani);
+                return this._arcConsistencyFail(seznamPromennych, promenna, selhani);
               }
             }
             break;
@@ -730,11 +681,11 @@ export class MainPageComponent implements OnInit {
               var porovnavanaPromenna = this._valueOf(seznamPromennych, promenna.omezeni[j].hodnotyOmezeni[k]);
               selhani = this._arcConsistencyEqual(promenna, porovnavanaPromenna);
               if (selhani) {
-                return this._arcConsistencyFail(promenna, selhani);
+                return this._arcConsistencyFail(seznamPromennych, promenna, selhani);
               }
               selhani = this._arcConsistencyEqual(porovnavanaPromenna, promenna);
               if (selhani) {
-                return this._arcConsistencyFail(promenna, selhani);
+                return this._arcConsistencyFail(seznamPromennych, promenna, selhani);
               }
             }
             break;
@@ -743,11 +694,11 @@ export class MainPageComponent implements OnInit {
               var porovnavanaPromenna = this._valueOf(seznamPromennych, promenna.omezeni[j].hodnotyOmezeni[k]);
               selhani = this._arcConsistencyNotEqual(promenna, porovnavanaPromenna);
               if (selhani) {
-                return this._arcConsistencyFail(promenna, selhani);
+                return this._arcConsistencyFail(seznamPromennych, promenna, selhani);
               }
               selhani = this._arcConsistencyNotEqual(porovnavanaPromenna, promenna);
               if (selhani) {
-                return this._arcConsistencyFail(promenna, selhani);
+                return this._arcConsistencyFail(seznamPromennych, promenna, selhani);
               }
             }
             break;
@@ -755,22 +706,22 @@ export class MainPageComponent implements OnInit {
             var porovnavanaPromenna = this._valueOf(seznamPromennych, promenna.omezeni[j].omezeniProPromennou);
             selhani = this._arcConsistencyPovoleneDvojice(promenna, porovnavanaPromenna, 0, 1, j, 1);
             if (selhani) {
-              return this._arcConsistencyFail(promenna, selhani);
+              return this._arcConsistencyFail(seznamPromennych, promenna, selhani);
             }
             selhani = this._arcConsistencyPovoleneDvojice(promenna, porovnavanaPromenna, 1, 0, j, 2);
             if (selhani) {
-              return this._arcConsistencyFail(promenna, selhani);
+              return this._arcConsistencyFail(seznamPromennych, promenna, selhani);
             }
             break;
           case 'z':
             var porovnavanaPromenna = this._valueOf(seznamPromennych, promenna.omezeni[j].omezeniProPromennou);
             selhani = this._arcConsistencyZakazanDvojice(promenna, porovnavanaPromenna, 0, j, 1);
             if (selhani) {
-              return this._arcConsistencyFail(promenna, selhani);
+              return this._arcConsistencyFail(seznamPromennych, promenna, selhani);
             }
             selhani = this._arcConsistencyZakazanDvojice(promenna, porovnavanaPromenna, 0, j, 2);
             if (selhani) {
-              return this._arcConsistencyFail(promenna, selhani);
+              return this._arcConsistencyFail(seznamPromennych, promenna, selhani);
             }
             break;
         }
@@ -985,11 +936,11 @@ export class MainPageComponent implements OnInit {
     }
   }
 
-  _arcConsistencyFail(promenna: Promenna, popis: String) {
+  _arcConsistencyFail(seznamPromennych: Array<Promenna>, promenna: Promenna, popis: string) {
       const krokAlgoritmu = new KrokAlgoritmu();
       krokAlgoritmu.popis = popis;
       krokAlgoritmu.nazev = promenna.nazev;
-      krokAlgoritmu.promenna = promenna;
+      krokAlgoritmu.promenna = this._indexOf(seznamPromennych, promenna.nazev);
       krokAlgoritmu.hodnota = null;
       krokAlgoritmu.rodic = 0;
       krokAlgoritmu.stav = 'deadend';
