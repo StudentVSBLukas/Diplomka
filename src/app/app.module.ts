@@ -19,6 +19,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { LokalizaceComponentComponent } from './lokalizace-component/lokalizace-component.component';
+import { PromennaService } from './promenna.service';
 
 export function HttpLoaderFactory(http: Http) {
     return new TranslateHttpLoader(http);
@@ -52,7 +53,7 @@ export function HttpLoaderFactory(http: Http) {
             }
         }),
   ],
-  providers: [],
+  providers: [PromennaService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

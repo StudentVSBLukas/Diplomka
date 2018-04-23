@@ -1,4 +1,5 @@
 import {Promenna, Omezeni, KrokAlgoritmu} from '../data-model';
+import { PromennaService } from '../promenna.service';
 import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { TranslateService, TranslatePipe } from '@ngx-translate/core';
 import {SelectItem} from 'primeng/api';
@@ -48,7 +49,9 @@ export class MainPageComponent implements OnInit {
   postup;
   aktualniKrok;
 
-  constructor(private translate: TranslateService) {
+  constructor(private promennaService: PromennaService, private translate: TranslateService) {
+    this.listPromennych = promennaService.list();
+    
       translate.setDefaultLang('cz');
       translate.use('cz');
   }
@@ -56,7 +59,8 @@ export class MainPageComponent implements OnInit {
 
   ngOnInit() {
     for (var i = 0; i < 3; i++) {
-      this.listPromennych.push(new Promenna(this.generateIdentifier(), [i + 1, i + 2, i + 4], null));
+      const p = this.promennaService.vytvor();
+      p.domena = [i + 1, i + 2, i + 4];
     }
 
     // TODO odstranit zakladni nastaveni vstupu
@@ -72,15 +76,13 @@ export class MainPageComponent implements OnInit {
   }
 
   pridejPromennou() {
-    const promenna = new Promenna(this.generateIdentifier(), [], null);
-    this.listPromennych.push(promenna);
+    const promenna = this.promennaService.vytvor();
+    this.listPromennych = this.promennaService.list();
   }
 
-  odeberPromennou(promenna) {
-    const index = this.listPromennych.indexOf(promenna);
-    if (index !== -1) {
-      this.listPromennych.splice(index, 1);
-    }
+  odeberPromennou(promenna: Promenna) {
+    this.promennaService.smaz(promenna);
+    this.listPromennych = this.promennaService.list();
   }
 
   openDialogOmezeni(promenna: Promenna) {
@@ -91,11 +93,11 @@ export class MainPageComponent implements OnInit {
   }
 
   resetDialogOmezeni() {
-    this.openDialogOmezeni(this._valueOf(this.listPromennych, this.vybranaPromenna.nazev));
+    this.openDialogOmezeni(this.promennaService.vrat(this.vybranaPromenna.nazev));
   }
 
   submitDialogOmezeni() {
-    const promenna = this._valueOf(this.listPromennych, this.vybranaPromenna.nazev);
+    const promenna = this.promennaService.vrat(this.vybranaPromenna.nazev);
     this.upravPromennou(promenna, this.vybranaPromenna);
 
     this.vybranaPromenna = null;
@@ -128,11 +130,11 @@ export class MainPageComponent implements OnInit {
 
       if (this.jeJednoducheOmezeni(o.typOmezeni)) {
         o.hodnotyOmezeni = item.hodnotyOmezeni.map(
-          (hodnota: string) => this._valueOf(this.listPromennych, hodnota)
+          (hodnota: string) => this.promennaService.vrat(hodnota)
         );
       } else {
         o.hodnotyOmezeni = item.hodnotyOmezeni.join(' ');
-        o.omezeniProPromennou = this._valueOf(this.listPromennych, item.omezeniProPromennou);
+        o.omezeniProPromennou = this.promennaService.vrat(item.omezeniProPromennou);
       }
 
       return o;
@@ -170,29 +172,6 @@ export class MainPageComponent implements OnInit {
     return typOmezeni === '<' || typOmezeni === '>' || typOmezeni === '=' || typOmezeni === '!';
   }
 
-  generateIdentifier() {
-    if (this.listPromennych.length === 0) {
-      return 'A';
-    }
-
-    const baseChar = ('A').charCodeAt(0) - 1;
-    const lastIdentifier = this.listPromennych[this.listPromennych.length - 1].nazev;
-    let lastIdentifierCode = 0;
-    for (let length = lastIdentifier.length, i = 0, base = 1; i < length; i++, base *= 27) {
-      lastIdentifierCode += base * (lastIdentifier.charCodeAt(length - i - 1) - baseChar);
-    }
-    lastIdentifierCode++;
-
-    let letters = '';
-    do {
-      letters = String.fromCharCode(baseChar + Math.max(lastIdentifierCode % 27, 1)) + letters;
-      lastIdentifierCode = ((lastIdentifierCode / 27) >> 0); // quick `floor`
-    } while (lastIdentifierCode > 0);
-
-    return letters;
-  }
-
-
   run() {
     const zadani = this.pripravAktivniPromenne();
 
@@ -223,12 +202,12 @@ export class MainPageComponent implements OnInit {
 
       // Filtruje omezeni s neaktivnimi promennymi
       kopiePromenne.omezeni = p.omezeni.filter(
-        (o: Omezeni) => !o.omezeniProPromennou || this._valueOf(this.listPromennych, o.omezeniProPromennou).aktivni
+        (o: Omezeni) => !o.omezeniProPromennou || this.promennaService.vrat(o.omezeniProPromennou).aktivni
       ).map(function(o) {
         const kopieOmezeni = Object.assign({}, o);
         if (this.jeJednoducheOmezeni(o.typOmezeni)) {
           kopieOmezeni.hodnotyOmezeni = o.hodnotyOmezeni.filter(
-            (hodnota: string) => this._valueOf(this.listPromennych, hodnota).aktivni
+            (hodnota: string) => this.promennaService.vrat(hodnota).aktivni
           );
         } else {
           kopieOmezeni.hodnotyOmezeni = o.hodnotyOmezeni.map(
@@ -654,7 +633,7 @@ export class MainPageComponent implements OnInit {
         switch (promenna.omezeni[j].typOmezeni) {
           case '<':
             for (var k = 0; k < promenna.omezeni[j].hodnotyOmezeni.length; k++) {
-              var porovnavanaPromenna = this._valueOf(seznamPromennych, promenna.omezeni[j].hodnotyOmezeni[k]);
+              var porovnavanaPromenna = this.promennaService.najdi(seznamPromennych, promenna.omezeni[j].hodnotyOmezeni[k]);
               selhani = this._arcConsistencyLesser(promenna, porovnavanaPromenna);
               if (selhani) {
                 return this._arcConsistencyFail(seznamPromennych, promenna, selhani);
@@ -667,7 +646,7 @@ export class MainPageComponent implements OnInit {
             break;
           case '>':
             for (var k = 0; k < promenna.omezeni[j].hodnotyOmezeni.length; k++) {
-              var porovnavanaPromenna = this._valueOf(seznamPromennych, promenna.omezeni[j].hodnotyOmezeni[k]);
+              var porovnavanaPromenna = this.promennaService.najdi(seznamPromennych, promenna.omezeni[j].hodnotyOmezeni[k]);
               selhani = this._arcConsistencyGreater(promenna, porovnavanaPromenna);
               if (selhani) {
                 return this._arcConsistencyFail(seznamPromennych, promenna, selhani);
@@ -680,7 +659,7 @@ export class MainPageComponent implements OnInit {
             break;
           case '=':
             for (var k = 0; k < promenna.omezeni[j].hodnotyOmezeni.length; k++) {
-              var porovnavanaPromenna = this._valueOf(seznamPromennych, promenna.omezeni[j].hodnotyOmezeni[k]);
+              var porovnavanaPromenna = this.promennaService.najdi(seznamPromennych, promenna.omezeni[j].hodnotyOmezeni[k]);
               selhani = this._arcConsistencyEqual(promenna, porovnavanaPromenna);
               if (selhani) {
                 return this._arcConsistencyFail(seznamPromennych, promenna, selhani);
@@ -693,7 +672,7 @@ export class MainPageComponent implements OnInit {
             break;
           case '!':
             for (var k = 0; k < promenna.omezeni[j].hodnotyOmezeni.length; k++) {
-              var porovnavanaPromenna = this._valueOf(seznamPromennych, promenna.omezeni[j].hodnotyOmezeni[k]);
+              var porovnavanaPromenna = this.promennaService.najdi(seznamPromennych, promenna.omezeni[j].hodnotyOmezeni[k]);
               selhani = this._arcConsistencyNotEqual(promenna, porovnavanaPromenna);
               if (selhani) {
                 return this._arcConsistencyFail(seznamPromennych, promenna, selhani);
@@ -705,7 +684,7 @@ export class MainPageComponent implements OnInit {
             }
             break;
           case 'p':
-            var porovnavanaPromenna = this._valueOf(seznamPromennych, promenna.omezeni[j].omezeniProPromennou);
+            var porovnavanaPromenna = this.promennaService.najdi(seznamPromennych, promenna.omezeni[j].omezeniProPromennou);
             selhani = this._arcConsistencyPovoleneDvojice(promenna, porovnavanaPromenna, 0, 1, j, 1);
             if (selhani) {
               return this._arcConsistencyFail(seznamPromennych, promenna, selhani);
@@ -716,7 +695,7 @@ export class MainPageComponent implements OnInit {
             }
             break;
           case 'z':
-            var porovnavanaPromenna = this._valueOf(seznamPromennych, promenna.omezeni[j].omezeniProPromennou);
+            var porovnavanaPromenna = this.promennaService.najdi(seznamPromennych, promenna.omezeni[j].omezeniProPromennou);
             selhani = this._arcConsistencyZakazanDvojice(promenna, porovnavanaPromenna, 0, j, 1);
             if (selhani) {
               return this._arcConsistencyFail(seznamPromennych, promenna, selhani);
@@ -1175,7 +1154,7 @@ export class MainPageComponent implements OnInit {
             if (porovnavanaPromenna != iOmezeni) {
               continue;
             }
-            var porovnavanaHodnota = this._valueOf(seznamPromennych, porovnavanaPromenna).vratPrirazenouHodnotu();
+            var porovnavanaHodnota = this.promennaService.najdi(seznamPromennych, porovnavanaPromenna).vratPrirazenouHodnotu();
             if (!(cislo < porovnavanaHodnota)) {
               return false;
             }
@@ -1187,7 +1166,7 @@ export class MainPageComponent implements OnInit {
             if (porovnavanaPromenna != iOmezeni) {
               continue;
             }
-            var porovnavanaHodnota = this._valueOf(seznamPromennych, porovnavanaPromenna).vratPrirazenouHodnotu();
+            var porovnavanaHodnota = this.promennaService.najdi(seznamPromennych, porovnavanaPromenna).vratPrirazenouHodnotu();
             if (!(cislo > porovnavanaHodnota)) {
               return false;
             }
@@ -1199,7 +1178,7 @@ export class MainPageComponent implements OnInit {
             if (porovnavanaPromenna != iOmezeni) {
               continue;
             }
-            var porovnavanaHodnota = this._valueOf(seznamPromennych, porovnavanaPromenna).vratPrirazenouHodnotu();
+            var porovnavanaHodnota = this.promennaService.najdi(seznamPromennych, porovnavanaPromenna).vratPrirazenouHodnotu();
             if (cislo !== porovnavanaHodnota) {
               return false;
             }
@@ -1211,7 +1190,7 @@ export class MainPageComponent implements OnInit {
             if (porovnavanaPromenna != iOmezeni) {
               continue;
             }
-            var porovnavanaHodnota = this._valueOf(seznamPromennych, porovnavanaPromenna).vratPrirazenouHodnotu();
+            var porovnavanaHodnota = this.promennaService.najdi(seznamPromennych, porovnavanaPromenna).vratPrirazenouHodnotu();
             if (cislo === porovnavanaHodnota) {
               return false;
             }
@@ -1222,7 +1201,7 @@ export class MainPageComponent implements OnInit {
           if (porovnavanaPromenna != iOmezeni) {
             continue;
           }
-          var porovnavanaHodnota = this._valueOf(seznamPromennych, porovnavanaPromenna).vratPrirazenouHodnotu();
+          var porovnavanaHodnota = this.promennaService.najdi(seznamPromennych, porovnavanaPromenna).vratPrirazenouHodnotu();
           var nalezeno = false;
           for (var j = 0; j < omezeni.hodnotyOmezeni.length; j++) {
             var a = omezeni.hodnotyOmezeni[j][0];
@@ -1241,7 +1220,7 @@ export class MainPageComponent implements OnInit {
           if (porovnavanaPromenna != iOmezeni) {
             continue;
           }
-          var porovnavanaHodnota = this._valueOf(seznamPromennych, porovnavanaPromenna).vratPrirazenouHodnotu();
+          var porovnavanaHodnota = this.promennaService.najdi(seznamPromennych, porovnavanaPromenna).vratPrirazenouHodnotu();
           for (var j = 0; j < omezeni.hodnotyOmezeni.length; j++) {
             if (cislo === omezeni.hodnotyOmezeni[j][0] && porovnavanaHodnota === omezeni.hodnotyOmezeni[j][1]) {
               return false;
@@ -1316,7 +1295,7 @@ export class MainPageComponent implements OnInit {
             for (var l = 0; l < omezeni.hodnotyOmezeni.length; l++) {
               var porovnavaneOmezeni = omezeni.hodnotyOmezeni[l];
               if (this._indexOf(seznamPromennych, porovnavaneOmezeni) > i) {
-                var porovnavanaPromenna = this._valueOf(seznamPromennych, porovnavaneOmezeni);
+                var porovnavanaPromenna = this.promennaService.najdi(seznamPromennych, porovnavaneOmezeni);
                 for (var m = 0; m < porovnavanaPromenna.omezeni.length; m++) {
                   if (porovnavanaPromenna.omezeni[m].typOmezeni === '>') {
                     porovnavanaPromenna.omezeni[m].hodnotyOmezeni.push(promenna.nazev);
@@ -1340,7 +1319,7 @@ export class MainPageComponent implements OnInit {
             for (var l = 0; l < omezeni.hodnotyOmezeni.length; l++) {
               var porovnavaneOmezeni = omezeni.hodnotyOmezeni[l];
               if (this._indexOf(seznamPromennych, porovnavaneOmezeni) > i) {
-                var porovnavanaPromenna = this._valueOf(seznamPromennych, porovnavaneOmezeni);
+                var porovnavanaPromenna = this.promennaService.najdi(seznamPromennych, porovnavaneOmezeni);
                 for (var m = 0; m < porovnavanaPromenna.omezeni.length; m++) {
                   if (porovnavanaPromenna.omezeni[m].typOmezeni === '<') {
                     porovnavanaPromenna.omezeni[m].hodnotyOmezeni.push(promenna.nazev);
@@ -1364,7 +1343,7 @@ export class MainPageComponent implements OnInit {
             for (var l = 0; l < omezeni.hodnotyOmezeni.length; l++) {
               var porovnavaneOmezeni = omezeni.hodnotyOmezeni[l];
               if (this._indexOf(seznamPromennych, porovnavaneOmezeni) > i) {
-                var porovnavanaPromenna = this._valueOf(seznamPromennych, porovnavaneOmezeni);
+                var porovnavanaPromenna = this.promennaService.najdi(seznamPromennych, porovnavaneOmezeni);
                 for (var m = 0; m < porovnavanaPromenna.omezeni.length; m++) {
                   if (porovnavanaPromenna.omezeni[m].typOmezeni === '=') {
                     porovnavanaPromenna.omezeni[m].hodnotyOmezeni.push(promenna.nazev);
@@ -1388,7 +1367,7 @@ export class MainPageComponent implements OnInit {
             for (var l = 0; l < omezeni.hodnotyOmezeni.length; l++) {
               var porovnavaneOmezeni = omezeni.hodnotyOmezeni[l];
               if (this._indexOf(seznamPromennych, porovnavaneOmezeni) > i) {
-                var porovnavanaPromenna = this._valueOf(seznamPromennych, porovnavaneOmezeni);
+                var porovnavanaPromenna = this.promennaService.najdi(seznamPromennych, porovnavaneOmezeni);
                 for (var m = 0; m < porovnavanaPromenna.omezeni.length; m++) {
                   if (porovnavanaPromenna.omezeni[m].typOmezeni === '!') {
                     porovnavanaPromenna.omezeni[m].hodnotyOmezeni.push(promenna.nazev);
@@ -1411,7 +1390,7 @@ export class MainPageComponent implements OnInit {
           case 'p':
             var pomocnaPromenna;
             if (this._indexOf(seznamPromennych, omezeni.omezeniProPromennou) > i) {
-              var porovnavanaPromenna = this._valueOf(seznamPromennych, omezeni.omezeniProPromennou);
+              var porovnavanaPromenna = this.promennaService.najdi(seznamPromennych, omezeni.omezeniProPromennou);
               var seznamDvojic = omezeni.hodnotyOmezeni;
               for (var k = 0; k < seznamDvojic.length; k++) {
                 var dvojice = seznamDvojic[k];
@@ -1438,7 +1417,7 @@ export class MainPageComponent implements OnInit {
           case 'z':
             var pomocnaPromenna;
             if (this._indexOf(seznamPromennych, omezeni.omezeniProPromennou) > i) {
-              var porovnavanaPromenna = this._valueOf(seznamPromennych, omezeni.omezeniProPromennou);
+              var porovnavanaPromenna = this.promennaService.najdi(seznamPromennych, omezeni.omezeniProPromennou);
               var seznamDvojic = omezeni.hodnotyOmezeni;
               for (var k = 0; k < seznamDvojic.length; k++) {
                 var dvojice = seznamDvojic[k];
@@ -1481,7 +1460,7 @@ export class MainPageComponent implements OnInit {
         case '<':
           for (var j = 0; j < omezeni.hodnotyOmezeni.length; j++) {
             var porovnavanaPromenna = omezeni.hodnotyOmezeni[j];
-            var porovnavanaHodnota = this._valueOf(seznamPromennych, porovnavanaPromenna).vratPrirazenouHodnotu();
+            var porovnavanaHodnota = this.promennaService.najdi(seznamPromennych, porovnavanaPromenna).vratPrirazenouHodnotu();
             if (!(cislo < porovnavanaHodnota)) {
               omezeni.omezeniProPromennou = porovnavanaPromenna;
               return omezeni;
@@ -1491,7 +1470,7 @@ export class MainPageComponent implements OnInit {
         case '>':
           for (var j = 0; j < omezeni.hodnotyOmezeni.length; j++) {
             var porovnavanaPromenna = omezeni.hodnotyOmezeni[j];
-            var porovnavanaHodnota = this._valueOf(seznamPromennych, porovnavanaPromenna).vratPrirazenouHodnotu();
+            var porovnavanaHodnota = this.promennaService.najdi(seznamPromennych, porovnavanaPromenna).vratPrirazenouHodnotu();
             if (!(cislo > porovnavanaHodnota)) {
               omezeni.omezeniProPromennou = porovnavanaPromenna;
               return omezeni;
@@ -1501,7 +1480,7 @@ export class MainPageComponent implements OnInit {
         case '=':
           for (var j = 0; j < omezeni.hodnotyOmezeni.length; j++) {
             var porovnavanaPromenna = omezeni.hodnotyOmezeni[j];
-            var porovnavanaHodnota = this._valueOf(seznamPromennych, porovnavanaPromenna).vratPrirazenouHodnotu();
+            var porovnavanaHodnota = this.promennaService.najdi(seznamPromennych, porovnavanaPromenna).vratPrirazenouHodnotu();
             if (cislo !== porovnavanaHodnota) {
               omezeni.omezeniProPromennou = porovnavanaPromenna;
               return omezeni;
@@ -1511,7 +1490,7 @@ export class MainPageComponent implements OnInit {
         case '!':
           for (var j = 0; j < omezeni.hodnotyOmezeni.length; j++) {
             var porovnavanaPromenna = omezeni.hodnotyOmezeni[j];
-            var porovnavanaHodnota = this._valueOf(seznamPromennych, porovnavanaPromenna).vratPrirazenouHodnotu();
+            var porovnavanaHodnota = this.promennaService.najdi(seznamPromennych, porovnavanaPromenna).vratPrirazenouHodnotu();
             if (cislo === porovnavanaHodnota) {
               omezeni.omezeniProPromennou = porovnavanaPromenna;
               return omezeni;
@@ -1520,7 +1499,7 @@ export class MainPageComponent implements OnInit {
           break;
         case 'p':
           var porovnavanaPromenna = omezeni.omezeniProPromennou;
-          var porovnavanaHodnota = this._valueOf(seznamPromennych, porovnavanaPromenna).vratPrirazenouHodnotu();
+          var porovnavanaHodnota = this.promennaService.najdi(seznamPromennych, porovnavanaPromenna).vratPrirazenouHodnotu();
           var nalezeno = false;
           for (var j = 0; j < omezeni.hodnotyOmezeni.length; j++) {
             var a = omezeni.hodnotyOmezeni[j][0];
@@ -1536,7 +1515,7 @@ export class MainPageComponent implements OnInit {
           break;
         case 'z':
           var porovnavanaPromenna = omezeni.omezeniProPromennou;
-          var porovnavanaHodnota = this._valueOf(seznamPromennych, porovnavanaPromenna).vratPrirazenouHodnotu();
+          var porovnavanaHodnota = this.promennaService.najdi(seznamPromennych, porovnavanaPromenna).vratPrirazenouHodnotu();
           for (var j = 0; j < omezeni.hodnotyOmezeni.length; j++) {
             if (cislo === omezeni.hodnotyOmezeni[j][0] && porovnavanaHodnota === omezeni.hodnotyOmezeni[j][1]) {
               return omezeni;
@@ -1557,17 +1536,6 @@ export class MainPageComponent implements OnInit {
     }
 
     return -1;
-  }
-
-  _valueOf(seznamPromennych, nazev) {
-    for (var i = 0; i < seznamPromennych.length; i++) {
-      var promenna = seznamPromennych[i];
-      if (promenna.nazev === nazev) {
-        return promenna;
-      }
-    }
-
-    return null;
   }
 
 
