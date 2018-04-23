@@ -4,9 +4,8 @@
 	     	<div class="row-layout container-fluid form-header">
 	     		<h3>{{'promenna.header' | translate}}</h3>
 	     		<i class="fa fa-fw fa-plus clickable" (click)="pridejPromennou()"></i>
-		     	<div class="jazyky">
-		     		<img src="/assets/img/cz.png" (click)="lokalizuj('cz')">
-		     		<img src="/assets/img/gb.png" (click)="lokalizuj('en')">
+		     	<div class="lokalizace">
+		     		<app-lokalizace-component [lokalizace]="lokalizace"></app-lokalizace-component>
 		     	</div>
 	     	</div>
 

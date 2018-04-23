@@ -18,6 +18,7 @@ import { MultiSelectModule } from 'primeng/multiselect';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { LokalizaceComponentComponent } from './lokalizace-component/lokalizace-component.component';
 
 export function HttpLoaderFactory(http: Http) {
     return new TranslateHttpLoader(http);
@@ -31,6 +32,7 @@ export function HttpLoaderFactory(http: Http) {
     BackjumpingComponent,
     PromennaComponent,
     NumbersConvertorDirective,
+    LokalizaceComponentComponent,
   ],
   imports: [
     BrowserModule,

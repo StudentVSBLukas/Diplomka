@@ -39,6 +39,8 @@ export class MainPageComponent implements OnInit {
   ];
   selectedAlgorithm = this.algoritmy[0].value;
   iConsistencyFaktor = 1;
+  
+  lokalizace = ['cz', 'gb'];
 
 
   // Komponenta graf
@@ -1734,11 +1736,6 @@ export class MainPageComponent implements OnInit {
 
   center() {
     this.graf.zoomToFit();
-  }
-
-
-  lokalizuj(jazyk: string) {
-     this.translate.use(jazyk);
   }
 
   // TODO odstranit

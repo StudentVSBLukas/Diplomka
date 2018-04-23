@@ -21,16 +21,10 @@
 	position: relative;
 }
 
-.jazyky {
+.lokalizace {
 	position: absolute;
 	top: 0;
 	right: 0;
-}
-
-.jazyky img {
-	padding: 3px 0;
-	margin: 0 5px;
-	cursor: pointer;
 }
 
 #navod {
