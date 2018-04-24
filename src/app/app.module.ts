@@ -6,10 +6,7 @@ import { AppRoutingModule } from './app-routing.module';
 
 import { AppComponent } from './app.component';
 import { MainPageComponent } from './main-page/main-page.component';
-import { AlgoritmComponent } from './algoritm/algoritm.component';
-import { BackjumpingComponent } from './backjumping/backjumping.component';
 import { NumbersConvertorDirective } from './convertor/numbersconvertor.directive';
-import { PromennaComponent } from './promenna/promenna.component';
 import { FormsModule } from '@angular/forms';
 import { DropdownModule } from 'primeng/dropdown';
 import { InputTextModule } from 'primeng/inputtext';
@@ -20,6 +17,7 @@ import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { LokalizaceComponentComponent } from './lokalizace-component/lokalizace-component.component';
 import { PromennaService } from './promenna.service';
+import { DialogOmezeniComponent } from './dialog-omezeni/dialog-omezeni.component';
 
 export function HttpLoaderFactory(http: Http) {
     return new TranslateHttpLoader(http);
@@ -29,11 +27,9 @@ export function HttpLoaderFactory(http: Http) {
   declarations: [
     AppComponent,
     MainPageComponent,
-    AlgoritmComponent,
-    BackjumpingComponent,
-    PromennaComponent,
     NumbersConvertorDirective,
     LokalizaceComponentComponent,
+    DialogOmezeniComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,7 +1,3 @@
-* {
-    box-sizing: border-box;
-}
-
 #vstupy {
 	float: left;
 	width: 31em;
@@ -104,11 +100,6 @@
 	width: 1.5em;
 }
 
-.border {
-    border: 1px solid black;
-    margin:5px;
-}
-
 .row-layout > * {
 	display: inline-block;
 }
@@ -129,65 +120,8 @@
 	display: table-cell;
 }
 
-.tooltip{
-    position: relative;
-    display: inline-block;
-}
-
-.tooltip .tooltiptext{
-    visibility: hidden;
-    background-color: #fffa49;
-    text-align: center;
-
-    opacity: 0;
-    transition: 1s;
-}
-
-.tooltip:hover .tooltiptext{
-    visibility: visible;
-    opacity: 1;
-}
-
-.row .rowHover {
-	visibility: hidden;
-}
-
-.row:hover .rowHover {
-	visibility: visible;
-}
-
-.clickable {
-	padding: 0.25em;
-	cursor: pointer;
-}
-
-.clickable:hover {
-	background-color: LightGray;
-}
-
 .invisible {
 	visibility: hidden;
-}
-
-/deep/ .ui-inputtext.ng-dirty.ng-invalid, /deep/ p-dropdown.ng-dirty.ng-invalid > .ui-dropdown, /deep/ p-multiselect.ng-dirty.ng-invalid > .ui-multiselect {
-	border-left-color: #f44336;
-    border-bottom-color: #f44336;
-}
-
-/deep/ input:required, /deep/ .ui-inputtext:required, /deep/ p-dropdown[required] > .ui-dropdown, /deep/ p-multiselect[required] > .ui-multiselect {
-	border-left: 2px solid orange;
-}
-
-.form {
-	background-color: #f0f7fd;
-}
-
-.input-form label {
-	min-width: 3em;
-}
-
-.input-form input, .input-form label, .input-form textarea, /deep/ .input-form .ui-multiselect, /deep/ .input-form .ui-dropdown {
-	width: 100%;
 }
 
 .input-form input.surrounded {
@@ -198,31 +132,9 @@
 	margin-top: 2em;
 }
 
-.modal-scroll {
-	max-height: calc(80vh - 60px - 7em);
-    overflow-y: auto;
-}
-
 .promenne-scroll {
 	max-height: calc(100vh - 24em);
     overflow-y: auto;
-}
-
-
-.grid-container {
-	padding-left: 15px;
-	padding-right: 15px;
-}
-
-fieldset:disabled {
-	color: gray;
-}
-
-.form-header {
-	position: relative;
-	margin-bottom: 1em;
-	background-color: #cde6fc;
-	border-bottom: 1px solid #81b2dd;
 }
 
 .form-submit {

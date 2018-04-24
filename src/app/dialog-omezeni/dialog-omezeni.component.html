@@ -1,0 +1,85 @@
+<div class="backdrop"></div>
+<div class="modal" tabindex="-1" role="dialog" style="display: block">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content form">
+            <div class="modal-header form-header">
+                <button type="button" class="close" aria-label="Close" (click)="closeDialogOmezeni()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">{{'omezeni.header' | translate:promenna}}</h4>
+            </div>
+            <form  (ngSubmit)="submitDialogOmezeni()" #omezeniForm="ngForm">
+	            <div class="modal-body input-form">
+	            	<div class="modal-scroll container-fluid">
+	                	<div *ngFor="let omezeni of promenna.omezeni; index as i" class="row form-group">
+	                 		<div *ngIf="!omezeni.omezeniProPromennou">
+	                 			<div [class]="hodnotaOmezeni.invalid && (hodnotaOmezeni.dirty || hodnotaOmezeni.touched) ? 'text text-danger' : ''">
+			                  		<div class="col-sm-1">
+			                  			<label for="omezeni{{omezeni.id}}">{{promenna.nazev}} {{omezeni.typOmezeni}}</label>
+			                  		</div>
+			                  		<div class="col-sm-10">
+			                  			<span *ngIf="hodnotaOmezeni.invalid && (hodnotaOmezeni.dirty || hodnotaOmezeni.touched)">
+			                  				{{'omezeni.validace.required' | translate}}
+			                  			</span>
+			                  		</div>
+			                 	</div>
+			                  	<div class="col-sm-1">
+			                  		<i class="fa fa-remove text-danger clickable rowHover" (click)="odeberOmezeni(promenna, omezeni)"></i>
+			                  	</div>
+								<div class="col-sm-12">		                        	
+			                  		<p-multiSelect id="omezeni{{omezeni.id}}" name="omezeni{{omezeni.id}}" #hodnotaOmezeni="ngModel" [(ngModel)]="omezeni.hodnotyOmezeni" [options]="filtrovanePromenne" optionLabel="nazev" maxSelectedLabels="30" required [appendTo]="appendTo"></p-multiSelect>
+			                  	</div>
+	                  		</div>
+	                  
+			                <div *ngIf="omezeni.omezeniProPromennou">
+			                	<div class="col-sm-1">
+			                 		<label for="omezeni{{omezeni.id}}">{{promenna.nazev}} {{omezeni.typOmezeni}} {{omezeni.omezeniProPromennou.nazev}}</label>
+			                 	</div>
+			                 	<div class="col-sm-10">
+			                 		<span *ngIf="domenaOmezeni.invalid && (domenaOmezeni.dirty || domenaOmezeni.touched)" class="text text-danger">
+			                 			<span *ngIf="domenaOmezeni.errors.required">{{'omezeni.validace.required' | translate}}</span>
+			                 			<span *ngIf="domenaOmezeni.errors.pattern">{{'omezeni.validace.dvojice' | translate}}</span>
+			                 		</span>
+			                 	</div>
+			                  	<div class="col-sm-1">
+			                  		<i class="fa fa-remove text-danger clickable rowHover" (click)="odeberOmezeni(promenna, omezeni)"></i>
+			                  	</div>
+			                  	
+								<div class="col-sm-12">		                        	
+			                  		<textarea id="omezeni{{omezeni.id}}" name="omezeni{{omezeni.id}}" #domenaOmezeni="ngModel" pInputTextarea rows="4" [(ngModel)]="omezeni.hodnotyOmezeni" required pattern="^(\s*-?\d+\s*,\s*-?\d+\s*)*$"></textarea>
+			                  	</div>
+		                    </div>
+	                 	</div>
+	                 
+		                <div *ngIf="promenna.omezeni?.length === 0" class="row form-group">
+		                	{{'omezeni.prazdne' | translate}}
+		                </div>
+	                </div>
+	                
+	                <div class="spacer container-fluid">
+	                	<p-dropdown #newTypOmezeni [options]="typyOmezeni" placeholder="{{'omezeni.typPlaceholder' | translate}}">
+	                		<ng-template let-item pTemplate="selectedItem">
+	                			{{item.label | translate}}
+	   						</ng-template>
+	                		<ng-template let-item pTemplate="item">
+	                			{{item.label | translate}}
+	   						</ng-template>
+	                	</p-dropdown>
+	                	<p-dropdown [disabled]="!newTypOmezeni.value || jeJednoducheOmezeni(newTypOmezeni.value)" #newCilovaPromenna [options]="filtrovanePromenne" optionLabel="nazev" placeholder="{{'omezeni.cilPlaceholder' | translate}}"></p-dropdown>
+	                	<button type="button" class="btn btn-default" [disabled]="!(newTypOmezeni.value && (jeJednoducheOmezeni(newTypOmezeni.value) || newCilovaPromenna.value))" (click)="pridejOmezeni(promenna, newTypOmezeni.value, newCilovaPromenna.value)"><i class="fa fa-plus" ></i> {{'omezeni.pridat' | translate}}</button>
+	                </div>
+	            </div>
+	            
+	            <div class="modal-footer">
+	                <button type="submit" class="btn btn-success" [disabled]="!omezeniForm.form.valid">{{'omezeni.ulozit' | translate}}</button>
+	                <button type="button" class="btn btn-danger" (click)="resetDialogOmezeni()">{{'omezeni.vratit' | translate}}</button>
+	                <button type="button" class="btn btn-default" (click)="closeDialogOmezeni()">{{'omezeni.zrusit' | translate}}</button>
+	            </div>
+            </form>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+	        
+	        

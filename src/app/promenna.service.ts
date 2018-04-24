@@ -29,6 +29,16 @@ export class PromennaService {
     return null;
   }
 
+  index(seznamPromennych: Array<Promenna>, nazev: string): number {
+    for (let i = 0; i < seznamPromennych.length; i++) {
+      if (seznamPromennych[i].nazev === nazev) {
+        return i;
+      }
+    }
+
+    return -1;
+  }
+
   vytvor(): Promenna {
     const promenna = new Promenna(this.generateIdentifier(), [], null);
     this.listPromennych.push(promenna);
@@ -36,12 +46,19 @@ export class PromennaService {
     return promenna;
   }
 
+  uprav(promenna: Promenna) {
+    const index = this.index(this.listPromennych, promenna.nazev);
+    if (index !== -1) {
+      this.listPromennych[index] = promenna;
+    }
+  }
+
   smaz(promenna: Promenna) {
     const index = this.listPromennych.indexOf(promenna);
     if (index !== -1) {
       this.listPromennych.splice(index, 1);
     }
-    
+
     // TODO odstranit vsechna omezeni s promennou
   }
 

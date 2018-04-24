@@ -19,15 +19,6 @@ export class MainPageComponent implements OnInit {
 
   // TODO Modalni dialog komponenta
   vybranaPromenna;
-  filtrovanePromenne;
-  typyOmezeni = [
-    {label: 'omezeni.typ.<', value: '<'},
-    {label: 'omezeni.typ.>', value: '>'},
-    {label: 'omezeni.typ.=', value: '='},
-    {label: 'omezeni.typ.!', value: '!'},
-    {label: 'omezeni.typ.p', value: 'p'},
-    {label: 'omezeni.typ.z', value: 'z'}
-  ];
 
   algoritmy = [
     {label: 'provedeni.typ.backtracking', value: 'backtracking'},
@@ -86,85 +77,16 @@ export class MainPageComponent implements OnInit {
   }
 
   openDialogOmezeni(promenna: Promenna) {
-    this.vybranaPromenna = this.prevedPromennou(promenna);
-    this.filtrovanePromenne = this.listPromennych.filter(
-      (p: Promenna) => p.nazev !== this.vybranaPromenna.nazev
-    );
+    this.vybranaPromenna = promenna;
   }
-
-  resetDialogOmezeni() {
-    this.openDialogOmezeni(this.promennaService.vrat(this.vybranaPromenna.nazev));
-  }
-
-  submitDialogOmezeni() {
-    const promenna = this.promennaService.vrat(this.vybranaPromenna.nazev);
-    this.upravPromennou(promenna, this.vybranaPromenna);
-
-    this.vybranaPromenna = null;
-  }
-
-  closeDialogOmezeni() {
-    this.vybranaPromenna = null;
-  }
-
-  // TODO presunout na Promennou (spravny typ na vybranaPromenna)
-  odeberOmezeni(promenna: Promenna, omezeni: Omezeni) {
-    const index = promenna.omezeni.indexOf(omezeni);
-    if (index !== -1) {
-      promenna.omezeni.splice(index, 1);
+  
+  closeDialogOmezeni(promenna:Promenna) {
+    if (promenna) {
+      this.promennaService.uprav(promenna);
+      this.listPromennych = this.promennaService.list();
     }
-  }
-
-  pridejOmezeni(promenna: Promenna, typ: string, cilovaPromenna: Promenna) {
-    const omezeni = new Omezeni(typ);
-    omezeni.omezeniProPromennou = cilovaPromenna;
-    promenna.omezeni.push(omezeni);
-  }
-
-  // Promenna Converter class
-  prevedPromennou(p: Promenna) {
-    const vysledek = Object.assign({}, p);
-
-    vysledek.omezeni = p.omezeni.map( function(item) {
-      const o =  Object.assign({}, item);
-
-      if (this.jeJednoducheOmezeni(o.typOmezeni)) {
-        o.hodnotyOmezeni = item.hodnotyOmezeni.map(
-          (hodnota: string) => this.promennaService.vrat(hodnota)
-        );
-      } else {
-        o.hodnotyOmezeni = item.hodnotyOmezeni.join(' ');
-        o.omezeniProPromennou = this.promennaService.vrat(item.omezeniProPromennou);
-      }
-
-      return o;
-    }, this);
-
-    return vysledek;
-  }
-
-  upravPromennou(original: Promenna, cil: Promenna) {
-    Object.assign(original, cil);
-
-    original.omezeni = cil.omezeni.map( function(item) {
-      const o =  Object.assign({}, item);
-
-      if (this.jeJednoducheOmezeni(o.typOmezeni)) {
-        o.hodnotyOmezeni = item.hodnotyOmezeni.map(
-          (promenna: Promenna) => promenna.nazev
-        );
-      } else {
-        const dvojiceHodnot = item.hodnotyOmezeni.match(/\s*(-?\d+\s*,\s*-?\d+)/g);
-        o.hodnotyOmezeni = dvojiceHodnot.map(
-          (dvojice: string) => dvojice.split(',').map(Number)
-        );
-        o.omezeniProPromennou = item.omezeniProPromennou.nazev;
-      }
-
-      return o;
-    }, this);
-
-    return original;
+    
+    this.vybranaPromenna = null;
   }
 
   // TODO zbavit se tohoto - upravit patricne atributy omezeni
@@ -336,11 +258,11 @@ export class MainPageComponent implements OnInit {
               const omezeni = zpracovavanaPromenna.omezeni[i];
               // TODO odstranit spolu s jeJednoducheOmezeni
               if (omezeni.typOmezeni === 'p' || omezeni.typOmezeni === 'z') {
-                  const jump = this._indexOf(seznamPromennych, omezeni.omezeniProPromennou);
+                  const jump = this.promennaService.index(seznamPromennych, omezeni.omezeniProPromennou);
                   backjump = Math.max(backjump, jump);
               } else {
                 for (var j = 0; j < omezeni.hodnotyOmezeni.length; j++) {
-                  const jump = this._indexOf(seznamPromennych, omezeni.hodnotyOmezeni[j]);
+                  const jump = this.promennaService.index(seznamPromennych, omezeni.hodnotyOmezeni[j]);
                   backjump = Math.max(backjump, jump);
                 }
               }
@@ -921,7 +843,7 @@ export class MainPageComponent implements OnInit {
       const krokAlgoritmu = new KrokAlgoritmu();
       krokAlgoritmu.popis = popis;
       krokAlgoritmu.nazev = promenna.nazev;
-      krokAlgoritmu.promenna = this._indexOf(seznamPromennych, promenna.nazev);
+      krokAlgoritmu.promenna = this.promennaService.index(seznamPromennych, promenna.nazev);
       krokAlgoritmu.hodnota = null;
       krokAlgoritmu.rodic = 0;
       krokAlgoritmu.stav = 'deadend';
@@ -1294,7 +1216,7 @@ export class MainPageComponent implements OnInit {
           case '<':
             for (var l = 0; l < omezeni.hodnotyOmezeni.length; l++) {
               var porovnavaneOmezeni = omezeni.hodnotyOmezeni[l];
-              if (this._indexOf(seznamPromennych, porovnavaneOmezeni) > i) {
+              if (this.promennaService.index(seznamPromennych, porovnavaneOmezeni) > i) {
                 var porovnavanaPromenna = this.promennaService.najdi(seznamPromennych, porovnavaneOmezeni);
                 for (var m = 0; m < porovnavanaPromenna.omezeni.length; m++) {
                   if (porovnavanaPromenna.omezeni[m].typOmezeni === '>') {
@@ -1318,7 +1240,7 @@ export class MainPageComponent implements OnInit {
           case '>':
             for (var l = 0; l < omezeni.hodnotyOmezeni.length; l++) {
               var porovnavaneOmezeni = omezeni.hodnotyOmezeni[l];
-              if (this._indexOf(seznamPromennych, porovnavaneOmezeni) > i) {
+              if (this.promennaService.index(seznamPromennych, porovnavaneOmezeni) > i) {
                 var porovnavanaPromenna = this.promennaService.najdi(seznamPromennych, porovnavaneOmezeni);
                 for (var m = 0; m < porovnavanaPromenna.omezeni.length; m++) {
                   if (porovnavanaPromenna.omezeni[m].typOmezeni === '<') {
@@ -1342,7 +1264,7 @@ export class MainPageComponent implements OnInit {
           case '=':
             for (var l = 0; l < omezeni.hodnotyOmezeni.length; l++) {
               var porovnavaneOmezeni = omezeni.hodnotyOmezeni[l];
-              if (this._indexOf(seznamPromennych, porovnavaneOmezeni) > i) {
+              if (this.promennaService.index(seznamPromennych, porovnavaneOmezeni) > i) {
                 var porovnavanaPromenna = this.promennaService.najdi(seznamPromennych, porovnavaneOmezeni);
                 for (var m = 0; m < porovnavanaPromenna.omezeni.length; m++) {
                   if (porovnavanaPromenna.omezeni[m].typOmezeni === '=') {
@@ -1366,7 +1288,7 @@ export class MainPageComponent implements OnInit {
           case '!':
             for (var l = 0; l < omezeni.hodnotyOmezeni.length; l++) {
               var porovnavaneOmezeni = omezeni.hodnotyOmezeni[l];
-              if (this._indexOf(seznamPromennych, porovnavaneOmezeni) > i) {
+              if (this.promennaService.index(seznamPromennych, porovnavaneOmezeni) > i) {
                 var porovnavanaPromenna = this.promennaService.najdi(seznamPromennych, porovnavaneOmezeni);
                 for (var m = 0; m < porovnavanaPromenna.omezeni.length; m++) {
                   if (porovnavanaPromenna.omezeni[m].typOmezeni === '!') {
@@ -1389,7 +1311,7 @@ export class MainPageComponent implements OnInit {
             break;
           case 'p':
             var pomocnaPromenna;
-            if (this._indexOf(seznamPromennych, omezeni.omezeniProPromennou) > i) {
+            if (this.promennaService.index(seznamPromennych, omezeni.omezeniProPromennou) > i) {
               var porovnavanaPromenna = this.promennaService.najdi(seznamPromennych, omezeni.omezeniProPromennou);
               var seznamDvojic = omezeni.hodnotyOmezeni;
               for (var k = 0; k < seznamDvojic.length; k++) {
@@ -1416,7 +1338,7 @@ export class MainPageComponent implements OnInit {
             break;
           case 'z':
             var pomocnaPromenna;
-            if (this._indexOf(seznamPromennych, omezeni.omezeniProPromennou) > i) {
+            if (this.promennaService.index(seznamPromennych, omezeni.omezeniProPromennou) > i) {
               var porovnavanaPromenna = this.promennaService.najdi(seznamPromennych, omezeni.omezeniProPromennou);
               var seznamDvojic = omezeni.hodnotyOmezeni;
               for (var k = 0; k < seznamDvojic.length; k++) {
@@ -1524,18 +1446,6 @@ export class MainPageComponent implements OnInit {
           break;
       }
     }
-  }
-
-
-
-  _indexOf(seznamPromennych, nazev) {
-    for (var i = 0; i < seznamPromennych.length; i++) {
-      if (seznamPromennych[i].nazev === nazev) {
-        return i;
-      }
-    }
-
-    return -1;
   }
 
 

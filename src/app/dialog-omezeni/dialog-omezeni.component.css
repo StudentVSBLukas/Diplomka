@@ -1,0 +1,4 @@
+.modal-scroll {
+	max-height: calc(80vh - 60px - 7em);
+    overflow-y: auto;
+}
