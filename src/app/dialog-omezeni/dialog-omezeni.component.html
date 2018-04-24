@@ -51,9 +51,10 @@
 		                    </div>
 	                 	</div>
 	                 
-		                <div *ngIf="promenna.omezeni?.length === 0" class="row form-group">
-		                	{{'omezeni.prazdne' | translate}}
-		                </div>
+		                <div *ngIf="promenna.omezeni?.length === 0" class="row form-group navod">
+						   	<i class="fa fa-5x fa-edit"></i>
+							<span>{{'omezeni.prazdne' | translate}}</span>
+						</div>
 	                </div>
 	                
 	                <div class="spacer container-fluid">

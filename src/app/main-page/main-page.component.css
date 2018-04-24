@@ -23,18 +23,18 @@
 	right: 0;
 }
 
-#navod {
+.navod {
 	margin-top: 5em;
 	text-align: center;
 	color: grey;
 }
 
-#navod > i {
+.navod > i {
 	font-size: 10em;
     margin-bottom: 0.5em;
 }
 
-#navod > span {
+.navod > span {
 	display: block;
 	font-size: 2em;
 	line-height: 1.45;
@@ -88,13 +88,6 @@
 	margin-bottom: 0.5em;
 }
 
-#menu {
-    float: left;
-    width: 30%;
-    height: 100%;
-    padding: 1em;
-}
-
 .operator {
 	display: inline-block;
 	width: 1.5em;
@@ -118,18 +111,6 @@
 
 .table-layout > div > div {
 	display: table-cell;
-}
-
-.invisible {
-	visibility: hidden;
-}
-
-.input-form input.surrounded {
-	width: calc(100% - 3.5em);
-}
-
-.spacer {
-	margin-top: 2em;
 }
 
 .promenne-scroll {

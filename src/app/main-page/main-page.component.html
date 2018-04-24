@@ -1,6 +1,6 @@
 <div>
     <div id="vstupy" class="form">
-        <form class="input-form">
+        
 	     	<div class="row-layout container-fluid form-header">
 	     		<h3>{{'promenna.header' | translate}}</h3>
 	     		<i class="fa fa-fw fa-plus clickable" (click)="pridejPromennou()"></i>
@@ -9,46 +9,9 @@
 		     	</div>
 	     	</div>
 
-			<div class="promenne-scroll container-fluid">
-	            <div *ngFor="let r of listPromennych, index as i" class="row form-group">
-	            	<fieldset [disabled]="!r.aktivni">
-		             	<div class="col-sm-1">{{r.nazev}}</div>
-			                <div class="col-sm-11" *ngIf="r.aktivni">
-			                	<i class="fa fa-cog clickable" (click)="openDialogOmezeni(r)"></i>
-			                	<i class="fa fa-ban text-danger clickable rowHover" (click)="r.aktivni = false"></i>
-			                	<i class="fa fa-remove text-danger clickable rowHover" (click)="odeberPromennou(r)"></i>
-			                </div>
-			                <div class="col-sm-11" *ngIf="!r.aktivni">
-			                	<i class="fa fa-cog clickable" class="invisible"></i>
-			                	<i class="fa fa-check-circle text-success clickable rowHover" (click)="r.aktivni = true"></i>
-			                </div>
-			                <div class="clearfix"></div>
-			                
-			                <div class="col-sm-1"></div>
-			            	<div class="col-sm-11">
-			                 	 <span class="operator">=</span> &#123;
-			                 	 <input name="domena{{r.nazev}}" [(ngModel)]="r.domena" required numbersConvertor pattern="^(-?\d+,? ?)*-?\d+$" #domenaControl="ngModel" class="surrounded" pInputText />
-			                 	 &#125;
-			                </div>
-		                 	<div class="clearfix"></div>
-		                 
-		                 	<div class="col-sm-1"></div>
-			             	<div class="col-sm-11">
-			             		<div *ngIf="domenaControl.invalid && (domenaControl.dirty || domenaControl.touched)" class="text text-danger">
-			             			{{'promenna.validace.pattern' | translate}}
-			             		</div>
-			                </div>
-		                
-			                <div *ngFor="let o of r.omezeni" class="">
-			                 	<div class="col-sm-1"></div>
-			              	<div class="col-sm-11">
-		                 		<span class="operator">{{o.typOmezeni}}{{o.omezeniProPromennou}}</span> {{o.hodnotyOmezeni}}
-		                 	</div>
-		                 </div>
-		         	</fieldset>
-	            </div>
+			<div class="promenne-scroll">
+				<app-promenne-panel [promenne]="listPromennych"></app-promenne-panel>
 	        </div>
-        </form>
 
         <form  (ngSubmit)="run()" #provedeniForm="ngForm" class="input-form ">
         	<div class="container-fluid form-header">
@@ -96,22 +59,9 @@
 		        </div>
 		    </div>
 	    </form>
-        
-<!-- TODO Co s tim? -->
-<!--         <p id="vykonanyAlgoritmus">&nbsp;</p> -->
-<!--         <div class="border" style="height: 30%"> -->
-<!--                 <app-algoritm [pocetPromennych]="pocetPromennych" *ngIf="(selectedAlgorithm=='Backtracking')"></app-algoritm> -->
-<!--             <app-backjumping *ngIf="(selectedAlgorithm=='Backjumping')"></app-backjumping> -->
-<!--         </div> -->
     </div>
     
     <div id="vstupySeparator"></div>
-    
-    <div *ngIf="vybranaPromenna">
-		<app-dialog-omezeni [promenna]="vybranaPromenna" (close)="closeDialogOmezeni($event)" [appendTo]="modalAppendTo"></app-dialog-omezeni>
-    </div>
-      
-    <div id="modalAppendTo" #modalAppendTo></div>  
         
     <div id="graf">
 		<!-- Kvuli GoJS knihovne a registraci listeneru na DOM je nutne skryvat css tridou a ne ngIf -->
@@ -150,7 +100,7 @@
 	            </div>
 	        </div>
         </div>
-        <div id="navod" *ngIf="!postup">
+        <div class="navod" *ngIf="!postup">
         	<i class="fa fa-5x fa-edit"></i>
         		<span>{{'graf.navod.1' | translate}}</span>
         		<span>{{'graf.navod.2' | translate}}</span>

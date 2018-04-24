@@ -1,6 +1,5 @@
-.modal-scroll {
-	max-height: calc(80vh - 60px - 7em);
-    overflow-y: auto;
+.input-form input.surrounded {
+	width: calc(100% - 3.5em);
 }
 
 .navod {

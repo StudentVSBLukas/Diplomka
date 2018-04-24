@@ -18,6 +18,7 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { LokalizaceComponentComponent } from './lokalizace-component/lokalizace-component.component';
 import { PromennaService } from './promenna.service';
 import { DialogOmezeniComponent } from './dialog-omezeni/dialog-omezeni.component';
+import { PromennePanelComponent } from './promenne-panel/promenne-panel.component';
 
 export function HttpLoaderFactory(http: Http) {
     return new TranslateHttpLoader(http);
@@ -30,6 +31,7 @@ export function HttpLoaderFactory(http: Http) {
     NumbersConvertorDirective,
     LokalizaceComponentComponent,
     DialogOmezeniComponent,
+    PromennePanelComponent,
   ],
   imports: [
     BrowserModule,

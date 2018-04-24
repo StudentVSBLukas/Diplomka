@@ -17,9 +17,6 @@ export class MainPageComponent implements OnInit {
 
   listPromennych = [];
 
-  // TODO Modalni dialog komponenta
-  vybranaPromenna;
-
   algoritmy = [
     {label: 'provedeni.typ.backtracking', value: 'backtracking'},
     {label: 'provedeni.typ.backjumping', value: 'backjumping'},
@@ -69,24 +66,6 @@ export class MainPageComponent implements OnInit {
   pridejPromennou() {
     const promenna = this.promennaService.vytvor();
     this.listPromennych = this.promennaService.list();
-  }
-
-  odeberPromennou(promenna: Promenna) {
-    this.promennaService.smaz(promenna);
-    this.listPromennych = this.promennaService.list();
-  }
-
-  openDialogOmezeni(promenna: Promenna) {
-    this.vybranaPromenna = promenna;
-  }
-  
-  closeDialogOmezeni(promenna:Promenna) {
-    if (promenna) {
-      this.promennaService.uprav(promenna);
-      this.listPromennych = this.promennaService.list();
-    }
-    
-    this.vybranaPromenna = null;
   }
 
   // TODO zbavit se tohoto - upravit patricne atributy omezeni

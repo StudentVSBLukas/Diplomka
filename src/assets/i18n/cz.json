@@ -83,5 +83,8 @@
 			"deadend" : "Vybírám první volnou hodnotu z domény proměnné {{nazev}} - {{hodnota}}.\nTato hodnota porušuje omezení {{nazev}}{{omezeni.typOmezeni}}{{omezeni.omezeniProPromennou}}.",
 			"reseni" : "Vybírám první volnou hodnotu z domény proměnné {{nazev}} - {{hodnota}}.\nTato hodnota neporušuje žádné omezení. Nalezené přiřazení je řešením."
 		}
+	},
+	"promennePanel": {
+		"empty" : "Vložte novou proměnnou kliknutím na + výše"
 	}
 }
