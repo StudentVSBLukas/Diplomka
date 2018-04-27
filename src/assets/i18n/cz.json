@@ -79,6 +79,7 @@
 		"forwardCheck": {
 			"nazev": "Forward checking",
 			"definice" : "TODO: Napsat definici algoritmu Backtracking. Muzes pouzit HTML!!",
+			"prirazeni": "Vybírám první volnou hodnotu z domény proměnné {{nazev}} = {{hodnota}}.\n",
 			"uzel": "Vybírám první volnou hodnotu z domény proměnné {{nazev}} - {{hodnota}}.\nTato hodnota neporušuje žádné omezení, proto pokračuji dopřednou fází k další proměnné.\n",
 			"prazdnaDomena": "Po odebrání prvku se doména proměnné {{porovnavanaPromenna}} stala prázdnou a tudíž pro dané přiřazení neexistuje řešení.\nZahájení zpetné fáze.\n",
 			"deadend": "Vybírám první volnou hodnotu z domény proměnné {{nazev}} - {{hodnota}}.\nTato hodnota porušuje omezení {{nazev}}{{omezeni.typOmezeni}}{{omezeni.omezeniProPromennou}}.\n",
