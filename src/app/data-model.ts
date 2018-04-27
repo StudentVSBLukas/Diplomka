@@ -36,7 +36,6 @@ export class Omezeni {
 }
 
 export class KrokAlgoritmu {
-  promenna: number; // Index v seznamu promennych
   nazev: string;
   hodnota: string;
   rodic: number;
@@ -47,6 +46,6 @@ export class KrokAlgoritmu {
 }
 
 export class LokalizovanaZprava {
-  klic: string;
-  parametry: any;
+
+  constructor (public klic: string = null, public parametry: any = null) {}
 }

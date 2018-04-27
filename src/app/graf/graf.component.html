@@ -3,7 +3,9 @@
 	
 			<div>
 				<div class="graf-podrobnosti">
-					{{aktualniKrok?.popis | translate:aktualniKrok}}
+					<span *ngFor="let zprava of aktualniKrok.popis">
+						{{zprava.klic | translate:zprava.parametry}}
+					</span>
 				</div>
 		        <div class="graf-navigation">
 	                <button (click)="odkrokujCele()">&lt;&lt;&lt;&lt;</button>

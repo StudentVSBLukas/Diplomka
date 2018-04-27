@@ -1,4 +1,4 @@
-import { KrokAlgoritmu } from '../data-model';
+import { KrokAlgoritmu, LokalizovanaZprava } from '../data-model';
 import { Component, OnInit, Input, OnChanges, SimpleChange, SimpleChanges } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import * as go from 'gojs';
@@ -64,8 +64,10 @@ export class GrafComponent implements OnInit, OnChanges {
       return 'lightgray';
     }
 
-    function tooltipConverter(krok) {
-        return self.translate.instant(krok.popis, krok);
+    function tooltipConverter(krok: KrokAlgoritmu) {
+        return krok.popis.map(
+          (zprava: LokalizovanaZprava) => self.translate.instant(zprava.klic, zprava.parametry)
+        ).join(' ');
     }
 
     const tooltipTemplate =
@@ -114,7 +116,7 @@ export class GrafComponent implements OnInit, OnChanges {
     this.aktualniKrok = new KrokAlgoritmu();
     this.aktualniKrok.hodnota = 'Start'; 
     // TODO this.aktualniKrok.hodnota = this.translate.instant(this.vybranyAlgoritmus.nazev);
-    this.aktualniKrok.popis = 'popis.start';
+    this.aktualniKrok.popis.push(new LokalizovanaZprava('popis.start'));
     const nodeDataArray = [{key: 0, krok: this.aktualniKrok}];
     this.graf.model = new go.TreeModel(nodeDataArray);
   }
