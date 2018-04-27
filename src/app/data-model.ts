@@ -5,7 +5,7 @@ export class Promenna {
   aktivni: boolean;
   pozice: number;
   zalohaDomeny: Array<number>;
-  constructor(nazev, domena: number[] = [], omezeni: Omezeni[] = []) {
+  constructor(nazev: string, domena: number[] = [], omezeni: Omezeni[] = []) {
     this.nazev = nazev;
     this.domena = domena || [];
     this.omezeni = omezeni || [];

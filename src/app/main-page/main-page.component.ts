@@ -1,32 +1,34 @@
 import {Promenna, Omezeni, KrokAlgoritmu} from '../data-model';
+import { Algoritmus } from '../dialog-algoritmus/dialog-algoritmus.component';
 import { PromennaService } from '../promenna.service';
 import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { TranslateService, TranslatePipe } from '@ngx-translate/core';
 import {SelectItem} from 'primeng/api';
 import * as go from 'gojs';
 
+
+
 @Component({
   selector: 'app-main-page',
   templateUrl: './main-page.component.html',
   styleUrls: ['./main-page.component.css']
 })
-
-
 export class MainPageComponent implements OnInit {
   pocetReseni;
 
   listPromennych = [];
 
   algoritmy = [
-    {label: 'provedeni.typ.backtracking', value: 'backtracking'},
-    {label: 'provedeni.typ.backjumping', value: 'backjumping'},
-    {label: 'provedeni.typ.forwardCheck', value: 'forwardCheck'},
-    {label: 'provedeni.typ.arcConsistency', value: 'arcConsistency'},
-    {label: 'provedeni.typ.random', value: 'random'},
-    {label: 'provedeni.typ.dynamicOrder', value: 'dynamicOrder'},
-    {label: 'provedeni.typ.iConsistency', value: 'iConsistency'}
+    { label: '-', value: new Algoritmus('popis.backtracking.nazev', 'popis.backtracking.definice', this.backtracking) },
+    { label: '-', value: new Algoritmus('popis.backjumping.nazev', 'popis.backjumping.definice', this.backjumping) },
+    { label: '-', value: new Algoritmus('popis.forwardCheck.nazev', 'popis.forwardCheck.definice', this.forwardChecking) },
+    { label: '-', value: new Algoritmus('popis.arcConsistency.nazev', 'popis.arcConsistency.definice', this.arcConsistency) },
+    { label: '-', value: new Algoritmus('popis.random.nazev', 'popis.random.definice', this.randomBacktracking) },
+    { label: '-', value: new Algoritmus('popis.dynamicOrder.nazev', 'popis.dynamicOrder.definice', this.dynamicOrderBacktracking) },
+    { label: '-', value: new Algoritmus('popis.iConsistency.nazev', 'popis.iConsistency.definice', this.iConsistency) }
   ];
-  selectedAlgorithm = this.algoritmy[0].value;
+  vybranyAlgoritmus = this.algoritmy[0].value;
+  zobrazVybranyAlgoritmus = false;
   iConsistencyFaktor = 1;
   
   lokalizace = ['cz', 'gb'];
@@ -67,6 +69,14 @@ export class MainPageComponent implements OnInit {
     const promenna = this.promennaService.vytvor();
     this.listPromennych = this.promennaService.list();
   }
+  
+  zobrazAlgoritmus() {
+    this.zobrazVybranyAlgoritmus = true;
+  }
+  
+  skryjAlgoritmus() {
+    this.zobrazVybranyAlgoritmus = false;
+  }
 
   // TODO zbavit se tohoto - upravit patricne atributy omezeni
   jeJednoducheOmezeni(typOmezeni: string) {
@@ -76,16 +86,7 @@ export class MainPageComponent implements OnInit {
   run() {
     const zadani = this.pripravAktivniPromenne();
 
-    switch (this.selectedAlgorithm) {
-      case 'backtracking' : this.postup = this.backtracking(this.pocetReseni, zadani); break;
-      case 'backjumping' : this.postup = this.backjumping(this.pocetReseni, zadani); break;
-      case 'forwardCheck' : this.postup = this.forwardChecking(this.pocetReseni, zadani); break;
-      case 'arcConsistency' : this.postup = this.arcConsistency(this.pocetReseni, zadani); break;
-      case 'random' : this.postup = this.randomBacktracking(this.pocetReseni, zadani); break;
-      case 'dynamicOrder' : this.postup = this.dynamicOrderBacktracking(this.pocetReseni, zadani); break;
-      case 'iConsistency' : this.postup = this.iConsistency(this.pocetReseni, this.iConsistencyFaktor, zadani); break;
-      default:
-    }
+    this.postup = this.vybranyAlgoritmus.run.call(this, this.pocetReseni, zadani, this.iConsistencyFaktor);
 
     this.reloadGraph();
   }
@@ -948,7 +949,7 @@ export class MainPageComponent implements OnInit {
     return postupTvoreniGrafu;
   }
 
-  iConsistency(pocetReseni, iPocet, seznamPromennych) {
+  iConsistency(pocetReseni, seznamPromennych, iPocet) {
 // TODO Test ze zadani
 //    seznamPromennych = [];
 //    // seznamPromennych.push(new Promenna("A", [1, 2], []))
@@ -1429,9 +1430,9 @@ export class MainPageComponent implements OnInit {
 
 
 
-  initGraph(){
+  initGraph() {
     var postup = new Array();
-    postup=this.postup;
+    postup = this.postup;
     var $ = go.GraphObject.make;
     var myDiagram =
             $(go.Diagram, 'myDiagramDiv',
@@ -1506,12 +1507,12 @@ export class MainPageComponent implements OnInit {
     if (!this.postup) {
       return;
     }
-    if(!this.graf) {
+    if (!this.graf) {
       this.initGraph();
     }
 
     this.aktualniKrok = new KrokAlgoritmu();
-    this.aktualniKrok.hodnota = this.translate.instant('provedeni.typ.' + this.selectedAlgorithm);
+    this.aktualniKrok.hodnota = this.translate.instant(this.vybranyAlgoritmus.nazev);
     this.aktualniKrok.popis = 'popis.start';
     const nodeDataArray = [{key: 0, krok: this.aktualniKrok}];
     this.graf.model = new go.TreeModel(nodeDataArray);
@@ -1597,6 +1598,6 @@ export class MainPageComponent implements OnInit {
 
   // TODO odstranit
   debug(o: any) {
-    return true;
+    return o.nazev;
   }
 }

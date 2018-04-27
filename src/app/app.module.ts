@@ -19,6 +19,7 @@ import { LokalizaceComponentComponent } from './lokalizace-component/lokalizace-
 import { PromennaService } from './promenna.service';
 import { DialogOmezeniComponent } from './dialog-omezeni/dialog-omezeni.component';
 import { PromennePanelComponent } from './promenne-panel/promenne-panel.component';
+import { DialogAlgoritmusComponent } from './dialog-algoritmus/dialog-algoritmus.component';
 
 export function HttpLoaderFactory(http: Http) {
     return new TranslateHttpLoader(http);
@@ -32,6 +33,7 @@ export function HttpLoaderFactory(http: Http) {
     LokalizaceComponentComponent,
     DialogOmezeniComponent,
     PromennePanelComponent,
+    DialogAlgoritmusComponent,
   ],
   imports: [
     BrowserModule,

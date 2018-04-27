@@ -8,7 +8,7 @@
 	"provedeni": {
 		"header": "Provedení",
 		"pocet": "Počet řešení",
-		"pocetPlaceholder": "Neomezeně",
+		"pocetPlaceholder": "Neomezeno",
 		"algoritmus": "Algoritmus",
 		"iConsistency": "iConsistency",
 		"spust": "Spusť",
@@ -44,6 +44,9 @@
 			"z": "z"
 		}
 	},
+	"algoritmus": {
+		"zavrit": "Zavřít" 
+	},
 	"graf": {
 		"popisDomeny": "Domény proměnných",
 		"navod": {
@@ -55,33 +58,49 @@
 	"popis": {
 		"start": "Start",
 		"backtracking": {
+			"nazev" : "Backtracking",
+			"definice" : "TODO: Napsat definici algoritmu Backtracking. Muzes pouzit HTML!!",
 			"uzel" : "Vybírám první volnou hodnotu z domény proměnné {{nazev}} - {{hodnota}}.\nTato hodnota neporušuje žádné omezení, proto pokračuji dopřednou fází k další proměnné.",
 			"deadend" : "Vybírám první volnou hodnotu z domény proměnné {{nazev}} - {{hodnota}}.\nTato hodnota porušuje omezení {{nazev}}{{omezeni.typOmezeni}}{{omezeni.omezeniProPromennou}}.",
 			"reseni" : "Vybírám první volnou hodnotu z domény proměnné {{nazev}} - {{hodnota}}.\nTato hodnota neporušuje žádné omezení. Nalezené přiřazení je řešením."
 		},
 		"backjumping": {
+			"nazev" : "Backjumping",
+			"definice" : "TODO: Napsat definici algoritmu Backjumping",
 			"uzel" : "Vybírám první volnou hodnotu z domény proměnné {{nazev}} - {{hodnota}}.\nTato hodnota neporušuje žádné omezení, proto pokračuji dopřednou fází k další proměnné.",
 			"deadend" : "Vybírám první volnou hodnotu z domény proměnné {{nazev}} - {{hodnota}}.\nTato hodnota porušuje omezení {{nazev}}{{omezeni.typOmezeni}}{{omezeni.omezeniProPromennou}}.",
 			"reseni" : "Vybírám první volnou hodnotu z domény proměnné {{nazev}} - {{hodnota}}.\nTato hodnota neporušuje žádné omezení. Nalezené přiřazení je řešením."
 		},
 		"forwardCheck": {
+			"nazev" : "Forward checking",
+			"definice" : "TODO: Napsat definici algoritmu forwardCheck",
 			"uzel" : "Vybírám první volnou hodnotu z domény proměnné {{nazev}} - {{hodnota}}.\nTato hodnota neporušuje žádné omezení, proto pokračuji dopřednou fází k další proměnné.",
 			"checkFail" : "TODO: netusim, co to dela a proc je toto jako selhani",
 			"deadend" : "Vybírám první volnou hodnotu z domény proměnné {{nazev}} - {{hodnota}}.\nTato hodnota porušuje omezení {{nazev}}{{omezeni.typOmezeni}}{{omezeni.omezeniProPromennou}}.",
 			"reseni" : "Vybírám první volnou hodnotu z domény proměnné {{nazev}} - {{hodnota}}.\nTato hodnota neporušuje žádné omezení. Nalezené přiřazení je řešením."
 		},
 		"arcConsistency": {
+			"nazev" : "Arc consistency",
+			"definice" : "TODO: Napsat definici algoritmu arcConsistency",
 			"prazdnaDomena" : "U proměnné {{nazev}} vznikla prázdná doména, tudíž pro tento problém neexistuje řešení."
 		},
 		"random": {
+			"nazev" : "Random",
+			"definice" : "TODO: Napsat definici algoritmu Random",
 			"uzel" : "Vybírám náhodnou volnou hodnotu z domény proměnné {{nazev}} - {{hodnota}}.\nTato hodnota neporušuje žádné omezení, proto pokračuji dopřednou fází k další proměnné.",
 			"deadend" : "Vybírám náhodnou volnou hodnotu z domény proměnné {{nazev}} - {{hodnota}}.\nTato hodnota porušuje omezení {{nazev}}{{omezeni.typOmezeni}}{{omezeni.omezeniProPromennou}}.",
 			"reseni" : "Vybírám náhodnou volnou hodnotu z domény proměnné {{nazev}} - {{hodnota}}.\nTato hodnota neporušuje žádné omezení. Nalezené přiřazení je řešením."
 		},
 		"dynamicOrder": {
+			"nazev" : "Dynamic order",
+			"definice" : "TODO: Napsat definici algoritmu dynamicOrder",
 			"uzel" : "Vybírám první volnou hodnotu z domény proměnné {{nazev}} - {{hodnota}}.\nTato hodnota neporušuje žádné omezení, proto pokračuji dopřednou fází k další proměnné.",
 			"deadend" : "Vybírám první volnou hodnotu z domény proměnné {{nazev}} - {{hodnota}}.\nTato hodnota porušuje omezení {{nazev}}{{omezeni.typOmezeni}}{{omezeni.omezeniProPromennou}}.",
 			"reseni" : "Vybírám první volnou hodnotu z domény proměnné {{nazev}} - {{hodnota}}.\nTato hodnota neporušuje žádné omezení. Nalezené přiřazení je řešením."
+		},
+		"iConsistency": {
+			"nazev" : "iConsistency",
+			"definice" : "TODO: Napsat definici algoritmu iConsistency"
 		}
 	},
 	"promennePanel": {

@@ -1,5 +1,5 @@
 .input-form input.surrounded {
-	width: calc(100% - 3.5em);
+	min-width: calc(100% - 3.5em);
 }
 
 .navod {
