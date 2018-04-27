@@ -20,6 +20,7 @@ import { PromennaService } from './promenna.service';
 import { DialogOmezeniComponent } from './dialog-omezeni/dialog-omezeni.component';
 import { PromennePanelComponent } from './promenne-panel/promenne-panel.component';
 import { DialogAlgoritmusComponent } from './dialog-algoritmus/dialog-algoritmus.component';
+import { GrafComponent } from './graf/graf.component';
 
 export function HttpLoaderFactory(http: Http) {
     return new TranslateHttpLoader(http);
@@ -34,6 +35,7 @@ export function HttpLoaderFactory(http: Http) {
     DialogOmezeniComponent,
     PromennePanelComponent,
     DialogAlgoritmusComponent,
+    GrafComponent,
   ],
   imports: [
     BrowserModule,

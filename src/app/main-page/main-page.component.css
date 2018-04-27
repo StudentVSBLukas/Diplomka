@@ -40,54 +40,6 @@
 	line-height: 1.45;
 }
 
-.graf-plocha {
-	width: 100%;
-	height: calc(100vh - 10em);
-}
-
-.graf-podrobnosti {
-	height: 2em;
-	margin-top: 1em;
-    text-align: center;
-}
-
-.graf-navigation {
-    height: 4em;
-    margin-top: 1em;
-    text-align: center;
-}
-
-.graf-navigation button {
-    margin: 0 0.25em;
-}
-
-.graf-navigation .graf-step {
-	display: inline-block;
-	width: 3em;
-}
-
-.graf-domena {
-	position: absolute;
-	top: 10px;
-	left: 10px;
-	z-index: 5;
-	background-color: white;
-	min-width: 180px;
-	padding-top: 15px;
-}
-
-.graf-zoom {
-	position: absolute;
-	top: 10px;
-	right: 10px;
-	z-index: 5;
-}
-
-.graf-zoom button{
-	display: block;
-	margin-bottom: 0.5em;
-}
-
 .operator {
 	display: inline-block;
 	width: 1.5em;

@@ -4,7 +4,6 @@ import { PromennaService } from '../promenna.service';
 import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { TranslateService, TranslatePipe } from '@ngx-translate/core';
 import {SelectItem} from 'primeng/api';
-import * as go from 'gojs';
 
 
 
@@ -14,7 +13,6 @@ import * as go from 'gojs';
   styleUrls: ['./main-page.component.css']
 })
 export class MainPageComponent implements OnInit {
-  pocetReseni;
 
   listPromennych = [];
 
@@ -30,20 +28,17 @@ export class MainPageComponent implements OnInit {
   vybranyAlgoritmus = this.algoritmy[0].value;
   zobrazVybranyAlgoritmus = false;
   iConsistencyFaktor = 1;
+  pocetReseni;
   
   lokalizace = ['cz', 'gb'];
 
-
-  // Komponenta graf
-  graf;
   postup;
-  aktualniKrok;
 
   constructor(private promennaService: PromennaService, private translate: TranslateService) {
     this.listPromennych = promennaService.list();
     
-      translate.setDefaultLang('cz');
-      translate.use('cz');
+    translate.setDefaultLang('cz');
+    translate.use('cz');
   }
 
 
@@ -87,8 +82,6 @@ export class MainPageComponent implements OnInit {
     const zadani = this.pripravAktivniPromenne();
 
     this.postup = this.vybranyAlgoritmus.run.call(this, this.pocetReseni, zadani, this.iConsistencyFaktor);
-
-    this.reloadGraph();
   }
 
   /*
@@ -1426,174 +1419,6 @@ export class MainPageComponent implements OnInit {
           break;
       }
     }
-  }
-
-
-
-  initGraph() {
-    var postup = new Array();
-    postup = this.postup;
-    var $ = go.GraphObject.make;
-    var myDiagram =
-            $(go.Diagram, 'myDiagramDiv',
-                    {
-                        'toolManager.hoverDelay': 100,
-                        'undoManager.isEnabled': true,
-                        initialContentAlignment: go.Spot.Top,
-                        allowCopy: false,
-                        layout:
-                                $(go.TreeLayout,
-                                        {angle: 90, nodeSpacing: 10, layerSpacing: 40, layerStyle: go.TreeLayout.LayerUniform})
-                    });
-    this.graf = myDiagram;
-
-    const self = this;
-    function valueConverter(krok) {
-      return krok.hodnota;
-    }
-    function colorConverter(krok) {
-        const stav = krok.stav;
-
-        if (stav === 'reseni') {
-            return '#72E91B';
-        }
-        if (stav === 'deadend') {
-            return '#FFB40E';
-        }
-        if (stav === 'nic') {
-            return 'gray';
-        }
-
-      return 'lightgray';
-    }
-
-    function tooltipConverter(krok) {
-        return self.translate.instant(krok.popis, krok);
-    }
-
-    const tooltipTemplate =
-            $(go.Adornment, 'Auto',
-                    $(go.Shape, 'Rectangle',
-                            {fill: 'whitesmoke', stroke: 'black'}),
-                    $(go.TextBlock,
-                            {font: 'bold 8pt Helvetica, bold Arial, sans-serif',
-                                wrap: go.TextBlock.WrapFit,
-                                margin: 5},
-                            new go.Binding('text', 'krok', tooltipConverter))
-                    );
-
-    myDiagram.nodeTemplate =
-            $(go.Node, 'Auto',
-                    {deletable: false, toolTip: tooltipTemplate},
-                    new go.Binding('text', 'name'),
-                    $(go.Shape, 'Rectangle',
-                            {fill: 'lightgray',
-                                stroke: 'full', strokeWidth: 1,
-                                alignment: go.Spot.Center},
-                            new go.Binding('fill', 'krok', colorConverter)),
-                    $(go.TextBlock,
-                            {font: '700 15px Droid Serif, sans-serif',
-                                textAlign: 'center',
-                                margin: 8, maxSize: new go.Size(150, NaN)},
-                            new go.Binding('text', 'krok', valueConverter))
-                    );
-    myDiagram.linkTemplate =
-            $(go.Link,
-                    {routing: go.Link.Orthogonal, corner: 5, selectable: false},
-                    $(go.Shape, {strokeWidth: 3, stroke: '#424242'}));
-  }
-
-  reloadGraph() {
-    if (!this.postup) {
-      return;
-    }
-    if (!this.graf) {
-      this.initGraph();
-    }
-
-    this.aktualniKrok = new KrokAlgoritmu();
-    this.aktualniKrok.hodnota = this.translate.instant(this.vybranyAlgoritmus.nazev);
-    this.aktualniKrok.popis = 'popis.start';
-    const nodeDataArray = [{key: 0, krok: this.aktualniKrok}];
-    this.graf.model = new go.TreeModel(nodeDataArray);
-  }
-
-  krokuj() {
-      const modelManager = this.graf.model.undoManager;
-      const krok = modelManager.historyIndex + 1;
-      if (krok === this.postup.length) {
-          return false;
-      }
-
-      this.aktualniKrok = this.postup[krok];
-      if (modelManager.canRedo()) {
-        modelManager.redo();
-        return true;
-      }
-
-      this.graf.startTransaction('make new node');
-      this.graf.model.addNodeData({key: (krok + 1), parent: this.aktualniKrok.rodic, krok: this.aktualniKrok});
-      this.graf.commitTransaction('make new node');
-
-    return true;
-  }
-
-  krokujReseni() {
-    while (this.krokuj()) {
-      const krok = this.postup[this.graf.model.undoManager.historyIndex];
-      if (krok.stav === 'reseni') {
-        break;
-      }
-    }
-  }
-
-  krokujCele() {
-    while (this.krokuj()) {};
-  }
-
-  odkrokuj() {
-      const modelManager = this.graf.model.undoManager;
-      const krok = modelManager.historyIndex - 1;
-      if (krok >= 0) {
-          this.aktualniKrok = this.postup[krok];
-      } else {
-          this.aktualniKrok = null;
-      }
-
-      if (modelManager.canUndo()) {
-        modelManager.undo();
-        return true;
-      }
-
-    return false;
-  }
-
-  odkrokujReseni() {
-    while (this.odkrokuj()) {
-      const krok = this.graf.model.undoManager.historyIndex;
-      if (krok >= 0 && this.postup[krok].stav === 'reseni') {
-        break;
-      }
-    }
-  }
-
-  odkrokujCele() {
-    while (this.odkrokuj()) {};
-  }
-
-  zoomIn() {
-    this.graf.scale = this.graf.scale * 1.1;
-    this.graf.scrollToRect(this.graf.findNodeForKey(0).actualBounds);
-  }
-
-  zoomOut() {
-    this.graf.scale = this.graf.scale / 1.1;
-    this.graf.scrollToRect(this.graf.findNodeForKey(0).actualBounds);
-  }
-
-
-  center() {
-    this.graf.zoomToFit();
   }
 
   // TODO odstranit

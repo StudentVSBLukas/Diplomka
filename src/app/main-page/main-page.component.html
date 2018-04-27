@@ -67,43 +67,8 @@
     <div id="vstupySeparator"></div>
         
     <div id="graf">
-		<!-- Kvuli GoJS knihovne a registraci listeneru na DOM je nutne skryvat css tridou a ne ngIf -->
-    	<div>
-	        <div id="myDiagramDiv" [class]="postup? 'graf-plocha' : 'graf-plocha hidden'"></div>
-	
-			<!--  TODO po presunuti grafu do samostatne komponenty neni nutne -->
-			<div *ngIf="postup">
-				<div class="graf-podrobnosti">
-					{{aktualniKrok?.popis | translate:aktualniKrok}}
-				</div>
-		        <div class="graf-navigation">
-	                <button (click)="odkrokujCele()">&lt;&lt;&lt;&lt;</button>
-	                <button (click)="odkrokujReseni()">&lt;&lt;</button>
-	                <button (click)="odkrokuj()">&lt;</button>
-	                <span class="graf-step">{{graf.model.undoManager.historyIndex + 1}}</span> / <span class="graf-step">{{postup?.length}}</span>
-	                <button (click)="krokuj()">&gt;</button>
-	                <button (click)="krokujReseni()">&gt;&gt;</button>
-	                <button (click)="krokujCele()">&gt;&gt;&gt;&gt;</button>
-		        </div>
-
-	            <div class="graf-zoom">
-	                <button (click)="zoomIn()"><i class="fa fa-plus"></i></button>
-	                <button (click)="center()"><i class="fa fa-crosshairs"></i></button>
-	                <button (click)="zoomOut()"><i class="fa fa-minus"></i></button>
-	            </div>
-	            
-	            <div class="graf-domena">
-	            	<h4>{{'graf.popisDomeny' | translate}}</h4>
-	            	<div class="table-layout">
-		            	<div *ngFor="let p of aktualniKrok?.hodnotaDomenKroku">
-		            		<div>{{p.nazev}}</div>
-		            		<div><span>= &#123;</span>{{p.domena}}<span>&#125;</span></div>
-		            	</div>
-		            </div>
-	            </div>
-	        </div>
-        </div>
-        <div class="navod" *ngIf="!postup">
+		<app-graf *ngIf="postup" [postup]="postup"></app-graf>
+        <div *ngIf="!postup" class="navod">
         	<i class="fa fa-5x fa-edit"></i>
         		<span>{{'graf.navod.1' | translate}}</span>
         		<span>{{'graf.navod.2' | translate}}</span>

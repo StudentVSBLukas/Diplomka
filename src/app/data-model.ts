@@ -38,7 +38,7 @@ export class Omezeni {
 export class KrokAlgoritmu {
   promenna: number; // Index v seznamu promennych
   nazev: string;
-  hodnota: number;
+  hodnota: string;
   rodic: number;
   popis: string;
   stav: string; // TODO enum
