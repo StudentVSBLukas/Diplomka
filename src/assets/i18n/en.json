@@ -1,0 +1,108 @@
+{
+	"promenna": {
+		"header": "Setting",
+		"validace": {
+			"pattern": "Enabled are integers separated by a comma"
+		}
+	},
+	"provedeni": {
+		"header": "Execution",
+		"pocet": "Number of solution",
+		"pocetPlaceholder": "Infinity",
+		"algoritmus": "Algorithm",
+		"iConsistency": "iConsistency",
+		"spust": "Run",
+		"typ": {
+			"backtracking": "Backtracking",
+			"backjumping": "Backjumping",
+			"forwardCheck": "Forward Check",
+			"arcConsistency": "Arc Consistency",
+			"random": "Random",
+			"dynamicOrder": "DynamicOrder",
+			"iConsistency": "iConsistency",
+      "fcdvo" : "forward Check + DynamicOrder"
+		}
+	},
+	"omezeni": {
+		"header": "Constraint of the variable {{nazev}}",
+		"validace": {
+			"required": "Value is required",
+			"dvojice": "It is possible to enter only pairs of integers separated by a space"
+		},
+		"prazdne": "The variable has no constraint. Add it below.",
+		"typPlaceholder": "Type",
+		"cilPlaceholder": "Variable",
+		"pridat": "Add",
+		"ulozit": "Save",
+		"vratit": "Return",
+		"zrusit": "Cancel",
+		"typ": {
+			"<": "<",
+			">": ">",
+			"=": "=",
+			"!": "!",
+			"p": "p",
+			"z": "z"
+		}
+	},
+	"graf": {
+		"popisDomeny": "Domains of variables",
+		"navod": {
+			"1": "Define variables and their constraints.",
+			"2": "Select algorithm.",
+			"3": "Run solution."
+		}
+	},
+	"popis": {
+		"start": "Start",
+		"backtracking": {
+			"prirazeni" : "Selecting the first free value from the variable domain {{nazev}} = {{hodnota}}.\n",
+			"uzel" : "This value does not violate any constraints, starting forward phase to the next variable.\n",
+			"deadend" : "Since the constraint is violated, the back phase begins.\n",
+			"reseni" : "Because all constraints are met and all variables have assigned value, this is a solution.\n"
+		},
+		"backjumping": {
+			"prirazeni" : "Selecting the first free value from the variable domain {{nazev}} = {{hodnota}}.\n",
+			"uzel" : "This value does not violate any constraints, starting forward phase to the next variable.\n",
+			"deadend" : "Since the constraint is violated, the back phase begins.\n",
+			"reseni" : "Because all constraints are met and all variables have assigned value, this is a solution.\n",
+			"deadendNedokonceny" : "Since the constraint is violated it continues to assign another element.\n",
+      "backjump" : "Since the constraint is violated and domain don't have any free value starting back pahse.\nSince this is a leaf variable, then a jump back to the {{backjump}} variable, the jump is performed on this variable because it is a constraint with the variable and was last assigned.\n"
+		},
+		"forwardCheck": {
+			"prirazeni" : "Selecting the first free value from the variable domain {{nazev}} = {{hodnota}}.\n",
+			"uzel" : "This value does not violate any constraints, starting forward phase to the next variable.\n",
+			"deadend" : "Since the constraint is violated, the back phase begins.\n",
+			"reseni" : "Because all constraints are met and all variables have assigned value, this is a solution.\n",
+		  "nesplneno" : "Constraint with type {{nazev}} {{typOmezeni}} {{porovnavanaPromenna}} ({{hondnota}} {{typOmezeni}} {{porovnavanaHodnota}}).\nValue {{porovnavanaHodnota}} is removed from domain of variable {{nazev}}.\n",
+      "povolenoNesplneno" : "Between variables {{nazev}} and {{porovnavanaPromenna}} wasn't found allowed pair with values {{hodnota}},{{porovnavanaHodnota}}.\nValue {{porovnavanaHodnota}} is removed from domain of variable {{nazev}}.\n",
+      "zakazaneNesplneno" : "Between variables {{nazev}} and {{porovnavanaPromenna}} was found forbidden pair with values {{hodnota}},{{porovnavanaHodnota}}.\nValue {{porovnavanaHodnota}} is removed from domain of variable {{nazev}}.\n"
+		},
+		"arcConsistency": {
+			"prazdnaDomena" : "There was an empty domain for variable {{name}}, so there is no solution to this problem.\n"
+		},
+		"random": {
+			"prirazeni" : "Selecting a random free value from the variable domain {{nazev}} = {{hodnota}}.\n",
+			"uzel" : "This value does not violate any constraints, starting forward phase to the next variable.\n",
+			"deadend" : "Since the constraint is violated, the back phase begins.\n",
+			"reseni" : "Because all constraints are met and all variables have assigned value, this is a solution.\n"
+		},
+		"dynamicOrder": {
+			"prirazeni" : "Selecting the first free value from the variable domain {{nazev}} = {{hodnota}}.\n",
+			"uzel" : "This value does not violate any constraints, starting forward phase to the next variable.\n",
+			"deadend" : "Since the constraint is violated, the back phase begins.\n",
+			"reseni" : "Because all constraints are met and all variables have assigned value, this is a solution.\n",
+      "poradiPred" : "List of variable before arrangement:\n", 		
+      "poradiPo" : "List of variable after arrangement:\n", 		
+      "poradiInfo" : "Variable {{nazev}} with domain length = {{delka}}.\n" 		
+    },
+		"omezeni": {
+			"splneno" : "Constraint with type between variables {{nazev}} {{typOmezeni}} {{porovnavanaPromenna}} ({{hodnota}} {{typOmezeni}} {{porovnavanaHodnota}}).\n",
+			"nesplneno" : "Constraint with type between variables {{nazev}} {{typOmezeni}} {{porovnavanaPromenna}} ({{hondnota}} {{typOmezeni}} {{porovnavanaHodnota}}).\n",
+      "povolenoSplneno" : "Between variables {{nazev}} and {{porovnavanaPromenna}} was found allowed pair with values {{hodnota}},{{porovnavanaHodnota}}.\n",
+      "povolenoNesplneno" : "Between variables {{nazev}} and {{porovnavanaPromenna}} wasn't found allowed pair with values {{hodnota}},{{porovnavanaHodnota}}.\n",
+      "zakazaneNesplneno" : "Between variables {{nazev}} and {{porovnavanaPromenna}} wasn't found forbidden pair with values {{hodnota}},{{porovnavanaHodnota}}.\n",
+      "zakazaneSplneno" : "Between variables {{nazev}} and {{porovnavanaPromenna}} was found forbidden pair with values {{hodnota}},{{porovnavanaHodnota}}.\n"
+		}
+	}
+}

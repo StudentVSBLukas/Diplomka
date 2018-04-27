@@ -40,8 +40,13 @@ export class KrokAlgoritmu {
   nazev: string;
   hodnota: string;
   rodic: number;
-  popis: string;
+  popis = new Array<LokalizovanaZprava>();
   stav: string; // TODO enum
   omezeni: Omezeni;
   hodnotaDomenKroku = new Array<any>();
-};
+}
+
+export class LokalizovanaZprava {
+  klic: string;
+  parametry: any;
+}

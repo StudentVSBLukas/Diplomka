@@ -8,7 +8,7 @@
 	"provedeni": {
 		"header": "Provedení",
 		"pocet": "Počet řešení",
-		"pocetPlaceholder": "Neomezeno",
+		"pocetPlaceholder": "Neomezeně",
 		"algoritmus": "Algoritmus",
 		"iConsistency": "iConsistency",
 		"spust": "Spusť",
@@ -19,7 +19,8 @@
 			"arcConsistency": "Arc Consistency",
 			"random": "Random",
 			"dynamicOrder": "DynamicOrder",
-			"iConsistency": "iConsistency"
+			"iConsistency": "iConsistency",
+      "fcdvo" : "forward Check + DynamicOrder"
 		}
 	},
 	"omezeni": {
@@ -44,9 +45,6 @@
 			"z": "z"
 		}
 	},
-	"algoritmus": {
-		"zavrit": "Zavřít" 
-	},
 	"graf": {
 		"popisDomeny": "Domény proměnných",
 		"navod": {
@@ -58,52 +56,54 @@
 	"popis": {
 		"start": "Start",
 		"backtracking": {
-			"nazev" : "Backtracking",
-			"definice" : "TODO: Napsat definici algoritmu Backtracking. Muzes pouzit HTML!!",
-			"uzel" : "Vybírám první volnou hodnotu z domény proměnné {{nazev}} - {{hodnota}}.\nTato hodnota neporušuje žádné omezení, proto pokračuji dopřednou fází k další proměnné.",
-			"deadend" : "Vybírám první volnou hodnotu z domény proměnné {{nazev}} - {{hodnota}}.\nTato hodnota porušuje omezení {{nazev}}{{omezeni.typOmezeni}}{{omezeni.omezeniProPromennou}}.",
-			"reseni" : "Vybírám první volnou hodnotu z domény proměnné {{nazev}} - {{hodnota}}.\nTato hodnota neporušuje žádné omezení. Nalezené přiřazení je řešením."
+			"prirazeni" : "Vybírám první volnou hodnotu z domény proměnné {{nazev}} = {{hodnota}}.\n",
+			"uzel" : "Tato hodnota neporušuje žádné omezení, proto pokračuji dopřednou fází k další proměnné.\n",
+			"deadend" : "Jelikož je porušeno omezení započne zpětná fáze.\n",
+			"reseni" : "Jelikož jsou všechna omezení splněna a všechny proměnné mají přiřazenou hodnotu jedná se o řešení.\n"
 		},
 		"backjumping": {
-			"nazev" : "Backjumping",
-			"definice" : "TODO: Napsat definici algoritmu Backjumping",
-			"uzel" : "Vybírám první volnou hodnotu z domény proměnné {{nazev}} - {{hodnota}}.\nTato hodnota neporušuje žádné omezení, proto pokračuji dopřednou fází k další proměnné.",
-			"deadend" : "Vybírám první volnou hodnotu z domény proměnné {{nazev}} - {{hodnota}}.\nTato hodnota porušuje omezení {{nazev}}{{omezeni.typOmezeni}}{{omezeni.omezeniProPromennou}}.",
-			"reseni" : "Vybírám první volnou hodnotu z domény proměnné {{nazev}} - {{hodnota}}.\nTato hodnota neporušuje žádné omezení. Nalezené přiřazení je řešením."
+      "prirazeni" : "Vybírám první volnou hodnotu z domény proměnné {{nazev}} = {{hodnota}}.\n",
+			"uzel" : "Tato hodnota neporušuje žádné omezení, proto pokračuji dopřednou fází k další proměnné.\n",
+			"deadend" : "Jelikož je porušeno omezení započne zpětná fáze.\n",
+			"deadendNedokonceny" : "Jelikož je porušeno omezení pokračuje se v přiřazení dalšího prvku.\n",
+			"reseni" : "Jelikož jsou všechna omezení splněna a všechny proměnné mají přiřazenou hodnotu jedná se o řešení.\n",
+      "backjump" : "Jelikož je porušeno omezení a v doméně nejsou dalši nepřiřazené prvky nastavá zpětná fáze.\nJelikož se jedná o listovou proměnnou tak se provede skok zpět na proměnnou {{backjump}}, skok se provede na tuto proměnnou jelikož je s touto proměnnou omezení a byla naposledy přiřazena.\n"
 		},
 		"forwardCheck": {
-			"nazev" : "Forward checking",
-			"definice" : "TODO: Napsat definici algoritmu forwardCheck",
-			"uzel" : "Vybírám první volnou hodnotu z domény proměnné {{nazev}} - {{hodnota}}.\nTato hodnota neporušuje žádné omezení, proto pokračuji dopřednou fází k další proměnné.",
-			"checkFail" : "TODO: netusim, co to dela a proc je toto jako selhani",
-			"deadend" : "Vybírám první volnou hodnotu z domény proměnné {{nazev}} - {{hodnota}}.\nTato hodnota porušuje omezení {{nazev}}{{omezeni.typOmezeni}}{{omezeni.omezeniProPromennou}}.",
-			"reseni" : "Vybírám první volnou hodnotu z domény proměnné {{nazev}} - {{hodnota}}.\nTato hodnota neporušuje žádné omezení. Nalezené přiřazení je řešením."
+			"uzel" : "Vybírám první volnou hodnotu z domény proměnné {{nazev}} - {{hodnota}}.\nTato hodnota neporušuje žádné omezení, proto pokračuji dopřednou fází k další proměnné.\n",
+			"prazdnaDomena" : "Po odebrání prvku se doména proměnné {{porovnavanaPromenna}} stala prázdnou a tudíž pro dané přiřazení neexistuje řešení.\nZahájení zpetné fáze.\n",
+			"deadend" : "Vybírám první volnou hodnotu z domény proměnné {{nazev}} - {{hodnota}}.\nTato hodnota porušuje omezení {{nazev}}{{omezeni.typOmezeni}}{{omezeni.omezeniProPromennou}}.\n",
+			"reseni" : "Vybírám první volnou hodnotu z domény proměnné {{nazev}} - {{hodnota}}.\nTato hodnota neporušuje žádné omezení. Nalezené přiřazení je řešením.\n",
+		  "nesplneno" : "Omezení typu proměnné {{nazev}} {{typOmezeni}} {{porovnavanaPromenna}} ({{hondnota}} {{typOmezeni}} {{porovnavanaHodnota}}).\nHodnota {{porovnavanaHodnota}} se odstraňuje z domény proměnné {{nazev}}.\n",
+      "povolenoNesplneno" : "Mezi proměnnou {{nazev}} a proměnnou {{porovnavanaPromenna}} se nenašla povolená dvojice s hodnotami {{hodnota}},{{porovnavanaHodnota}}.\nHodnota {{porovnavanaHodnota}} se odstraňuje z domény proměnné {{nazev}}.\n",
+      "zakazaneNesplneno" : "Mezi proměnnou {{nazev}} a proměnnou {{porovnavanaPromenna}} se našla zakázáná dvojice s hodnotami {{hodnota}},{{porovnavanaHodnota}}.\nHodnota {{porovnavanaHodnota}} se odstraňuje z domény proměnné {{nazev}}.\n"
 		},
 		"arcConsistency": {
-			"nazev" : "Arc consistency",
-			"definice" : "TODO: Napsat definici algoritmu arcConsistency",
-			"prazdnaDomena" : "U proměnné {{nazev}} vznikla prázdná doména, tudíž pro tento problém neexistuje řešení."
+			"upravaDomeny" : "U proměnné {{nazev}} se odebral prvek {{hodnota}} z domény, jelikož v proměnné {{porovnavanaPromenna}} neexistuje prvek v doméně, který by splňoval omezení {{nazev}} {{typ}} {{porovnavanaPromenna}}.\n",
+			"prazdnaDomena" : "U proměnné {{nazev}} vznikla prázdná doména, tudíž pro tento problém neexistuje řešení.\n"
 		},
 		"random": {
-			"nazev" : "Random",
-			"definice" : "TODO: Napsat definici algoritmu Random",
-			"uzel" : "Vybírám náhodnou volnou hodnotu z domény proměnné {{nazev}} - {{hodnota}}.\nTato hodnota neporušuje žádné omezení, proto pokračuji dopřednou fází k další proměnné.",
-			"deadend" : "Vybírám náhodnou volnou hodnotu z domény proměnné {{nazev}} - {{hodnota}}.\nTato hodnota porušuje omezení {{nazev}}{{omezeni.typOmezeni}}{{omezeni.omezeniProPromennou}}.",
-			"reseni" : "Vybírám náhodnou volnou hodnotu z domény proměnné {{nazev}} - {{hodnota}}.\nTato hodnota neporušuje žádné omezení. Nalezené přiřazení je řešením."
+			"prirazeni" : "Vybírám náhodnou hodnotu z domény proměnné {{nazev}} = {{hodnota}}.\n",
+			"uzel" : "Tato hodnota neporušuje žádné omezení, proto pokračuji dopřednou fází k další proměnné.\n",
+			"deadend" : "Jelikož je porušeno omezení započne zpětná fáze.\n",
+			"reseni" : "Jelikož jsou všechna omezení splněna a všechny proměnné mají přiřazenou hodnotu jedná se o řešení.\n"
 		},
 		"dynamicOrder": {
-			"nazev" : "Dynamic order",
-			"definice" : "TODO: Napsat definici algoritmu dynamicOrder",
-			"uzel" : "Vybírám první volnou hodnotu z domény proměnné {{nazev}} - {{hodnota}}.\nTato hodnota neporušuje žádné omezení, proto pokračuji dopřednou fází k další proměnné.",
-			"deadend" : "Vybírám první volnou hodnotu z domény proměnné {{nazev}} - {{hodnota}}.\nTato hodnota porušuje omezení {{nazev}}{{omezeni.typOmezeni}}{{omezeni.omezeniProPromennou}}.",
-			"reseni" : "Vybírám první volnou hodnotu z domény proměnné {{nazev}} - {{hodnota}}.\nTato hodnota neporušuje žádné omezení. Nalezené přiřazení je řešením."
-		},
-		"iConsistency": {
-			"nazev" : "iConsistency",
-			"definice" : "TODO: Napsat definici algoritmu iConsistency"
+			"prirazeni" : "Vybírám náhodnou hodnotu z domény proměnné {{nazev}} = {{hodnota}}.\n",
+			"uzel" : "Tato hodnota neporušuje žádné omezení, proto pokračuji dopřednou fází k další proměnné.\n",
+			"deadend" : "Jelikož je porušeno omezení započne zpětná fáze.\n",
+			"reseni" : "Jelikož jsou všechna omezení splněna a všechny proměnné mají přiřazenou hodnotu jedná se o řešení.\n",
+      "poradiPred" : "Seznam proměnných před uspořádáním:\n", 		
+      "poradiPo" : "Seznam proměnných po uspořádáním:\n", 		
+      "poradiInfo" : "Proměnna {{nazev}} s délkou domény = {{delka}}.\n" 		
+    },
+		"omezeni": {
+			"splneno" : "Omezení typu proměnné {{nazev}} {{typOmezeni}} {{porovnavanaPromenna}} ({{hodnota}} {{typOmezeni}} {{porovnavanaHodnota}}).\n",
+			"nesplneno" : "Omezení typu proměnné {{nazev}} {{typOmezeni}} {{porovnavanaPromenna}} ({{hondnota}} {{typOmezeni}} {{porovnavanaHodnota}}).\n",
+      "povolenoSplneno" : "Mezi proměnnou {{nazev}} a proměnnou {{porovnavanaPromenna}} se našla povolená dvojice s hodnotami {{hodnota}},{{porovnavanaHodnota}}.\n",
+      "povolenoNesplneno" : "Mezi proměnnou {{nazev}} a proměnnou {{porovnavanaPromenna}} se nenašla povolená dvojice s hodnotami {{hodnota}},{{porovnavanaHodnota}}.\n",
+      "zakazeneSplneno" : "Mezi proměnnou {{nazev}} a proměnnou {{porovnavanaPromenna}} se nenašla zakázáná dvojice s hodnotami {{hodnota}},{{porovnavanaHodnota}}.\n",
+      "zakazaneNesplneno" : "Mezi proměnnou {{nazev}} a proměnnou {{porovnavanaPromenna}} se našla zakázáná dvojice s hodnotami {{hodnota}},{{porovnavanaHodnota}}.\n"
 		}
-	},
-	"promennePanel": {
-		"empty" : "Vložte novou proměnnou kliknutím na + výše"
 	}
 }
