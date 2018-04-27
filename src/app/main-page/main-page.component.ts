@@ -156,7 +156,6 @@ export class MainPageComponent implements OnInit {
       lokalizovanaZprava.klic = 'popis.backtracking.prirazeni';
       lokalizovanaZprava.parametry = { 'nazev': krokAlgoritmu.nazev, 'hodnota': krokAlgoritmu.hodnota }
       krokAlgoritmu.popis.push(lokalizovanaZprava);
-      postupTvoreniGrafu.push(krokAlgoritmu);
 
       const poruseneOmezeni = this._porovnej(zpracovavanaPromenna, seznamPromennych);
       if (poruseneOmezeni != undefined) {
