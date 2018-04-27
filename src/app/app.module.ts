@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { HttpModule, Http } from '@angular/http';
-import {HttpClientModule, HttpClient} from '@angular/common/http';
+import { HttpClientModule, HttpClient } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 
@@ -16,9 +16,15 @@ import { MultiSelectModule } from 'primeng/multiselect';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { LokalizaceComponentComponent } from './lokalizace-component/lokalizace-component.component';
+import { PromennaService } from './promenna.service';
+import { DialogOmezeniComponent } from './dialog-omezeni/dialog-omezeni.component';
+import { PromennePanelComponent } from './promenne-panel/promenne-panel.component';
+import { DialogAlgoritmusComponent } from './dialog-algoritmus/dialog-algoritmus.component';
+import { GrafComponent } from './graf/graf.component';
 
 export function HttpLoaderFactory(http: HttpClient) {
-    return new TranslateHttpLoader(http);
+  return new TranslateHttpLoader(http);
 }
 
 @NgModule({
@@ -26,6 +32,11 @@ export function HttpLoaderFactory(http: HttpClient) {
     AppComponent,
     MainPageComponent,
     NumbersConvertorDirective,
+    LokalizaceComponentComponent,
+    DialogOmezeniComponent,
+    PromennePanelComponent,
+    DialogAlgoritmusComponent,
+    GrafComponent,
   ],
   imports: [
     BrowserModule,
@@ -38,14 +49,14 @@ export function HttpLoaderFactory(http: HttpClient) {
     InputTextareaModule,
     MultiSelectModule,
     TranslateModule.forRoot({
-            loader: {
-                provide: TranslateLoader,
-                useFactory: HttpLoaderFactory,
-                deps: [HttpClient]
-            }
-        }),
+      loader: {
+        provide: TranslateLoader,
+        useFactory: HttpLoaderFactory,
+        deps: [HttpClient]
+      }
+    }),
   ],
-  providers: [],
+  providers: [PromennaService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

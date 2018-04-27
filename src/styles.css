@@ -1,1 +1,60 @@
-/* You can add global styles to this file, and also import other style files */
+* {
+    box-sizing: border-box;
+}
+
+.form-header {
+	position: relative;
+	margin-bottom: 1em;
+	background-color: #cde6fc;
+	border-bottom: 1px solid #81b2dd;
+}
+
+fieldset:disabled {
+	color: gray;
+}
+
+.ui-inputtext.ng-dirty.ng-invalid, p-dropdown.ng-dirty.ng-invalid > .ui-dropdown, p-multiselect.ng-dirty.ng-invalid > .ui-multiselect {
+	border-left-color: #f44336;
+    border-bottom-color: #f44336;
+}
+
+input:required, .ui-inputtext:required, p-dropdown[required] > .ui-dropdown, p-multiselect[required] > .ui-multiselect {
+	border-left: 2px solid orange;
+}
+
+.row .rowHover {
+	visibility: hidden;
+}
+
+.row:hover .rowHover {
+	visibility: visible;
+}
+
+.clickable {
+	padding: 0.25em;
+	cursor: pointer;
+}
+
+.clickable:hover {
+	background-color: LightGray;
+}
+
+.invisible {
+	visibility: hidden;
+}
+
+.form {
+	background-color: #f0f7fd;
+}
+
+.input-form label {
+	min-width: 3em;
+}
+
+.input-form input, .input-form label, .input-form textarea, .input-form .ui-multiselect, .input-form .ui-dropdown {
+	min-width: 100%; 
+}
+
+.spacer {
+	margin-top: 2em;
+}

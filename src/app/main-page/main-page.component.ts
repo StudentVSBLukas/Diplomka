@@ -891,7 +891,7 @@ export class MainPageComponent implements OnInit {
             }
             break;
           case 'p':
-            var porovnavanaPromenna = this.promennaService.najdi(seznamPromennych, promenna.omezeni[j].hodnotyOmezeni[k]);
+            var porovnavanaPromenna = this.promennaService.najdi(seznamPromennych, promenna.omezeni[j].omezeniProPromennou);
             const krokAlgoritmu = new KrokAlgoritmu();
             selhani = this._arcConsistencyPovoleneDvojice(promenna, porovnavanaPromenna, 0, 1, j, 1);
             switch (selhani[0]) {
@@ -915,7 +915,7 @@ export class MainPageComponent implements OnInit {
             }
             break;
           case 'z':
-            var porovnavanaPromenna = this.promennaService.najdi(seznamPromennych, promenna.omezeni[j].hodnotyOmezeni[k]);
+            var porovnavanaPromenna = this.promennaService.najdi(seznamPromennych, promenna.omezeni[j].omezeniProPromennou);
             selhani = this._arcConsistencyZakazanDvojice(promenna, porovnavanaPromenna, 0, j, 1);
             switch (selhani[0]) {
               case "uprava":
@@ -966,7 +966,7 @@ export class MainPageComponent implements OnInit {
         provedlaSeUprava = 'uprava';
         var zprava = new LokalizovanaZprava();
         zprava.klic = 'popis.arcConsistency.prazdnaDomena';
-        zprava.parametry = { 'nazev': promennaA.nazev, 'hodnota': promennaA.domena[i], 'porovnavanaPromenna': promennaB.nazev, "typ": "=" }
+        zprava.parametry = { 'nazev': promennaA.nazev, 'hodnota': promennaA.domena[i], 'porovnavanaPromenna': promennaB.nazev, "typ": "<" }
         popisUpravy.push(zprava)
         if (promennaA.domena.length === 0) {
           var zprava = new LokalizovanaZprava();
@@ -998,7 +998,7 @@ export class MainPageComponent implements OnInit {
         provedlaSeUprava = 'uprava';
         var zprava = new LokalizovanaZprava();
         zprava.klic = 'popis.arcConsistency.prazdnaDomena';
-        zprava.parametry = { 'nazev': promennaA.nazev, 'hodnota': promennaA.domena[i], 'porovnavanaPromenna': promennaB.nazev, "typ": "=" }
+        zprava.parametry = { 'nazev': promennaA.nazev, 'hodnota': promennaA.domena[i], 'porovnavanaPromenna': promennaB.nazev, "typ": ">" }
         popisUpravy.push(zprava)
         if (promennaA.domena.length === 0) {
           var zprava = new LokalizovanaZprava();
@@ -1084,6 +1084,9 @@ export class MainPageComponent implements OnInit {
     var remove, pomoc;
     var vlastniDvojice = [];
     var indexyHodnot = [];
+    var popisUpravy = new Array<LokalizovanaZprava>();
+    var provedlaSeUprava = 'nic';
+
     if (volani === 1) {
       var domenaA = promennaA.domena;
       var domenaB = promennaB.domena;
@@ -1111,17 +1114,36 @@ export class MainPageComponent implements OnInit {
       if (remove && volani === 1) {
         promennaA.domena.splice(i, 1);
         i--;
+        provedlaSeUprava = 'uprava';
+        var zprava = new LokalizovanaZprava();
+        zprava.klic = 'popis.arcConsistency.prazdnaDomena';
+        zprava.parametry = { 'nazev': promennaA.nazev, 'hodnota': promennaA.domena[i], 'porovnavanaPromenna': promennaB.nazev, "typ": "p" }
+        popisUpravy.push(zprava)
         if (promennaA.domena.length === 0) {
-          return 'popis.arcConsistency.prazdnaDomena';
+          var zprava = new LokalizovanaZprava();
+          zprava.klic = 'popis.arcConsistency.prazdnaDomena';
+          zprava.parametry = { 'nazev': promennaA.nazev }
+          popisUpravy.push(zprava)
+          return ['prazdna domena', popisUpravy];
         }
       } else if (remove && volani === 2) {
         promennaB.domena.splice(i, 1);
         i--;
+        provedlaSeUprava = 'uprava';
+        var zprava = new LokalizovanaZprava();
+        zprava.klic = 'popis.arcConsistency.prazdnaDomena';
+        zprava.parametry = { 'nazev': promennaA.nazev, 'hodnota': promennaA.domena[i], 'porovnavanaPromenna': promennaB.nazev, "typ": "p" }
+        popisUpravy.push(zprava)
         if (promennaB.domena.length === 0) {
-          return 'popis.arcConsistency.prazdnaDomena';
+          var zprava = new LokalizovanaZprava();
+          zprava.klic = 'popis.arcConsistency.prazdnaDomena';
+          zprava.parametry = { 'nazev': promennaA.nazev }
+          popisUpravy.push(zprava)
+          return ['prazdna domena', popisUpravy];
         }
       }
     }
+    return [provedlaSeUprava, popisUpravy]
   }
 
   _arcConsistencyZakazanDvojice(promennaA, promennaB, d, index, volani) {
@@ -1129,6 +1151,8 @@ export class MainPageComponent implements OnInit {
     var vlastniDvojice = [];
     var indexyHodnot = [];
     var povoleneDvojice = [];
+    var popisUpravy = new Array<LokalizovanaZprava>();
+    var provedlaSeUprava = 'nic';
     if (volani === 1) {
       var domenaA = promennaA.domena;
       var domenaB = promennaB.domena;
@@ -1184,15 +1208,33 @@ export class MainPageComponent implements OnInit {
       if (remove && volani === 1) {
         promennaA.domena.splice(i, 1);
         if (promennaA.domena.length === 0) {
-          return 'popis.arcConsistency.prazdnaDomena';
+          var zprava = new LokalizovanaZprava();
+          zprava.klic = 'popis.arcConsistency.prazdnaDomena';
+          zprava.parametry = { 'nazev': promennaA.nazev }
+          popisUpravy.push(zprava)
+          return ['prazdna domena', popisUpravy];
         }
         i--;
+        provedlaSeUprava = 'uprava';
+        var zprava = new LokalizovanaZprava();
+        zprava.klic = 'popis.arcConsistency.prazdnaDomena';
+        zprava.parametry = { 'nazev': promennaA.nazev, 'hodnota': promennaA.domena[i], 'porovnavanaPromenna': promennaB.nazev, "typ": "p" }
+        popisUpravy.push(zprava)
       } else if (remove && volani === 2) {
         promennaB.domena.splice(i, 1);
         if (promennaB.domena.length === 0) {
-          return 'popis.arcConsistency.prazdnaDomena';
+          var zprava = new LokalizovanaZprava();
+          zprava.klic = 'popis.arcConsistency.prazdnaDomena';
+          zprava.parametry = { 'nazev': promennaA.nazev }
+          popisUpravy.push(zprava)
+          return ['prazdna domena', popisUpravy];
         }
         i--;
+        provedlaSeUprava = 'uprava';
+        var zprava = new LokalizovanaZprava();
+        zprava.klic = 'popis.arcConsistency.prazdnaDomena';
+        zprava.parametry = { 'nazev': promennaA.nazev, 'hodnota': promennaA.domena[i], 'porovnavanaPromenna': promennaB.nazev, "typ": "p" }
+        popisUpravy.push(zprava)
       }
     }
   }
@@ -1311,17 +1353,6 @@ export class MainPageComponent implements OnInit {
     var promenna = 0;
 
     const krokAlgoritmu = new KrokAlgoritmu();
-
-    var lokalizovanaZprava = new LokalizovanaZprava();
-    lokalizovanaZprava.klic = 'popis.dynamicOrder.poradiPred';
-    krokAlgoritmu.popis.push(lokalizovanaZprava);
-    postupTvoreniGrafu.push(krokAlgoritmu);
-    for (var i = 0; i < seznamPromennych.length; i++) {
-      var lokalizovanaZprava = new LokalizovanaZprava();
-      lokalizovanaZprava.klic = 'popis.dynamicOrder.poradiInfo';
-      lokalizovanaZprava.parametry = { 'nazev': seznamPromennych[i].nazev, 'delka': seznamPromennych[i].domena.length }
-      krokAlgoritmu.popis.push(lokalizovanaZprava);
-    }
 
     seznamPromennych = this._dynamicOrder(promenna, seznamPromennych);
 
