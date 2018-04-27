@@ -7,10 +7,13 @@ import { AppRoutingModule } from './app-routing.module';
 
 import { AppComponent } from './app.component';
 import { MainPageComponent } from './main-page/main-page.component';
-import { AlgoritmComponent } from './algoritm/algoritm.component';
-import { BackjumpingComponent } from './backjumping/backjumping.component';
 import { NumbersConvertorDirective } from './convertor/numbersconvertor.directive';
-import { PromennaComponent } from './promenna/promenna.component';
+import { DialogAlgoritmusComponent } from './dialog-algoritmus/dialog-algoritmus.component';
+import { DialogOmezeniComponent } from './dialog-omezeni/dialog-omezeni.component';
+import { GrafComponent } from './graf/graf.component';
+import { LokalizaceComponentComponent } from './lokalizace-component/lokalizace-component.component';
+import { PromennaService } from './promenna.service';
+import { PromennePanelComponent } from './promenne-panel/promenne-panel.component';
 import { FormsModule } from '@angular/forms';
 import { DropdownModule } from 'primeng/dropdown';
 import { InputTextModule } from 'primeng/inputtext';
@@ -28,10 +31,12 @@ export function HttpLoaderFactory(http: HttpClient) {
   declarations: [
     AppComponent,
     MainPageComponent,
-    AlgoritmComponent,
-    BackjumpingComponent,
-    PromennaComponent,
     NumbersConvertorDirective,
+    LokalizaceComponentComponent,
+    DialogOmezeniComponent,
+    PromennePanelComponent,
+    DialogAlgoritmusComponent,
+    GrafComponent,
   ],
   imports: [
     BrowserModule,
@@ -51,7 +56,7 @@ export function HttpLoaderFactory(http: HttpClient) {
             }
         }),
   ],
-  providers: [],
+  providers: [PromennaService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
