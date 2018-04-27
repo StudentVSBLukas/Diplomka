@@ -780,7 +780,7 @@ export class MainPageComponent implements OnInit {
     this._prevodOmezeni(seznamPromennych);
 
     var zmeneno;
-    let selhani: string;
+    let selhani;
     var postupTvoreniGrafu = new Array();
     for (var i = 0; i < seznamPromennych.length; i++) {
       zmeneno = false;
@@ -815,7 +815,7 @@ export class MainPageComponent implements OnInit {
             break;
           case '>':
             for (var k = 0; k < promenna.omezeni[j].hodnotyOmezeni.length; k++) {
-              var porovnavanaPromenna = this._valueOf(seznamPromennych, promenna.omezeni[j].hodnotyOmezeni[k]);
+              var porovnavanaPromenna = this.promennaService.najdi(seznamPromennych, promenna.omezeni[j].hodnotyOmezeni[k]);
               const krokAlgoritmu = new KrokAlgoritmu();
               selhani = this._arcConsistencyGreater(promenna, porovnavanaPromenna);
               switch (selhani[0]) {
@@ -841,7 +841,7 @@ export class MainPageComponent implements OnInit {
             break;
           case '=':
             for (var k = 0; k < promenna.omezeni[j].hodnotyOmezeni.length; k++) {
-              var porovnavanaPromenna = this._valueOf(seznamPromennych, promenna.omezeni[j].hodnotyOmezeni[k]);
+              var porovnavanaPromenna = this.promennaService.najdi(seznamPromennych, promenna.omezeni[j].hodnotyOmezeni[k]);
               const krokAlgoritmu = new KrokAlgoritmu();
               selhani = this._arcConsistencyEqual(promenna, porovnavanaPromenna);
               switch (selhani[0]) {
@@ -867,7 +867,7 @@ export class MainPageComponent implements OnInit {
             break;
           case '!':
             for (var k = 0; k < promenna.omezeni[j].hodnotyOmezeni.length; k++) {
-              var porovnavanaPromenna = this._valueOf(seznamPromennych, promenna.omezeni[j].hodnotyOmezeni[k]);
+              var porovnavanaPromenna = this.promennaService.najdi(seznamPromennych, promenna.omezeni[j].hodnotyOmezeni[k]);
               const krokAlgoritmu = new KrokAlgoritmu();
               selhani = this._arcConsistencyNotEqual(promenna, porovnavanaPromenna);
               switch (selhani[0]) {
@@ -892,7 +892,7 @@ export class MainPageComponent implements OnInit {
             }
             break;
           case 'p':
-            var porovnavanaPromenna = this._valueOf(seznamPromennych, promenna.omezeni[j].omezeniProPromennou);
+            var porovnavanaPromenna = this.promennaService.najdi(seznamPromennych, promenna.omezeni[j].hodnotyOmezeni[k]);
             const krokAlgoritmu = new KrokAlgoritmu();
             selhani = this._arcConsistencyPovoleneDvojice(promenna, porovnavanaPromenna, 0, 1, j, 1);
             switch (selhani[0]) {
@@ -916,7 +916,7 @@ export class MainPageComponent implements OnInit {
             }
             break;
           case 'z':
-            var porovnavanaPromenna = this._valueOf(seznamPromennych, promenna.omezeni[j].omezeniProPromennou);
+            var porovnavanaPromenna = this.promennaService.najdi(seznamPromennych, promenna.omezeni[j].hodnotyOmezeni[k]);
             selhani = this._arcConsistencyZakazanDvojice(promenna, porovnavanaPromenna, 0, j, 1);
             switch (selhani[0]) {
               case "uprava":
@@ -1800,7 +1800,7 @@ export class MainPageComponent implements OnInit {
 
   _porovnej(promenna, seznamPromennych) {
     if (!promenna.omezeni) {
-      return '';
+      return null;
     }
 
     var popisPrubehuOmezeni = new Array<LokalizovanaZprava>();
