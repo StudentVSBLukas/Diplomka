@@ -35,14 +35,24 @@ export class Omezeni {
   }
 }
 
+export enum TypKroku {
+  akce,
+  popis,
+}
+
 export class KrokAlgoritmu {
   nazev: string;
   hodnota: string;
   rodic: number;
   popis = new Array<LokalizovanaZprava>();
   stav: string; // TODO enum
+  typ: TypKroku;
   omezeni: Omezeni;
   hodnotaDomenKroku = new Array<any>();
+  
+  constructor() {
+    this.typ = TypKroku.akce;
+  }
 }
 
 export class LokalizovanaZprava {

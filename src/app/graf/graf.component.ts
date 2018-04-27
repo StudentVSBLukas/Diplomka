@@ -1,4 +1,4 @@
-import { KrokAlgoritmu, LokalizovanaZprava } from '../data-model';
+import { KrokAlgoritmu, LokalizovanaZprava, TypKroku } from '../data-model';
 import { Component, OnInit, Input, OnChanges, SimpleChange, SimpleChanges } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import * as go from 'gojs';
@@ -46,7 +46,7 @@ export class GrafComponent implements OnInit, OnChanges {
 
     const self = this;
     function valueConverter(krok) {
-      return krok.hodnota;
+      return krok.nazev ? krok.nazev + ' = ' + krok.hodnota : krok.hodnota;
     }
     function colorConverter(krok) {
         const stav = krok.stav;
@@ -134,9 +134,17 @@ export class GrafComponent implements OnInit, OnChanges {
         return true;
       }
 
-      this.graf.startTransaction('make new node');
-      this.graf.model.addNodeData({key: (krok + 1), parent: this.aktualniKrok.rodic, krok: this.aktualniKrok});
-      this.graf.commitTransaction('make new node');
+      this.graf.model.startTransaction('make new node');
+      if (this.aktualniKrok.typ === TypKroku.akce) {
+        // Akce prida novy uzel
+        this.graf.model.addNodeData({key: (krok + 1), parent: this.aktualniKrok.rodic, krok: this.aktualniKrok});
+      } else {
+        // Jiny typ kroku zmeni popis, domenu, pole
+        // Musime provest zmenu na diagramu, aby ji zaznamenal undoManager
+        const root = this.graf.model.findNodeDataForKey(0);
+        this.graf.model.setDataProperty(root, 'aktualniKrok', krok);
+      }
+      this.graf.model.commitTransaction('make new node');
 
     return true;
   }
@@ -156,11 +164,11 @@ export class GrafComponent implements OnInit, OnChanges {
 
   odkrokuj() {
       const modelManager = this.graf.model.undoManager;
-      const krok = modelManager.historyIndex - 1;
+      const krok = modelManager.historyIndex;
       if (krok >= 0) {
           this.aktualniKrok = this.postup[krok];
       } else {
-          this.aktualniKrok = null;
+          this.aktualniKrok = this.graf.model.findNodeDataForKey(0).krok;
       }
 
       if (modelManager.canUndo()) {
