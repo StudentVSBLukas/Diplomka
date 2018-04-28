@@ -113,8 +113,8 @@ export class ForwardCheckingService implements Algoritmus {
       for (var l = 0; l < seznamPromennych[i].omezeni.length; l++) {
         typOmezeni = seznamPromennych[i].omezeni[l].typOmezeni;
         if (typOmezeni === '<' || typOmezeni === '>' || typOmezeni === '=' || typOmezeni === '!') {
-          for (var j = 0; j < seznamPromennych[i].omezeni[l].hodnotyOmezeni.length; j++) {
-            if (seznamPromennych[i].omezeni[l].hodnotyOmezeni[j] === vstup[promenna - 1]) {
+          for (var j = 0; j < seznamPromennych[i].omezeni[l].omezeniProPromennou.length; j++) {
+            if (seznamPromennych[i].omezeni[l].omezeniProPromennou[j] === vstup[promenna - 1]) {
               switch (typOmezeni) {
                 case '<':
                   for (var k = 0; k < seznamPromennych[i].domena.length; k++) {
@@ -204,7 +204,7 @@ export class ForwardCheckingService implements Algoritmus {
             }
           }
         } else if (typOmezeni === 'p' || typOmezeni === 'z') {
-          if (seznamPromennych[i].omezeni[l].omezeniProPromennou === vstup[promenna - 1]) {
+          if (seznamPromennych[i].omezeni[l].omezeniProPromennou[0] === vstup[promenna - 1]) {
             switch (typOmezeni) {
               case 'p':
                 var nalezeno;

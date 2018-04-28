@@ -19,7 +19,7 @@ export class ArcConsistencyService implements Algoritmus {
     //    seznamPromennych.push(new Promenna('B', [2], []));
     //    seznamPromennych.push(new Promenna('C', [3], []));
     //    seznamPromennych.push(new Promenna('D', [4], []));
-    //    // seznamPromennych.push(new Promenna("E", [1, 2, 3, 4, 5], [new Omezeni("=", ["A", "D"], null)]))
+    //    // seznamPromennych.push(new Promenna("E", [1, 2, 3, 4, 5], [new Omezeni("=", ["A", "D"])]))
     //    // seznamPromennych.push(new Promenna("E", [1, 2, 3, 4, 5], [new Omezeni("p", [[1,1],[2,2],[3,3],[4,4],[5,5]], "A"),new Omezeni("p", [[1,1],[2,2],[3,3],[4,4],[5,5]], "D")]))
     //    seznamPromennych.push(new Promenna('E', [4, 5], [new Omezeni('z', [[5, 5]], 'A'), new Omezeni('z', [[4, 4]], 'D')]));
 
@@ -35,153 +35,153 @@ export class ArcConsistencyService implements Algoritmus {
       for (var j = 0; j < promenna.omezeni.length; j++) {
         switch (promenna.omezeni[j].typOmezeni) {
           case '<':
-            for (var k = 0; k < promenna.omezeni[j].hodnotyOmezeni.length; k++) {
-              var porovnavanaPromenna = AlgoritmusUtils.najdi(seznamPromennych, promenna.omezeni[j].hodnotyOmezeni[k]);
+            for (var k = 0; k < promenna.omezeni[j].omezeniProPromennou.length; k++) {
+              var porovnavanaPromenna = AlgoritmusUtils.najdi(seznamPromennych, promenna.omezeni[j].omezeniProPromennou[k]);
               const krokAlgoritmu = new KrokAlgoritmu();
               selhani = this._arcConsistencyLesser(promenna, porovnavanaPromenna);
               switch (selhani[0]) {
-                case "uprava":
+                case 'uprava':
                   for (var l = 0; l < selhani[1].length; l++) {
                     krokAlgoritmu.popis.push(selhani[1][l]);
                   }
                   break;
-                case "prazdna domena":
+                case 'prazdna domena':
                   return this._arcConsistencyFail(seznamPromennych, promenna, selhani);
               }
               selhani = this._arcConsistencyGreater(porovnavanaPromenna, promenna);
               switch (selhani[0]) {
-                case "uprava":
+                case 'uprava':
                   for (var l = 0; l < selhani[1].length; l++) {
                     krokAlgoritmu.popis.push(selhani[1][l]);
                   }
                   break;
-                case "prazdna domena":
+                case 'prazdna domena':
                   return this._arcConsistencyFail(seznamPromennych, promenna, selhani);
               }
             }
             break;
           case '>':
-            for (var k = 0; k < promenna.omezeni[j].hodnotyOmezeni.length; k++) {
-              var porovnavanaPromenna = AlgoritmusUtils.najdi(seznamPromennych, promenna.omezeni[j].hodnotyOmezeni[k]);
+            for (var k = 0; k < promenna.omezeni[j].omezeniProPromennou.length; k++) {
+              var porovnavanaPromenna = AlgoritmusUtils.najdi(seznamPromennych, promenna.omezeni[j].omezeniProPromennou[k]);
               const krokAlgoritmu = new KrokAlgoritmu();
               selhani = this._arcConsistencyGreater(promenna, porovnavanaPromenna);
               switch (selhani[0]) {
-                case "uprava":
+                case 'uprava':
                   for (var l = 0; l < selhani[1].length; l++) {
                     krokAlgoritmu.popis.push(selhani[1][l]);
                   }
                   break;
-                case "prazdna domena":
+                case 'prazdna domena':
                   return this._arcConsistencyFail(seznamPromennych, promenna, selhani);
               }
               selhani = this._arcConsistencyLesser(porovnavanaPromenna, promenna);
               switch (selhani[0]) {
-                case "uprava":
+                case 'uprava':
                   for (var l = 0; l < selhani[1].length; l++) {
                     krokAlgoritmu.popis.push(selhani[1][l]);
                   }
                   break;
-                case "prazdna domena":
+                case 'prazdna domena':
                   return this._arcConsistencyFail(seznamPromennych, promenna, selhani);
               }
             }
             break;
           case '=':
-            for (var k = 0; k < promenna.omezeni[j].hodnotyOmezeni.length; k++) {
-              var porovnavanaPromenna = AlgoritmusUtils.najdi(seznamPromennych, promenna.omezeni[j].hodnotyOmezeni[k]);
+            for (var k = 0; k < promenna.omezeni[j].omezeniProPromennou.length; k++) {
+              var porovnavanaPromenna = AlgoritmusUtils.najdi(seznamPromennych, promenna.omezeni[j].omezeniProPromennou[k]);
               const krokAlgoritmu = new KrokAlgoritmu();
               selhani = this._arcConsistencyEqual(promenna, porovnavanaPromenna);
               switch (selhani[0]) {
-                case "uprava":
+                case 'uprava':
                   for (var l = 0; l < selhani[1].length; l++) {
                     krokAlgoritmu.popis.push(selhani[1][l]);
                   }
                   break;
-                case "prazdna domena":
+                case 'prazdna domena':
                   return this._arcConsistencyFail(seznamPromennych, promenna, selhani);
               }
               selhani = this._arcConsistencyEqual(porovnavanaPromenna, promenna);
               switch (selhani[0]) {
-                case "uprava":
+                case 'uprava':
                   for (var l = 0; l < selhani[1].length; l++) {
                     krokAlgoritmu.popis.push(selhani[1][l]);
                   }
                   break;
-                case "prazdna domena":
+                case 'prazdna domena':
                   return this._arcConsistencyFail(seznamPromennych, promenna, selhani);
               }
             }
             break;
           case '!':
-            for (var k = 0; k < promenna.omezeni[j].hodnotyOmezeni.length; k++) {
-              var porovnavanaPromenna = AlgoritmusUtils.najdi(seznamPromennych, promenna.omezeni[j].hodnotyOmezeni[k]);
+            for (var k = 0; k < promenna.omezeni[j].omezeniProPromennou.length; k++) {
+              var porovnavanaPromenna = AlgoritmusUtils.najdi(seznamPromennych, promenna.omezeni[j].omezeniProPromennou[k]);
               const krokAlgoritmu = new KrokAlgoritmu();
               selhani = this._arcConsistencyNotEqual(promenna, porovnavanaPromenna);
               switch (selhani[0]) {
-                case "uprava":
+                case 'uprava':
                   for (var l = 0; l < selhani[1].length; l++) {
                     krokAlgoritmu.popis.push(selhani[1][l]);
                   }
                   break;
-                case "prazdna domena":
+                case 'prazdna domena':
                   return this._arcConsistencyFail(seznamPromennych, promenna, selhani);
               }
               selhani = this._arcConsistencyNotEqual(porovnavanaPromenna, promenna);
               switch (selhani[0]) {
-                case "uprava":
+                case 'uprava':
                   for (var l = 0; l < selhani[1].length; l++) {
                     krokAlgoritmu.popis.push(selhani[1][l]);
                   }
                   break;
-                case "prazdna domena":
+                case 'prazdna domena':
                   return this._arcConsistencyFail(seznamPromennych, promenna, selhani);
               }
             }
             break;
           case 'p':
-            var porovnavanaPromenna = AlgoritmusUtils.najdi(seznamPromennych, promenna.omezeni[j].hodnotyOmezeni[k]);
+            var porovnavanaPromenna = AlgoritmusUtils.najdi(seznamPromennych, promenna.omezeni[j].omezeniProPromennou[0]);
             const krokAlgoritmu = new KrokAlgoritmu();
             selhani = this._arcConsistencyPovoleneDvojice(promenna, porovnavanaPromenna, 0, 1, j, 1);
             switch (selhani[0]) {
-              case "uprava":
+              case 'uprava':
                 for (var l = 0; l < selhani[1].length; l++) {
                   krokAlgoritmu.popis.push(selhani[1][l]);
                 }
                 break;
-              case "prazdna domena":
+              case 'prazdna domena':
                 return this._arcConsistencyFail(seznamPromennych, promenna, selhani);
             }
             selhani = this._arcConsistencyPovoleneDvojice(promenna, porovnavanaPromenna, 1, 0, j, 2);
             switch (selhani[0]) {
-              case "uprava":
+              case 'uprava':
                 for (var l = 0; l < selhani[1].length; l++) {
                   krokAlgoritmu.popis.push(selhani[1][l]);
                 }
                 break;
-              case "prazdna domena":
+              case 'prazdna domena':
                 return this._arcConsistencyFail(seznamPromennych, promenna, selhani);
             }
             break;
           case 'z':
-            var porovnavanaPromenna = AlgoritmusUtils.najdi(seznamPromennych, promenna.omezeni[j].hodnotyOmezeni[k]);
+            var porovnavanaPromenna = AlgoritmusUtils.najdi(seznamPromennych, promenna.omezeni[j].omezeniProPromennou[0]);
             selhani = this._arcConsistencyZakazanDvojice(promenna, porovnavanaPromenna, 0, j, 1);
             switch (selhani[0]) {
-              case "uprava":
+              case 'uprava':
                 for (var l = 0; l < selhani[1].length; l++) {
                   krokAlgoritmu.popis.push(selhani[1][l]);
                 }
                 break;
-              case "prazdna domena":
+              case 'prazdna domena':
                 return this._arcConsistencyFail(seznamPromennych, promenna, selhani);
             }
             selhani = this._arcConsistencyZakazanDvojice(promenna, porovnavanaPromenna, 0, j, 2);
             switch (selhani[0]) {
-              case "uprava":
+              case 'uprava':
                 for (var l = 0; l < selhani[1].length; l++) {
                   krokAlgoritmu.popis.push(selhani[1][l]);
                 }
                 break;
-              case "prazdna domena":
+              case 'prazdna domena':
                 return this._arcConsistencyFail(seznamPromennych, promenna, selhani);
             }
             break;
@@ -214,7 +214,7 @@ export class ArcConsistencyService implements Algoritmus {
         provedlaSeUprava = 'uprava';
         var zprava = new LokalizovanaZprava();
         zprava.klic = 'popis.arcConsistency.prazdnaDomena';
-        zprava.parametry = { 'nazev': promennaA.nazev, 'hodnota': promennaA.domena[i], 'porovnavanaPromenna': promennaB.nazev, "typ": "=" }
+        zprava.parametry = { 'nazev': promennaA.nazev, 'hodnota': promennaA.domena[i], 'porovnavanaPromenna': promennaB.nazev, 'typ': '=' }
         popisUpravy.push(zprava)
         if (promennaA.domena.length === 0) {
           var zprava = new LokalizovanaZprava();
@@ -246,7 +246,7 @@ export class ArcConsistencyService implements Algoritmus {
         provedlaSeUprava = 'uprava';
         var zprava = new LokalizovanaZprava();
         zprava.klic = 'popis.arcConsistency.prazdnaDomena';
-        zprava.parametry = { 'nazev': promennaA.nazev, 'hodnota': promennaA.domena[i], 'porovnavanaPromenna': promennaB.nazev, "typ": "=" }
+        zprava.parametry = { 'nazev': promennaA.nazev, 'hodnota': promennaA.domena[i], 'porovnavanaPromenna': promennaB.nazev, 'typ': '=' }
         popisUpravy.push(zprava)
         if (promennaA.domena.length === 0) {
           var zprava = new LokalizovanaZprava();
@@ -278,7 +278,7 @@ export class ArcConsistencyService implements Algoritmus {
         provedlaSeUprava = 'uprava';
         var zprava = new LokalizovanaZprava();
         zprava.klic = 'popis.arcConsistency.prazdnaDomena';
-        zprava.parametry = { 'nazev': promennaA.nazev, 'hodnota': promennaA.domena[i], 'porovnavanaPromenna': promennaB.nazev, "typ": "=" }
+        zprava.parametry = { 'nazev': promennaA.nazev, 'hodnota': promennaA.domena[i], 'porovnavanaPromenna': promennaB.nazev, 'typ': '=' }
         popisUpravy.push(zprava)
         if (promennaA.domena.length === 0) {
           var zprava = new LokalizovanaZprava();
@@ -310,7 +310,7 @@ export class ArcConsistencyService implements Algoritmus {
         provedlaSeUprava = 'uprava';
         var zprava = new LokalizovanaZprava();
         zprava.klic = 'popis.arcConsistency.prazdnaDomena';
-        zprava.parametry = { 'nazev': promennaA.nazev, 'hodnota': promennaA.domena[i], 'porovnavanaPromenna': promennaB.nazev, "typ": "!=" }
+        zprava.parametry = { 'nazev': promennaA.nazev, 'hodnota': promennaA.domena[i], 'porovnavanaPromenna': promennaB.nazev, 'typ': '!=' }
         popisUpravy.push(zprava)
         if (promennaA.domena.length === 0) {
           var zprava = new LokalizovanaZprava();

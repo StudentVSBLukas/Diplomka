@@ -97,15 +97,9 @@ export class BackjumpingService implements Algoritmus {
           } else {
             for (var i = 0; i < zpracovavanaPromenna.omezeni.length; i++) {
               const omezeni = zpracovavanaPromenna.omezeni[i];
-              // TODO odstranit spolu s jeJednoducheOmezeni
-              if (omezeni.typOmezeni === 'p' || omezeni.typOmezeni === 'z') {
-                const jump = AlgoritmusUtils.index(seznamPromennych, omezeni.omezeniProPromennou);
+              for (var j = 0; j < omezeni.omezeniProPromennou.length; j++) {
+                const jump = AlgoritmusUtils.index(seznamPromennych, omezeni.omezeniProPromennou[j]);
                 backjump = Math.max(backjump, jump);
-              } else {
-                for (var j = 0; j < omezeni.hodnotyOmezeni.length; j++) {
-                  const jump = AlgoritmusUtils.index(seznamPromennych, omezeni.hodnotyOmezeni[j]);
-                  backjump = Math.max(backjump, jump);
-                }
               }
             }
           }
