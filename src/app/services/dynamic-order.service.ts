@@ -1,4 +1,4 @@
-import {Promenna, KrokAlgoritmu, LokalizovanaZprava, TypKroku} from '../data-model';
+import { Promenna, KrokAlgoritmu, LokalizovanaZprava, TypKroku } from '../data-model';
 import { Algoritmus } from './algoritmus';
 import { Injectable } from '@angular/core';
 import AlgoritmusUtils from './algoritmus-utils';
@@ -10,7 +10,7 @@ export class DynamicOrderService implements Algoritmus {
 
   constructor() { }
 
-  run(seznamPromennych: Array<Promenna>, pozadovanychReseni:  number): Array<KrokAlgoritmu> {
+  run(seznamPromennych: Array<Promenna>, pozadovanychReseni: number): Array<KrokAlgoritmu> {
     // TODO Test ze zadani
     //    seznamPromennych = [];
     //    seznamPromennych.push(new Promenna('A', [1, 2, 3, 4, 5], []));
@@ -114,17 +114,19 @@ export class DynamicOrderService implements Algoritmus {
   }
 
   _dynamicOrder(promenna, seznamPromennych) {
-    var nejmensiDelkaDomeny = 999999999;
-    var pozicePromenneSNejmensiDelkouDomeny = 999999999;
+    var nejmensiDelkaDomeny = seznamPromennych[promenna].domena.length;
+    var pozicePromenneSNejmensiDelkouDomeny = promenna;
     for (var i = promenna; i < seznamPromennych.length; i++) {
-      if (seznamPromennych[i].domena.length < nejmensiDelkaDomeny) {
-        nejmensiDelkaDomeny = seznamPromennych[i].domena.length;
-        pozicePromenneSNejmensiDelkouDomeny = i;
+      for (var j = i; j < seznamPromennych.length; j++) {
+        if (seznamPromennych[i].domena.length < nejmensiDelkaDomeny) {
+          nejmensiDelkaDomeny = seznamPromennych[i].domena.length;
+          pozicePromenneSNejmensiDelkouDomeny = i;
+        }
       }
+      var pom = seznamPromennych[pozicePromenneSNejmensiDelkouDomeny];
+      seznamPromennych[pozicePromenneSNejmensiDelkouDomeny] = seznamPromennych[promenna];
+      seznamPromennych[promenna] = pom;
     }
-    var pom = seznamPromennych[pozicePromenneSNejmensiDelkouDomeny];
-    seznamPromennych[pozicePromenneSNejmensiDelkouDomeny] = seznamPromennych[promenna];
-    seznamPromennych[promenna] = pom;
     return seznamPromennych;
   }
 

@@ -120,9 +120,8 @@
 			"poradiInfo": "Proměnna {{nazev}} s délkou domény = {{delka}}.\n"
 		},
 		"omezeni": {
-			"splneno": "Omezení typu proměnné {{nazev}} {{typOmezeni}} {{porovnavanaPromenna}} ({{hodnota}} {{typOmezeni}} {{porovnavanaHodnota}}).\n",
-			"definice" : "TODO: Napsat definici algoritmu Backtracking. Muzes pouzit HTML!!",
-			"nesplneno": "Omezení typu proměnné {{nazev}} {{typOmezeni}} {{porovnavanaPromenna}} ({{hondnota}} {{typOmezeni}} {{porovnavanaHodnota}}).\n",
+			"splneno": "Omezení typu proměnné {{nazev}} {{typOmezeni}} {{porovnavanaPromenna}} ({{hodnota}} {{typOmezeni}} {{porovnavanaHodnota}}) je splněno.\n",
+			"nesplneno": "Omezení typu proměnné {{nazev}} {{typOmezeni}} {{porovnavanaPromenna}} ({{hondnota}} {{typOmezeni}} {{porovnavanaHodnota}}) není splněno.\n",
 			"povolenoSplneno": "Mezi proměnnou {{nazev}} a proměnnou {{porovnavanaPromenna}} se našla povolená dvojice s hodnotami {{hodnota}},{{porovnavanaHodnota}}.\n",
 			"povolenoNesplneno": "Mezi proměnnou {{nazev}} a proměnnou {{porovnavanaPromenna}} se nenašla povolená dvojice s hodnotami {{hodnota}},{{porovnavanaHodnota}}.\n",
 			"zakazeneSplneno": "Mezi proměnnou {{nazev}} a proměnnou {{porovnavanaPromenna}} se nenašla zakázáná dvojice s hodnotami {{hodnota}},{{porovnavanaHodnota}}.\n",

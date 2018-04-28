@@ -118,11 +118,6 @@ export class MainPageComponent implements OnInit {
     return zadani;
   }
 
-
-
-
-
-
     // TODO odstranit
   testPrevoduOmezeni() {
 

@@ -27,7 +27,7 @@
 			                  		<i class="fa fa-remove text-danger clickable rowHover" (click)="odeberOmezeni(promenna, omezeni)"></i>
 			                  	</div>
 								<div class="col-sm-12">		                        	
-			                  		<p-multiSelect id="omezeni{{omezeni.id}}" name="omezeni{{omezeni.id}}" #hodnotaOmezeni="ngModel" [(ngModel)]="omezeni.hodnotyOmezeni" [options]="filtrovanePromenne" maxSelectedLabels="30" required [appendTo]="appendTo"></p-multiSelect>
+			                  		<p-multiSelect id="omezeni{{omezeni.id}}" name="omezeni{{omezeni.id}}" #hodnotaOmezeni="ngModel" [(ngModel)]="omezeni.omezeniProPromennou" [options]="filtrovanePromenne" maxSelectedLabels="30" required [appendTo]="appendTo"></p-multiSelect>
 			                  	</div>
 	                  		</div>
 	                  

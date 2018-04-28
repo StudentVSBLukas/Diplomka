@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA, InjectionToken } from '@angular/core';
 import { HttpModule, Http } from '@angular/http';
-import {HttpClientModule, HttpClient} from '@angular/common/http';
+import { HttpClientModule, HttpClient } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 
@@ -16,10 +16,10 @@ import { PromennaService } from './services/promenna.service';
 import { PromennePanelComponent } from './promenne-panel/promenne-panel.component';
 import { FormsModule } from '@angular/forms';
 import { DropdownModule } from 'primeng/dropdown';
-import { FileUploadModule } from 'primeng/fileupload';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { MultiSelectModule } from 'primeng/multiselect';
+import { FileUploadModule } from 'primeng/fileupload';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
@@ -35,7 +35,7 @@ import { IconsistencyService } from './services/iconsistency.service';
 import { RandomBacktrackingService } from './services/random-backtracking.service';
 
 export function HttpLoaderFactory(http: HttpClient) {
-    return new TranslateHttpLoader(http);
+  return new TranslateHttpLoader(http);
 }
 
 @NgModule({
@@ -47,8 +47,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     DialogOmezeniComponent,
     PromennePanelComponent,
     DialogAlgoritmusComponent,
-    GrafComponent,
     DialogImportComponent,
+    GrafComponent,
   ],
   imports: [
     BrowserModule,
@@ -62,12 +62,12 @@ export function HttpLoaderFactory(http: HttpClient) {
     MultiSelectModule,
     FileUploadModule,
     TranslateModule.forRoot({
-            loader: {
-                provide: TranslateLoader,
-                useFactory: HttpLoaderFactory,
-                deps: [HttpClient]
-            }
-        }),
+      loader: {
+        provide: TranslateLoader,
+        useFactory: HttpLoaderFactory,
+        deps: [HttpClient]
+      }
+    }),
   ],
   providers: [PromennaService,
     BacktrackingService,
