@@ -1,9 +1,5 @@
+import { Algoritmus } from '../services/algoritmus';
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-
-export class Algoritmus {
-  constructor(public nazev: string, public definice: string, public run: any) {}
-}
-
 
 @Component({
   selector: 'app-dialog-algoritmus',

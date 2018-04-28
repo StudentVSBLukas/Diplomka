@@ -1,5 +1,6 @@
-import { Promenna, Omezeni } from './data-model';
+import { Promenna, Omezeni } from '../data-model';
 import { Injectable } from '@angular/core';
+import AlgoritmusUtils from './algoritmus-utils';
 
 @Injectable()
 export class PromennaService {
@@ -15,28 +16,7 @@ export class PromennaService {
   }
 
   vrat(nazev: string): Promenna {
-    return this.najdi(this.listPromennych, nazev);
-  }
-
-  najdi(seznamPromennych: Array<Promenna>, nazev: string) {
-    for (let i = 0; i < seznamPromennych.length; i++) {
-      const promenna = seznamPromennych[i];
-      if (promenna.nazev === nazev) {
-        return promenna;
-      }
-    }
-
-    return null;
-  }
-
-  index(seznamPromennych: Array<Promenna>, nazev: string): number {
-    for (let i = 0; i < seznamPromennych.length; i++) {
-      if (seznamPromennych[i].nazev === nazev) {
-        return i;
-      }
-    }
-
-    return -1;
+    return AlgoritmusUtils.najdi(this.listPromennych, nazev);
   }
 
   vytvor(): Promenna {
@@ -47,7 +27,7 @@ export class PromennaService {
   }
 
   uprav(promenna: Promenna) {
-    const index = this.index(this.listPromennych, promenna.nazev);
+    const index = AlgoritmusUtils.index(this.listPromennych, promenna.nazev);
     if (index !== -1) {
       this.listPromennych[index] = promenna;
     }

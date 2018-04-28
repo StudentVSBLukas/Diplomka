@@ -42,7 +42,7 @@ export enum TypKroku {
 
 export class KrokAlgoritmu {
   nazev: string;
-  hodnota: string;
+  hodnota: any;
   rodic: number;
   popis = new Array<LokalizovanaZprava>();
   stav: string; // TODO enum

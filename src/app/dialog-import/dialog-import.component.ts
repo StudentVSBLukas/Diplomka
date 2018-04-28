@@ -1,4 +1,4 @@
-import { PromennaService } from '../promenna.service';
+import { PromennaService } from '../services/promenna.service';
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 
 @Component({

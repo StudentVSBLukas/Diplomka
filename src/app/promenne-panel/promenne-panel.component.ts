@@ -1,5 +1,5 @@
 import { Promenna } from '../data-model';
-import { PromennaService } from '../promenna.service';
+import { PromennaService } from '../services/promenna.service';
 import { Component, OnInit, Input } from '@angular/core';
 
 @Component({

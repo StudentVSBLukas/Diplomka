@@ -1,5 +1,5 @@
 import { Promenna, Omezeni } from '../data-model';
-import { PromennaService } from '../promenna.service';
+import { PromennaService } from '../services/promenna.service';
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
