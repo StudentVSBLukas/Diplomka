@@ -1,0 +1,36 @@
+<div class="backdrop"></div>
+<div class="modal" tabindex="-1" role="dialog" style="display: block">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content form">
+            <div class="modal-header form-header">
+                <button type="button" class="close" aria-label="Close" (click)="zavritDialog()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">{{'import.header' | translate}}</h4>
+            </div>
+            
+            <div class="modal-body">
+            	<form class="input-form">
+			        <div class="container-fluid">
+				        <div class="row form-group">
+				        	<div class="col-sm-12">
+		                 		<label for="importSouboru">{{'import.soubor.label' | translate}}</label>
+		                 	</div>
+		                  	<div class="col-sm-9">
+		                  		<p-fileUpload id="importSouboru" name="importSouboru" mode="basic" customUpload="true" (uploadHandler)="importSouboru($event)" auto="auto" accept=".json" chooseLabel="{{'import.soubor.vybrat' | translate}}"></p-fileUpload>
+		                  	</div>
+				        </div>
+				    </div>
+				</form>
+            </div>
+            
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" (click)="zavritDialog()">{{'import.zavrit' | translate}}</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+	        
+	        

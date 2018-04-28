@@ -1,4 +1,4 @@
-import { Promenna } from './data-model';
+import { Promenna, Omezeni } from './data-model';
 import { Injectable } from '@angular/core';
 
 @Injectable()
@@ -60,6 +60,31 @@ export class PromennaService {
     }
 
     // TODO odstranit vsechna omezeni s promennou
+  }
+
+  export(): string {
+    return JSON.stringify(this.listPromennych, (key, value) => {
+      if (key === 'pozice') { return undefined; }
+      if (key === 'zalohaDomeny') { return undefined; }
+      return value;
+    }, 2);
+  }
+
+  import(vstup: Array<any>) {
+    // Vytvoreni promennych ze vstupu
+    const promenne = vstup.map(
+      (p: any) => Object.assign(new Promenna(p.nazev), p)
+    );
+
+    // Vytvoreni omezeni ze vstupu
+    promenne.forEach(
+      (p: Promenna) => p.omezeni = p.omezeni.map(
+        (o: any) => Object.assign(new Omezeni(o.typOmezeni), o)
+      )
+    );
+
+    // TODO validovat vstup
+    this.listPromennych = promenne;
   }
 
   private generateIdentifier() {

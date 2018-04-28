@@ -4,6 +4,7 @@ import { PromennaService } from '../promenna.service';
 import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { TranslateService, TranslatePipe } from '@ngx-translate/core';
 import { SelectItem } from 'primeng/api';
+import { saveAs } from 'file-saver/FileSaver';
 
 @Component({
   selector: 'app-main-page',
@@ -24,11 +25,13 @@ export class MainPageComponent implements OnInit {
     { label: '-', value: new Algoritmus('popis.iConsistency.nazev', 'popis.iConsistency.definice', this.iConsistency) }
   ];
   vybranyAlgoritmus = this.algoritmy[0].value;
-  zobrazVybranyAlgoritmus = false;
   iConsistencyFaktor = 1;
   pocetReseni;
 
   lokalizace = ['cz', 'gb'];
+
+  zobrazAlgoritmusDialog = false;
+  zobrazImportDialog = false;
 
   postup;
 
@@ -64,11 +67,15 @@ export class MainPageComponent implements OnInit {
   }
 
   zobrazAlgoritmus() {
-    this.zobrazVybranyAlgoritmus = true;
+    this.zobrazAlgoritmusDialog = true;
   }
 
   skryjAlgoritmus() {
-    this.zobrazVybranyAlgoritmus = false;
+    this.zobrazAlgoritmusDialog = false;
+  }
+
+  zobrazImport() {
+    this.zobrazImportDialog = true;
   }
 
   // TODO zbavit se tohoto - upravit patricne atributy omezeni
@@ -1964,6 +1971,20 @@ export class MainPageComponent implements OnInit {
           popisPrubehuOmezeni.push(popis);
           break;
       }
+    }
+  }
+
+  exportZadani() {
+    const json = this.promennaService.export();
+    const blob = new Blob([json], {type: 'application/json'});
+    saveAs(blob, 'Zadani.json');
+  }
+
+  importZadani(importovano: boolean) {
+    this.zobrazImportDialog = false;
+    
+    if (importovano) {
+      this.listPromennych = this.promennaService.list();
     }
   }
 

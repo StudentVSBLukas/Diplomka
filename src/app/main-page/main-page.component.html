@@ -4,6 +4,8 @@
 	     	<div class="row-layout container-fluid form-header">
 	     		<h3>{{'promenna.header' | translate}}</h3>
 	     		<i class="fa fa-fw fa-plus clickable" (click)="pridejPromennou()"></i>
+	     		<i class="fa fa-fw fa-upload clickable" (click)="zobrazImport()"></i>
+	     		<i class="fa fa-fw fa-download clickable" (click)="exportZadani()"></i>
 		     	<div class="lokalizace">
 		     		<app-lokalizace-component [lokalizace]="lokalizace"></app-lokalizace-component>
 		     	</div>
@@ -76,6 +78,7 @@
         </div>
     </div>
     
-    <app-dialog-algoritmus *ngIf="zobrazVybranyAlgoritmus" [algoritmus]="vybranyAlgoritmus" (close)="skryjAlgoritmus()"></app-dialog-algoritmus>
+    <app-dialog-algoritmus *ngIf="zobrazAlgoritmusDialog" [algoritmus]="vybranyAlgoritmus" (close)="skryjAlgoritmus()"></app-dialog-algoritmus>
+    <app-dialog-import *ngIf="zobrazImportDialog" (close)="importZadani($event)"></app-dialog-import>
 </div>
 
