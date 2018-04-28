@@ -3,13 +3,15 @@
 	
 			<div>
 				<div class="graf-podrobnosti">
-					{{aktualniKrok?.popis | translate:aktualniKrok}}
+					<span *ngFor="let zprava of aktualniKrok.popis">
+						{{zprava.klic | translate:zprava.parametry}}
+					</span>
 				</div>
 		        <div class="graf-navigation">
 	                <button (click)="odkrokujCele()">&lt;&lt;&lt;&lt;</button>
 	                <button (click)="odkrokujReseni()">&lt;&lt;</button>
 	                <button (click)="odkrokuj()">&lt;</button>
-	                <span class="graf-step">{{graf.model.undoManager.historyIndex + 1}}</span> / <span class="graf-step">{{postup?.length}}</span>
+	                <span class="graf-step">{{graf.model.undoManager.historyIndex + 1}}</span> / <span class="graf-step">{{postup.length}}</span>
 	                <button (click)="krokuj()">&gt;</button>
 	                <button (click)="krokujReseni()">&gt;&gt;</button>
 	                <button (click)="krokujCele()">&gt;&gt;&gt;&gt;</button>

@@ -1,4 +1,4 @@
-import { Promenna, Omezeni, KrokAlgoritmu, LokalizovanaZprava } from '../data-model';
+import { Promenna, Omezeni, KrokAlgoritmu, LokalizovanaZprava, TypKroku } from '../data-model';
 import { Algoritmus } from '../dialog-algoritmus/dialog-algoritmus.component';
 import { PromennaService } from '../promenna.service';
 import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
@@ -147,14 +147,13 @@ export class MainPageComponent implements OnInit {
 
       const krokAlgoritmu = new KrokAlgoritmu();
       krokAlgoritmu.nazev = zpracovavanaPromenna.nazev;
-      krokAlgoritmu.promenna = promenna;
       krokAlgoritmu.hodnota = zpracovavanaPromenna.domena[zpracovavanaPromenna.pozice];
-      krokAlgoritmu.rodic = this._lastIndex(promenna - 1, postupTvoreniGrafu) + 1;
+      krokAlgoritmu.rodic = this._lastIndex(seznamPromennych[promenna - 1], postupTvoreniGrafu) + 1;
       postupTvoreniGrafu.push(krokAlgoritmu);
 
 
       var lokalizovanaZprava = new LokalizovanaZprava();
-      lokalizovanaZprava.klic = 'popis.backtracking.detailPrirazeni';
+      lokalizovanaZprava.klic = 'popis.backtracking.prirazeni';
       lokalizovanaZprava.parametry = { 'nazev': krokAlgoritmu.nazev, 'hodnota': krokAlgoritmu.hodnota }
       krokAlgoritmu.popis.push(lokalizovanaZprava);
 
@@ -166,7 +165,7 @@ export class MainPageComponent implements OnInit {
       }
       if (poruseneOmezeni) {
         var lokalizovanaZprava = new LokalizovanaZprava();
-        lokalizovanaZprava.klic = 'popis.backtracking.detailDeadend';
+        lokalizovanaZprava.klic = 'popis.backtracking.deadend';
         lokalizovanaZprava.parametry = { 'nazev': krokAlgoritmu.nazev, 'hodnota': krokAlgoritmu.hodnota }
         krokAlgoritmu.popis.push(lokalizovanaZprava);
         krokAlgoritmu.stav = 'deadend';
@@ -174,14 +173,14 @@ export class MainPageComponent implements OnInit {
         if (promenna === (seznamPromennych.length - 1)) {
           pocetReseni++;
           var lokalizovanaZprava = new LokalizovanaZprava();
-          lokalizovanaZprava.klic = 'popis.backtracking.detailReseni';
+          lokalizovanaZprava.klic = 'popis.backtracking.reseni';
           lokalizovanaZprava.parametry = { 'nazev': krokAlgoritmu.nazev, 'hodnota': krokAlgoritmu.hodnota }
           krokAlgoritmu.popis.push(lokalizovanaZprava);
           krokAlgoritmu.stav = 'reseni';
         } else {
           promenna++;
           var lokalizovanaZprava = new LokalizovanaZprava();
-          lokalizovanaZprava.klic = 'popis.backtracking.detailUzel';
+          lokalizovanaZprava.klic = 'popis.backtracking.uzel';
           lokalizovanaZprava.parametry = { 'nazev': krokAlgoritmu.nazev, 'hodnota': krokAlgoritmu.hodnota }
           krokAlgoritmu.popis.push(lokalizovanaZprava);
         }
@@ -221,7 +220,6 @@ export class MainPageComponent implements OnInit {
         }
         var krokAlgoritmu2 = new KrokAlgoritmu();
         krokAlgoritmu2.nazev = zpracovavanaPromenna.nazev;
-        krokAlgoritmu2.promenna = promenna;
         krokAlgoritmu2.hodnota = zpracovavanaPromenna.domena[zpracovavanaPromenna.pozice];
         krokAlgoritmu2.rodic = 0;
         postupTvoreniGrafu.push(krokAlgoritmu2);
@@ -253,7 +251,6 @@ export class MainPageComponent implements OnInit {
 
         var krokAlgoritmu2 = new KrokAlgoritmu();
         krokAlgoritmu2.nazev = zpracovavanaPromenna.nazev;
-        krokAlgoritmu2.promenna = promenna;
         krokAlgoritmu2.hodnota = zpracovavanaPromenna.domena[zpracovavanaPromenna.pozice];
         krokAlgoritmu2.rodic = 0;
 
@@ -305,9 +302,8 @@ export class MainPageComponent implements OnInit {
         } else {
           var krokAlgoritmu2 = new KrokAlgoritmu();
           krokAlgoritmu2.nazev = zpracovavanaPromenna.nazev;
-          krokAlgoritmu2.promenna = promenna;
           krokAlgoritmu2.hodnota = zpracovavanaPromenna.domena[zpracovavanaPromenna.pozice];
-          krokAlgoritmu2.rodic = this._lastIndex(promenna - 1, postupTvoreniGrafu) + 1;
+          krokAlgoritmu2.rodic = this._lastIndex(seznamPromennych[promenna - 1], postupTvoreniGrafu) + 1;
           const poruseneOmezeni = this._porovnej(zpracovavanaPromenna, seznamPromennych);
           if (poruseneOmezeni != undefined) {
             for (var i = 0; i < poruseneOmezeni.length; i++) {
@@ -383,12 +379,11 @@ export class MainPageComponent implements OnInit {
 
       const krokAlgoritmu = new KrokAlgoritmu();
       krokAlgoritmu.nazev = zpracovavanaPromenna.nazev;
-      krokAlgoritmu.promenna = promenna;
       krokAlgoritmu.hodnota = zpracovavanaPromenna.domena[zpracovavanaPromenna.pozice];
-      krokAlgoritmu.rodic = this._lastIndex(promenna - 1, postupTvoreniGrafu) + 1;
+      krokAlgoritmu.rodic = this._lastIndex(seznamPromennych[promenna - 1], postupTvoreniGrafu) + 1;
 
       var lokalizovanaZprava = new LokalizovanaZprava();
-      lokalizovanaZprava.klic = 'popis.forwardCheck.detailPrirazeni';
+      lokalizovanaZprava.klic = 'popis.forwardCheck.prirazeni';
       lokalizovanaZprava.parametry = { 'nazev': krokAlgoritmu.nazev, 'hodnota': krokAlgoritmu.hodnota }
       krokAlgoritmu.popis.push(lokalizovanaZprava);
 
@@ -400,7 +395,7 @@ export class MainPageComponent implements OnInit {
       }
       if (poruseneOmezeni) {
         var lokalizovanaZprava = new LokalizovanaZprava();
-        lokalizovanaZprava.klic = 'popis.forwardCheck.detailDeadend';
+        lokalizovanaZprava.klic = 'popis.forwardCheck.deadend';
         lokalizovanaZprava.parametry = { 'nazev': krokAlgoritmu.nazev, 'hodnota': krokAlgoritmu.hodnota }
         krokAlgoritmu.popis.push(lokalizovanaZprava);
         krokAlgoritmu.stav = 'deadend';
@@ -409,7 +404,7 @@ export class MainPageComponent implements OnInit {
           pocetReseni++;
           krokAlgoritmu.stav = 'reseni';
           var lokalizovanaZprava = new LokalizovanaZprava();
-          lokalizovanaZprava.klic = 'popis.forwardCheck.detailReseni';
+          lokalizovanaZprava.klic = 'popis.forwardCheck.reseni';
           lokalizovanaZprava.parametry = { 'nazev': krokAlgoritmu.nazev, 'hodnota': krokAlgoritmu.hodnota }
           krokAlgoritmu.popis.push(lokalizovanaZprava);
           krokAlgoritmu.hodnotaDomenKroku = this._forwardChechHodnotaDomen(seznamPromennych);
@@ -425,7 +420,7 @@ export class MainPageComponent implements OnInit {
           } else {
             seznamPromennych = tmp[0];
             var lokalizovanaZprava = new LokalizovanaZprava();
-            lokalizovanaZprava.klic = 'popis.forwardCheck.detailUzel';
+            lokalizovanaZprava.klic = 'popis.forwardCheck.uzel';
             lokalizovanaZprava.parametry = { 'nazev': krokAlgoritmu.nazev, 'hodnota': krokAlgoritmu.hodnota }
             krokAlgoritmu.popis.push(lokalizovanaZprava);
             promenna++;
@@ -501,12 +496,11 @@ export class MainPageComponent implements OnInit {
       }
 
       krokAlgoritmu.nazev = zpracovavanaPromenna.nazev;
-      krokAlgoritmu.promenna = promenna;
       krokAlgoritmu.hodnota = zpracovavanaPromenna.domena[zpracovavanaPromenna.pozice];
-      krokAlgoritmu.rodic = this._lastIndex(promenna - 1, postupTvoreniGrafu) + 1;
+      krokAlgoritmu.rodic = this._lastIndex(seznamPromennych[promenna - 1], postupTvoreniGrafu) + 1;
 
       var lokalizovanaZprava = new LokalizovanaZprava();
-      lokalizovanaZprava.klic = 'popis.forwardCheck.detailPrirazeni';
+      lokalizovanaZprava.klic = 'popis.forwardCheck.prirazeni';
       lokalizovanaZprava.parametry = { 'nazev': krokAlgoritmu.nazev, 'hodnota': krokAlgoritmu.hodnota }
       krokAlgoritmu.popis.push(lokalizovanaZprava);
 
@@ -519,7 +513,7 @@ export class MainPageComponent implements OnInit {
       }
       if (poruseneOmezeni) {
         var lokalizovanaZprava = new LokalizovanaZprava();
-        lokalizovanaZprava.klic = 'popis.forwardCheck.detailDeadend';
+        lokalizovanaZprava.klic = 'popis.forwardCheck.deadend';
         lokalizovanaZprava.parametry = { 'nazev': krokAlgoritmu.nazev, 'hodnota': krokAlgoritmu.hodnota }
         krokAlgoritmu.popis.push(lokalizovanaZprava);
         krokAlgoritmu.stav = 'deadend';
@@ -528,7 +522,7 @@ export class MainPageComponent implements OnInit {
           pocetReseni++;
           krokAlgoritmu.stav = 'reseni';
           var lokalizovanaZprava = new LokalizovanaZprava();
-          lokalizovanaZprava.klic = 'popis.forwardCheck.detailReseni';
+          lokalizovanaZprava.klic = 'popis.forwardCheck.reseni';
           lokalizovanaZprava.parametry = { 'nazev': krokAlgoritmu.nazev, 'hodnota': krokAlgoritmu.hodnota }
           krokAlgoritmu.popis.push(lokalizovanaZprava);
           krokAlgoritmu.hodnotaDomenKroku = this._forwardChechHodnotaDomen(seznamPromennych);
@@ -542,7 +536,7 @@ export class MainPageComponent implements OnInit {
           } else {
             seznamPromennych = tmp[0];
             var lokalizovanaZprava = new LokalizovanaZprava();
-            lokalizovanaZprava.klic = 'popis.forwardCheck.detailUzel';
+            lokalizovanaZprava.klic = 'popis.forwardCheck.uzel';
             lokalizovanaZprava.parametry = { 'nazev': krokAlgoritmu.nazev, 'hodnota': krokAlgoritmu.hodnota }
             krokAlgoritmu.popis.push(lokalizovanaZprava);
             promenna++;
@@ -1243,7 +1237,6 @@ export class MainPageComponent implements OnInit {
     const krokAlgoritmu = new KrokAlgoritmu();
     // krokAlgoritmu.popis = popis;
     krokAlgoritmu.nazev = promenna.nazev;
-    krokAlgoritmu.promenna = this.promennaService.index(seznamPromennych, promenna.nazev);
     krokAlgoritmu.hodnota = null;
     krokAlgoritmu.rodic = 0;
     krokAlgoritmu.stav = 'deadend';
@@ -1291,12 +1284,11 @@ export class MainPageComponent implements OnInit {
 
       const krokAlgoritmu = new KrokAlgoritmu();
       krokAlgoritmu.nazev = zpracovavanaPromenna.nazev;
-      krokAlgoritmu.promenna = promenna;
       krokAlgoritmu.hodnota = zpracovavanaPromenna.domena[zpracovavanaPromenna.pozice];
-      krokAlgoritmu.rodic = this._lastIndex(promenna - 1, postupTvoreniGrafu) + 1;
+      krokAlgoritmu.rodic = this._lastIndex(seznamPromennych[promenna - 1], postupTvoreniGrafu) + 1;
 
       var lokalizovanaZprava = new LokalizovanaZprava();
-      lokalizovanaZprava.klic = 'popis.random.detailPrirazeni';
+      lokalizovanaZprava.klic = 'popis.random.prirazeni';
       lokalizovanaZprava.parametry = { 'nazev': krokAlgoritmu.nazev, 'hodnota': krokAlgoritmu.hodnota }
       krokAlgoritmu.popis.push(lokalizovanaZprava);
 
@@ -1310,7 +1302,7 @@ export class MainPageComponent implements OnInit {
       }
       if (poruseneOmezeni) {
         var lokalizovanaZprava = new LokalizovanaZprava();
-        lokalizovanaZprava.klic = 'popis.random.detailDeadend';
+        lokalizovanaZprava.klic = 'popis.random.deadend';
         lokalizovanaZprava.parametry = { 'nazev': krokAlgoritmu.nazev, 'hodnota': krokAlgoritmu.hodnota }
         krokAlgoritmu.popis.push(lokalizovanaZprava);
         krokAlgoritmu.stav = 'deadend';
@@ -1320,14 +1312,14 @@ export class MainPageComponent implements OnInit {
           pocetReseni++;
           krokAlgoritmu.stav = 'reseni';
           var lokalizovanaZprava = new LokalizovanaZprava();
-          lokalizovanaZprava.klic = 'popis.random.detailReseni';
+          lokalizovanaZprava.klic = 'popis.random.reseni';
           lokalizovanaZprava.parametry = { 'nazev': krokAlgoritmu.nazev, 'hodnota': krokAlgoritmu.hodnota }
           krokAlgoritmu.popis.push(lokalizovanaZprava);
           zpracovavanaPromenna.domena.splice(zpracovavanaPromenna.pozice, 1);
         } else {
           promenna++;
           var lokalizovanaZprava = new LokalizovanaZprava();
-          lokalizovanaZprava.klic = 'popis.random.detailUzel';
+          lokalizovanaZprava.klic = 'popis.random.uzel';
           lokalizovanaZprava.parametry = { 'nazev': krokAlgoritmu.nazev, 'hodnota': krokAlgoritmu.hodnota }
           krokAlgoritmu.popis.push(lokalizovanaZprava);
         }
@@ -1354,17 +1346,34 @@ export class MainPageComponent implements OnInit {
 
     const krokAlgoritmu = new KrokAlgoritmu();
 
-    seznamPromennych = this._dynamicOrder(promenna, seznamPromennych);
-
+<<<<<<< HEAD
+=======
     var lokalizovanaZprava = new LokalizovanaZprava();
-    lokalizovanaZprava.klic = 'popis.dynamicOrder.poradiPo';
+    lokalizovanaZprava.klic = 'popis.dynamicOrder.poradiPred';
     krokAlgoritmu.popis.push(lokalizovanaZprava);
+    krokAlgoritmu.typ = TypKroku.popis;
     postupTvoreniGrafu.push(krokAlgoritmu);
     for (var i = 0; i < seznamPromennych.length; i++) {
       var lokalizovanaZprava = new LokalizovanaZprava();
       lokalizovanaZprava.klic = 'popis.dynamicOrder.poradiInfo';
       lokalizovanaZprava.parametry = { 'nazev': seznamPromennych[i].nazev, 'delka': seznamPromennych[i].domena.length }
       krokAlgoritmu.popis.push(lokalizovanaZprava);
+    }
+
+>>>>>>> 669fff7638560aa38d653bf1b1aca3a7e6e7e463
+    seznamPromennych = this._dynamicOrder(promenna, seznamPromennych);
+
+    const krokAlgoritmu2 = new KrokAlgoritmu();
+    var lokalizovanaZprava = new LokalizovanaZprava();
+    lokalizovanaZprava.klic = 'popis.dynamicOrder.poradiPo';
+    krokAlgoritmu2.popis.push(lokalizovanaZprava);
+    krokAlgoritmu2.typ = TypKroku.popis;
+    postupTvoreniGrafu.push(krokAlgoritmu2);
+    for (var i = 0; i < seznamPromennych.length; i++) {
+      var lokalizovanaZprava = new LokalizovanaZprava();
+      lokalizovanaZprava.klic = 'popis.dynamicOrder.poradiInfo';
+      lokalizovanaZprava.parametry = { 'nazev': seznamPromennych[i].nazev, 'delka': seznamPromennych[i].domena.length }
+      krokAlgoritmu2.popis.push(lokalizovanaZprava);
     }
 
 
@@ -1379,12 +1388,11 @@ export class MainPageComponent implements OnInit {
 
       const krokAlgoritmu = new KrokAlgoritmu();
       krokAlgoritmu.nazev = zpracovavanaPromenna.nazev;
-      krokAlgoritmu.promenna = promenna;
       krokAlgoritmu.hodnota = zpracovavanaPromenna.domena[zpracovavanaPromenna.pozice];
-      krokAlgoritmu.rodic = this._lastIndex(promenna - 1, postupTvoreniGrafu) + 1;
+      krokAlgoritmu.rodic = this._lastIndex(seznamPromennych[promenna - 1], postupTvoreniGrafu) + 1;
 
       var lokalizovanaZprava = new LokalizovanaZprava();
-      lokalizovanaZprava.klic = 'popis.dynamicOrder.detailPrirazeni';
+      lokalizovanaZprava.klic = 'popis.dynamicOrder.prirazeni';
       lokalizovanaZprava.parametry = { 'nazev': krokAlgoritmu.nazev, 'hodnota': krokAlgoritmu.hodnota }
       krokAlgoritmu.popis.push(lokalizovanaZprava);
       postupTvoreniGrafu.push(krokAlgoritmu);
@@ -1397,7 +1405,7 @@ export class MainPageComponent implements OnInit {
       }
       if (poruseneOmezeni) {
         var lokalizovanaZprava = new LokalizovanaZprava();
-        lokalizovanaZprava.klic = 'popis.dynamicOrder.detailDeadend';
+        lokalizovanaZprava.klic = 'popis.dynamicOrder.deadend';
         lokalizovanaZprava.parametry = { 'nazev': krokAlgoritmu.nazev, 'hodnota': krokAlgoritmu.hodnota }
         krokAlgoritmu.popis.push(lokalizovanaZprava);
         krokAlgoritmu.stav = 'deadend';
@@ -1406,13 +1414,13 @@ export class MainPageComponent implements OnInit {
           pocetReseni++;
           krokAlgoritmu.stav = 'reseni';
           var lokalizovanaZprava = new LokalizovanaZprava();
-          lokalizovanaZprava.klic = 'popis.dynamicOrder.detailReseni';
+          lokalizovanaZprava.klic = 'popis.dynamicOrder.reseni';
           lokalizovanaZprava.parametry = { 'nazev': krokAlgoritmu.nazev, 'hodnota': krokAlgoritmu.hodnota }
           krokAlgoritmu.popis.push(lokalizovanaZprava);
         } else {
           promenna++;
           var lokalizovanaZprava = new LokalizovanaZprava();
-          lokalizovanaZprava.klic = 'popis.dynamicOrder.detailUzel';
+          lokalizovanaZprava.klic = 'popis.dynamicOrder.uzel';
           lokalizovanaZprava.parametry = { 'nazev': krokAlgoritmu.nazev, 'hodnota': krokAlgoritmu.hodnota }
           krokAlgoritmu.popis.push(lokalizovanaZprava);
         }
@@ -1644,9 +1652,12 @@ export class MainPageComponent implements OnInit {
     return seznamPromennych;
   }
 
-  _lastIndex(promenna, postupTvoreniGrafu) {
+  _lastIndex(promenna: Promenna, postupTvoreniGrafu: Array<KrokAlgoritmu>) {
+    if (!promenna) {
+      return -1;
+    }
     for (var i = postupTvoreniGrafu.length - 1; i >= 0; i--) {
-      if (postupTvoreniGrafu[i].promenna === promenna) {
+      if (postupTvoreniGrafu[i].nazev === promenna.nazev) {
         return i;
       }
     }

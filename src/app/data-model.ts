@@ -35,18 +35,27 @@ export class Omezeni {
   }
 }
 
+export enum TypKroku {
+  akce,
+  popis,
+}
+
 export class KrokAlgoritmu {
-  promenna: number; // Index v seznamu promennych
   nazev: string;
   hodnota: string;
   rodic: number;
   popis = new Array<LokalizovanaZprava>();
   stav: string; // TODO enum
+  typ: TypKroku;
   omezeni: Omezeni;
   hodnotaDomenKroku = new Array<any>();
+  
+  constructor() {
+    this.typ = TypKroku.akce;
+  }
 }
 
 export class LokalizovanaZprava {
-  klic: string;
-  parametry: any;
+
+  constructor (public klic: string = null, public parametry: any = null) {}
 }
