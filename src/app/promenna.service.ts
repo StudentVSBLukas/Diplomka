@@ -62,6 +62,10 @@ export class PromennaService {
     // TODO odstranit vsechna omezeni s promennou
   }
 
+  export(): string {
+    return JSON.stringify(this.listPromennych, null, 2);
+  }
+
   private generateIdentifier() {
     if (this.listPromennych.length === 0) {
       return 'A';

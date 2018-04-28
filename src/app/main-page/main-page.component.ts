@@ -4,6 +4,7 @@ import { PromennaService } from '../promenna.service';
 import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { TranslateService, TranslatePipe } from '@ngx-translate/core';
 import { SelectItem } from 'primeng/api';
+import { saveAs } from 'file-saver/FileSaver';
 
 @Component({
   selector: 'app-main-page',
@@ -1920,6 +1921,12 @@ export class MainPageComponent implements OnInit {
           break;
       }
     }
+  }
+
+  exportZadani() {
+    const json = this.promennaService.export();
+    const blob = new Blob([json], {type: 'application/json'});
+    saveAs(blob, 'Zadani.json');
   }
 
   // TODO odstranit
