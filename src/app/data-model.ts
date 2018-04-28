@@ -19,19 +19,33 @@ export class Promenna {
 
 }
 
+export enum TypOmezeni {
+  vetsi = '>',
+  mensi = '<',
+  rovno = '=',
+  nerovno = '!',
+  povoleno = 'p',
+  zakazano = 'z',
+}
+
 export class Omezeni {
   static id_sequence = 0;
 
   // TODO predelat na Enum a zmenit i atribut ve tride Omezeni
   id: number;
-  typOmezeni: string;
+  typOmezeni: TypOmezeni;
   hodnotyOmezeni: Array<Array<number>>;
   omezeniProPromennou: Array<string>;
-  constructor(typOmezeni: string, omezeniProPromennou: Array<string> = [], hodnotyOmezeni: Array<Array<number>> = []) {
+  constructor(typOmezeni: TypOmezeni, omezeniProPromennou: Array<string> = [], hodnotyOmezeni: Array<Array<number>> = []) {
     this.id = Omezeni.id_sequence++;
     this.typOmezeni = typOmezeni;
     this.omezeniProPromennou = omezeniProPromennou;
     this.hodnotyOmezeni = hodnotyOmezeni;
+  }
+
+  jeJednoduche(): boolean {
+    return this.typOmezeni === TypOmezeni.mensi || this.typOmezeni === TypOmezeni.vetsi ||
+      this.typOmezeni === TypOmezeni.rovno || this.typOmezeni === TypOmezeni.nerovno;
   }
 }
 
@@ -49,7 +63,7 @@ export class KrokAlgoritmu {
   typ: TypKroku;
   omezeni: Omezeni;
   hodnotaDomenKroku = new Array<any>();
-  
+
   constructor() {
     this.typ = TypKroku.akce;
   }

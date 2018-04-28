@@ -1,4 +1,4 @@
-import {Promenna, KrokAlgoritmu, LokalizovanaZprava} from '../data-model';
+import {Promenna, KrokAlgoritmu, LokalizovanaZprava, TypOmezeni} from '../data-model';
 import { Algoritmus } from './algoritmus';
 import { Injectable } from '@angular/core';
 import AlgoritmusUtils from './algoritmus-utils';
@@ -23,7 +23,7 @@ export class IconsistencyService implements Algoritmus {
     //    seznamPromennych.push(new Promenna('B', [2], []));
     //    seznamPromennych.push(new Promenna('C', [3, 4], []));
     //    seznamPromennych.push(new Promenna('D', [4, 5], []));
-    //    seznamPromennych.push(new Promenna('E', [4, 5], [new Omezeni('=', ['C', 'D'], null)]));
+    //    seznamPromennych.push(new Promenna('E', [4, 5], [new Omezeni(TypOmezeni.rovno, ['C', 'D'], null)]));
     //    iPocet = 3;
 
     AlgoritmusUtils.prevedOmezeni(seznamPromennych);
@@ -121,7 +121,7 @@ export class IconsistencyService implements Algoritmus {
       var omezeni = promenna.omezeni[i];
 
       switch (omezeni.typOmezeni) {
-        case '<':
+        case TypOmezeni.mensi:
           for (var j = 0; j < omezeni.omezeniProPromennou.length; j++) {
             var porovnavanaPromenna = omezeni.omezeniProPromennou[j];
             if (porovnavanaPromenna != iOmezeni) {
@@ -133,7 +133,7 @@ export class IconsistencyService implements Algoritmus {
             }
           }
           break;
-        case '>':
+        case TypOmezeni.vetsi:
           for (var j = 0; j < omezeni.omezeniProPromennou.length; j++) {
             var porovnavanaPromenna = omezeni.omezeniProPromennou[j];
             if (porovnavanaPromenna != iOmezeni) {
@@ -145,7 +145,7 @@ export class IconsistencyService implements Algoritmus {
             }
           }
           break;
-        case '=':
+        case TypOmezeni.rovno:
           for (var j = 0; j < omezeni.omezeniProPromennou.length; j++) {
             var porovnavanaPromenna = omezeni.omezeniProPromennou[j];
             if (porovnavanaPromenna != iOmezeni) {
@@ -157,7 +157,7 @@ export class IconsistencyService implements Algoritmus {
             }
           }
           break;
-        case '!':
+        case TypOmezeni.nerovno:
           for (var j = 0; j < omezeni.omezeniProPromennou.length; j++) {
             var porovnavanaPromenna = omezeni.omezeniProPromennou[j];
             if (porovnavanaPromenna != iOmezeni) {
@@ -169,7 +169,7 @@ export class IconsistencyService implements Algoritmus {
             }
           }
           break;
-        case 'p':
+        case TypOmezeni.povoleno:
           var porovnavanaPromenna = omezeni.omezeniProPromennou;
           if (porovnavanaPromenna != iOmezeni) {
             continue;
@@ -188,7 +188,7 @@ export class IconsistencyService implements Algoritmus {
             return false;
           }
           break;
-        case 'z':
+        case TypOmezeni.zakazano:
           var porovnavanaPromenna = omezeni.omezeniProPromennou;
           if (porovnavanaPromenna != iOmezeni) {
             continue;

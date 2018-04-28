@@ -1,4 +1,4 @@
-import {Promenna, KrokAlgoritmu, LokalizovanaZprava} from '../data-model';
+import {Promenna, KrokAlgoritmu, LokalizovanaZprava, TypOmezeni} from '../data-model';
 import { Algoritmus } from './algoritmus';
 import { Injectable } from '@angular/core';
 import AlgoritmusUtils from './algoritmus-utils';
@@ -13,11 +13,11 @@ export class ForwardCheckingService implements Algoritmus {
   run(seznamPromennych: Array<Promenna>, pozadovanychReseni:  number): Array<KrokAlgoritmu> {
     // TODO Test ze zadani
 //    seznamPromennych = [];
-//    seznamPromennych.push(new Promenna('A', [1, 2, 3], [new Omezeni('!', ['B', 'C', 'D', 'G'], null)]));
-//    seznamPromennych.push(new Promenna('B', [2, 3], [new Omezeni('!', ['F'], null)]));
-//    seznamPromennych.push(new Promenna('C', [1, 2], [new Omezeni('!', ['G'], null)]));
-//    seznamPromennych.push(new Promenna('D', [1, 2], [new Omezeni('!', ['E', 'G'], null)]));
-//    seznamPromennych.push(new Promenna('E', [2, 3], [new Omezeni('!', ['F', 'G'], null)]));
+//    seznamPromennych.push(new Promenna('A', [1, 2, 3], [new Omezeni(TypOmezeni.nerovno, ['B', 'C', 'D', 'G'], null)]));
+//    seznamPromennych.push(new Promenna('B', [2, 3], [new Omezeni(TypOmezeni.nerovno, ['F'], null)]));
+//    seznamPromennych.push(new Promenna('C', [1, 2], [new Omezeni(TypOmezeni.nerovno, ['G'], null)]));
+//    seznamPromennych.push(new Promenna('D', [1, 2], [new Omezeni(TypOmezeni.nerovno, ['E', 'G'], null)]));
+//    seznamPromennych.push(new Promenna('E', [2, 3], [new Omezeni(TypOmezeni.nerovno, ['F', 'G'], null)]));
 //    seznamPromennych.push(new Promenna('F', [1, 3, 4]));
 //    seznamPromennych.push(new Promenna('G', [1, 2]));
 
@@ -118,11 +118,11 @@ export class ForwardCheckingService implements Algoritmus {
     for (var i = promenna; i < seznamPromennych.length; i++) {
       for (var l = 0; l < seznamPromennych[i].omezeni.length; l++) {
         typOmezeni = seznamPromennych[i].omezeni[l].typOmezeni;
-        if (typOmezeni === '<' || typOmezeni === '>' || typOmezeni === '=' || typOmezeni === '!') {
+        if (seznamPromennych[i].omezeni[l].jeJednoduche()) {
           for (var j = 0; j < seznamPromennych[i].omezeni[l].omezeniProPromennou.length; j++) {
             if (seznamPromennych[i].omezeni[l].omezeniProPromennou[j] === vstup[promenna - 1]) {
               switch (typOmezeni) {
-                case '<':
+                case TypOmezeni.mensi:
                   for (var k = 0; k < seznamPromennych[i].domena.length; k++) {
                     if (!(seznamPromennych[i].domena[k] < hodnota)) {
                       seznamPromennych[i].domena.splice(k, 1);
@@ -143,7 +143,7 @@ export class ForwardCheckingService implements Algoritmus {
                     }
                   }
                   break;
-                case '>':
+                case TypOmezeni.vetsi:
                   for (var k = 0; k < seznamPromennych[i].domena.length; k++) {
                     if (!(seznamPromennych[i].domena[k] > hodnota)) {
                       seznamPromennych[i].domena.splice(k, 1);
@@ -164,7 +164,7 @@ export class ForwardCheckingService implements Algoritmus {
                     }
                   }
                   break;
-                case '=':
+                case TypOmezeni.rovno:
                   for (var k = 0; k < seznamPromennych[i].domena.length; k++) {
                     if (hodnota !== seznamPromennych[i].domena[k]) {
                       seznamPromennych[i].domena.splice(k, 1);
@@ -185,7 +185,7 @@ export class ForwardCheckingService implements Algoritmus {
                     }
                   }
                   break;
-                case '!':
+                case TypOmezeni.nerovno:
                   for (var k = 0; k < seznamPromennych[i].domena.length; k++) {
                     if (hodnota === seznamPromennych[i].domena[k]) {
                       seznamPromennych[i].domena.splice(k, 1);
@@ -209,10 +209,10 @@ export class ForwardCheckingService implements Algoritmus {
               }
             }
           }
-        } else if (typOmezeni === 'p' || typOmezeni === 'z') {
+        } else if (!seznamPromennych[i].omezeni[l].jeJednoduche()) {
           if (seznamPromennych[i].omezeni[l].omezeniProPromennou[0] === vstup[promenna - 1]) {
             switch (typOmezeni) {
-              case 'p':
+              case TypOmezeni.povoleno:
                 var nalezeno;
                 for (var k = 0; k < seznamPromennych[i].domena.length; k++) {
                   nalezeno = false;
@@ -241,7 +241,7 @@ export class ForwardCheckingService implements Algoritmus {
                   }
                 }
                 break;
-              case 'z':
+              case TypOmezeni.zakazano:
                 for (var k = 0; k < seznamPromennych[i].domena.length; k++) {
                   for (var k = 0; k < seznamPromennych[i].domena.length; k++) {
                     nalezeno = false;

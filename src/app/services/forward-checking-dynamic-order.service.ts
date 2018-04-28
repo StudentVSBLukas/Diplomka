@@ -20,7 +20,7 @@ export class ForwardCheckingDynamicOrderService extends ForwardCheckingService {
     //    seznamPromennych.push(new Promenna('B', [2], []));
     //    seznamPromennych.push(new Promenna('C', [3], []));
     //    seznamPromennych.push(new Promenna('D', [4], []));
-    //    seznamPromennych.push(new Promenna('E', [1, 2, 3, 4, 5], [new Omezeni('=', ['A', 'D'], null)]));
+    //    seznamPromennych.push(new Promenna('E', [1, 2, 3, 4, 5], [new Omezeni(TypOmezeni.rovno, ['A', 'D'], null)]));
 
     AlgoritmusUtils.prevedOmezeni(seznamPromennych);
 

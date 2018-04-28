@@ -1,4 +1,4 @@
-import { Promenna, Omezeni } from '../data-model';
+import { Promenna, Omezeni, TypOmezeni } from '../data-model';
 import { PromennaService } from '../services/promenna.service';
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
@@ -17,12 +17,12 @@ export class DialogOmezeniComponent implements OnInit {
   filtrovanePromenne: Array<any>;
   // TODO vytahnout do enums
   typyOmezeni = [
-    {label: 'omezeni.typ.<', value: '<'},
-    {label: 'omezeni.typ.>', value: '>'},
-    {label: 'omezeni.typ.=', value: '='},
-    {label: 'omezeni.typ.!', value: '!'},
-    {label: 'omezeni.typ.p', value: 'p'},
-    {label: 'omezeni.typ.z', value: 'z'}
+    {label: 'omezeni.typ.<', value: TypOmezeni.mensi},
+    {label: 'omezeni.typ.>', value: TypOmezeni.vetsi},
+    {label: 'omezeni.typ.=', value: TypOmezeni.rovno},
+    {label: 'omezeni.typ.!', value: TypOmezeni.nerovno},
+    {label: 'omezeni.typ.p', value: TypOmezeni.povoleno},
+    {label: 'omezeni.typ.z', value: TypOmezeni.zakazano}
   ];
 
   constructor(private promennaService: PromennaService) {
@@ -53,7 +53,7 @@ export class DialogOmezeniComponent implements OnInit {
     }
   }
 
-  pridejOmezeni(promenna: Promenna, typ: string, cilovaPromenna: string) {
+  pridejOmezeni(promenna: Promenna, typ: TypOmezeni, cilovaPromenna: string) {
     const omezeni = new Omezeni(typ, [cilovaPromenna], <any> '');
     promenna.omezeni.push(omezeni);
   }
@@ -106,9 +106,5 @@ export class DialogOmezeniComponent implements OnInit {
     }, this);
 
     return original;
-  }
-
-  jeJednoducheOmezeni(typOmezeni: string) {
-    return typOmezeni === '<' || typOmezeni === '>' || typOmezeni === '=' || typOmezeni === '!';
   }
 }

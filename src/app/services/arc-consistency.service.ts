@@ -1,4 +1,4 @@
-import {Promenna, KrokAlgoritmu, LokalizovanaZprava, TypKroku} from '../data-model';
+import {Promenna, KrokAlgoritmu, LokalizovanaZprava, TypKroku, TypOmezeni} from '../data-model';
 import { Algoritmus } from './algoritmus';
 import { Injectable } from '@angular/core';
 import AlgoritmusUtils from './algoritmus-utils';
@@ -21,7 +21,7 @@ export class ArcConsistencyService implements Algoritmus {
     //    seznamPromennych.push(new Promenna('D', [4], []));
     //    // seznamPromennych.push(new Promenna("E", [1, 2, 3, 4, 5], [new Omezeni("=", ["A", "D"])]))
     //    // seznamPromennych.push(new Promenna("E", [1, 2, 3, 4, 5], [new Omezeni("p", [[1,1],[2,2],[3,3],[4,4],[5,5]], "A"),new Omezeni("p", [[1,1],[2,2],[3,3],[4,4],[5,5]], "D")]))
-    //    seznamPromennych.push(new Promenna('E', [4, 5], [new Omezeni('z', [[5, 5]], 'A'), new Omezeni('z', [[4, 4]], 'D')]));
+    //    seznamPromennych.push(new Promenna('E', [4, 5], [new Omezeni(TypOmezeni.zakazano, [[5, 5]], 'A'), new Omezeni(TypOmezeni.zakazano, [[4, 4]], 'D')]));
 
 
     AlgoritmusUtils.prevedOmezeni(seznamPromennych);
@@ -40,7 +40,7 @@ export class ArcConsistencyService implements Algoritmus {
       var promenna = seznamPromennych[i];
       for (var j = 0; j < promenna.omezeni.length; j++) {
         switch (promenna.omezeni[j].typOmezeni) {
-          case '<':
+          case TypOmezeni.mensi:
             for (var k = 0; k < promenna.omezeni[j].omezeniProPromennou.length; k++) {
               var porovnavanaPromenna = AlgoritmusUtils.najdi(seznamPromennych, promenna.omezeni[j].omezeniProPromennou[k]);
               let krokAlgoritmu = new KrokAlgoritmu();
@@ -72,7 +72,7 @@ export class ArcConsistencyService implements Algoritmus {
               }
             }
             break;
-          case '>':
+          case TypOmezeni.vetsi:
             for (var k = 0; k < promenna.omezeni[j].omezeniProPromennou.length; k++) {
               var porovnavanaPromenna = AlgoritmusUtils.najdi(seznamPromennych, promenna.omezeni[j].omezeniProPromennou[k]);
               let krokAlgoritmu = new KrokAlgoritmu();
@@ -104,7 +104,7 @@ export class ArcConsistencyService implements Algoritmus {
               }
             }
             break;
-          case '=':
+          case TypOmezeni.rovno:
             for (var k = 0; k < promenna.omezeni[j].omezeniProPromennou.length; k++) {
               var porovnavanaPromenna = AlgoritmusUtils.najdi(seznamPromennych, promenna.omezeni[j].omezeniProPromennou[k]);
               let krokAlgoritmu = new KrokAlgoritmu();
@@ -136,7 +136,7 @@ export class ArcConsistencyService implements Algoritmus {
               }
             }
             break;
-          case '!':
+          case TypOmezeni.nerovno:
             for (var k = 0; k < promenna.omezeni[j].omezeniProPromennou.length; k++) {
               var porovnavanaPromenna = AlgoritmusUtils.najdi(seznamPromennych, promenna.omezeni[j].omezeniProPromennou[k]);
               let krokAlgoritmu = new KrokAlgoritmu();
@@ -168,7 +168,7 @@ export class ArcConsistencyService implements Algoritmus {
               }
             }
             break;
-          case 'p':
+          case TypOmezeni.povoleno:
             var porovnavanaPromenna = AlgoritmusUtils.najdi(seznamPromennych, promenna.omezeni[j].omezeniProPromennou[0]);
             let krokAlgoritmu = new KrokAlgoritmu();
             krokAlgoritmu.typ = TypKroku.popis;
@@ -198,7 +198,7 @@ export class ArcConsistencyService implements Algoritmus {
                 return this._arcConsistencyFail(seznamPromennych, promenna, selhani);
             }
             break;
-          case 'z':
+          case TypOmezeni.zakazano:
             var porovnavanaPromenna = AlgoritmusUtils.najdi(seznamPromennych, promenna.omezeni[j].omezeniProPromennou[0]);
             krokAlgoritmu = new KrokAlgoritmu();
             krokAlgoritmu.typ = TypKroku.popis;
@@ -258,7 +258,7 @@ export class ArcConsistencyService implements Algoritmus {
         provedlaSeUprava = 'uprava';
         var zprava = new LokalizovanaZprava();
         zprava.klic = 'popis.arcConsistency.prazdnaDomena';
-        zprava.parametry = { 'nazev': promennaA.nazev, 'hodnota': promennaA.domena[i], 'porovnavanaPromenna': promennaB.nazev, 'typ': '=' }
+        zprava.parametry = { 'nazev': promennaA.nazev, 'hodnota': promennaA.domena[i], 'porovnavanaPromenna': promennaB.nazev, 'typ': TypOmezeni.rovno }
         popisUpravy.push(zprava)
         if (promennaA.domena.length === 0) {
           var zprava = new LokalizovanaZprava();
@@ -290,7 +290,7 @@ export class ArcConsistencyService implements Algoritmus {
         provedlaSeUprava = 'uprava';
         var zprava = new LokalizovanaZprava();
         zprava.klic = 'popis.arcConsistency.prazdnaDomena';
-        zprava.parametry = { 'nazev': promennaA.nazev, 'hodnota': promennaA.domena[i], 'porovnavanaPromenna': promennaB.nazev, 'typ': '=' }
+        zprava.parametry = { 'nazev': promennaA.nazev, 'hodnota': promennaA.domena[i], 'porovnavanaPromenna': promennaB.nazev, 'typ': TypOmezeni.rovno }
         popisUpravy.push(zprava)
         if (promennaA.domena.length === 0) {
           var zprava = new LokalizovanaZprava();
@@ -322,7 +322,7 @@ export class ArcConsistencyService implements Algoritmus {
         provedlaSeUprava = 'uprava';
         var zprava = new LokalizovanaZprava();
         zprava.klic = 'popis.arcConsistency.prazdnaDomena';
-        zprava.parametry = { 'nazev': promennaA.nazev, 'hodnota': promennaA.domena[i], 'porovnavanaPromenna': promennaB.nazev, 'typ': '=' }
+        zprava.parametry = { 'nazev': promennaA.nazev, 'hodnota': promennaA.domena[i], 'porovnavanaPromenna': promennaB.nazev, 'typ': TypOmezeni.rovno }
         popisUpravy.push(zprava)
         if (promennaA.domena.length === 0) {
           var zprava = new LokalizovanaZprava();
