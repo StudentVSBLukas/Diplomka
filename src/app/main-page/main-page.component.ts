@@ -113,23 +113,6 @@ export class MainPageComponent implements OnInit {
     return zadani;
   }
 
-    // TODO odstranit
-  testPrevoduOmezeni() {
-
-    // TODO Test ze zadani
-//    var seznamPromennych = [];
-//    seznamPromennych.push(new Promenna('A', [1, 2, 3, 4, 5], [new Omezeni(TypOmezeni.povoleno, [[1, 2], [3, 4]], 'C')]));
-//    // seznamPromennych.push(new Promenna("A", [1,2,3,4, 5], [new Omezeni("=",["C","E"])]))
-//    seznamPromennych.push(new Promenna('B', [4, 3, 2], []));
-//    seznamPromennych.push(new Promenna('C', [3, 1], [new Omezeni(TypOmezeni.povoleno, [[6, 5]], 'A')]));
-//    // seznamPromennych.push(new Promenna("C", [3,1], [new Omezeni("=",["B"])]))
-//    seznamPromennych.push(new Promenna('D', [4], []));
-//    seznamPromennych.push(new Promenna('E', [1, 5], []));
-//
-//    AlgoritmusUtils.prevedOmezeni(seznamPromennych);
-
-  }
-
   exportZadani() {
     const json = this.promennaService.export();
     const blob = new Blob([json], {type: 'application/json'});
@@ -142,10 +125,5 @@ export class MainPageComponent implements OnInit {
     if (importovano) {
       this.listPromennych = this.promennaService.list();
     }
-  }
-
-  // TODO odstranit
-  debug(o: any) {
-    return true;
   }
 }
