@@ -12,7 +12,7 @@
 	            <div class="modal-body input-form">
 	            	<div class="modal-scroll container-fluid">
 	                	<div *ngFor="let omezeni of promenna.omezeni; index as i" class="row form-group">
-	                 		<div *ngIf="omezeni.jeJednoduche()">
+	                 		<div *ngIf="jeJednoducheOmezeni(omezeni.typOmezeni)">
 	                 			<div [class]="hodnotaOmezeni.invalid && (hodnotaOmezeni.dirty || hodnotaOmezeni.touched) ? 'text text-danger' : ''">
 			                  		<div class="col-sm-1">
 			                  			<label for="omezeni{{omezeni.id}}">{{promenna.nazev}} {{omezeni.typOmezeni}}</label>
@@ -31,7 +31,7 @@
 			                  	</div>
 	                  		</div>
 	                  
-			                <div *ngIf="!omezeni.jeJednoduche()">
+			                <div *ngIf="!jeJednoducheOmezeni(omezeni.typOmezeni)">
 			                	<div class="col-sm-1">
 			                 		<label for="omezeni{{omezeni.id}}">{{promenna.nazev}} {{omezeni.typOmezeni}} {{omezeni.omezeniProPromennou[0]}}</label>
 			                 	</div>
@@ -66,8 +66,8 @@
 	                			{{item.label | translate}}
 	   						</ng-template>
 	                	</p-dropdown>
-	                	<p-dropdown [disabled]="!newTypOmezeni.value || newTypOmezeni.value.jeJednoduche()" #newCilovaPromenna [options]="filtrovanePromenne" placeholder="{{'omezeni.cilPlaceholder' | translate}}"></p-dropdown>
-	                	<button type="button" class="btn btn-default" [disabled]="!(newTypOmezeni.value && (newTypOmezeni.value.jeJednoduche() || newCilovaPromenna.value))" (click)="pridejOmezeni(promenna, newTypOmezeni.value, newCilovaPromenna.value)"><i class="fa fa-plus" ></i> {{'omezeni.pridat' | translate}}</button>
+	                	<p-dropdown [disabled]="!newTypOmezeni.value || jeJednoducheOmezeni(newTypOmezeni.value)" #newCilovaPromenna [options]="filtrovanePromenne" placeholder="{{'omezeni.cilPlaceholder' | translate}}"></p-dropdown>
+	                	<button type="button" class="btn btn-default" [disabled]="!(newTypOmezeni.value && (jeJednoducheOmezeni(newTypOmezeni.value) || newCilovaPromenna.value))" (click)="pridejOmezeni(promenna, newTypOmezeni.value, newCilovaPromenna.value)"><i class="fa fa-plus" ></i> {{'omezeni.pridat' | translate}}</button>
 	                </div>
 	            </div>
 	            
