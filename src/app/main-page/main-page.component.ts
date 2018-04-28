@@ -49,9 +49,9 @@ export class MainPageComponent implements OnInit {
 
     // TODO odstranit zakladni nastaveni vstupu
     const a = this.listPromennych[0];
-    const ogt = new Omezeni('<', ['B'], null);
-    const one = new Omezeni('!', ['C'], null);
-    const op = new Omezeni('p', [[4, 5], [2, 1]], 'B');
+    const ogt = new Omezeni('<', ['B']);
+    const one = new Omezeni('!', ['C']);
+    const op = new Omezeni('p', ['B'], [[4, 5], [2, 1]]);
     a.omezeni = [ogt, one, op];
 
     //    const c = this.listPromennych[2];
@@ -99,25 +99,19 @@ export class MainPageComponent implements OnInit {
       kopiePromenne.domena = p.domena.slice();
 
       // Filtruje omezeni s neaktivnimi promennymi
-      kopiePromenne.omezeni = p.omezeni.filter(
-        (o: Omezeni) => !o.omezeniProPromennou || this.promennaService.vrat(o.omezeniProPromennou).aktivni
-      ).map(function (o) {
+      kopiePromenne.omezeni = p.omezeni.map(function (o) {
         const kopieOmezeni = Object.assign({}, o);
-        if (this.jeJednoducheOmezeni(o.typOmezeni)) {
-          kopieOmezeni.hodnotyOmezeni = o.hodnotyOmezeni.filter(
-            (hodnota: string) => this.promennaService.vrat(hodnota).aktivni
-          );
-        } else {
-          kopieOmezeni.hodnotyOmezeni = o.hodnotyOmezeni.map(
+        kopieOmezeni.omezeniProPromennou = o.omezeniProPromennou.filter(
+          (cilovaPromenna: string) => this.promennaService.vrat(cilovaPromenna).aktivni
+        );
+        kopieOmezeni.hodnotyOmezeni = o.hodnotyOmezeni.map(
             hodnota => Object.assign({}, hodnota)
-          );
-          kopieOmezeni.omezeniProPromennou = o.omezeniProPromennou;
-        }
+        );
 
         return kopieOmezeni;
       }, this).filter(
-        (o: Omezeni) => o.hodnotyOmezeni.length
-        );
+        (o: Omezeni) => o.omezeniProPromennou.length
+      );
 
       return kopiePromenne;
     }, this);
@@ -133,16 +127,16 @@ export class MainPageComponent implements OnInit {
   testPrevoduOmezeni() {
 
     // TODO Test ze zadani
-    var seznamPromennych = [];
-    seznamPromennych.push(new Promenna('A', [1, 2, 3, 4, 5], [new Omezeni('p', [[1, 2], [3, 4]], 'C')]));
-    // seznamPromennych.push(new Promenna("A", [1,2,3,4, 5], [new Omezeni("=",["C","E"],null)]))
-    seznamPromennych.push(new Promenna('B', [4, 3, 2], []));
-    seznamPromennych.push(new Promenna('C', [3, 1], [new Omezeni('p', [[6, 5]], 'A')]));
-    // seznamPromennych.push(new Promenna("C", [3,1], [new Omezeni("=",["B"],null)]))
-    seznamPromennych.push(new Promenna('D', [4], []));
-    seznamPromennych.push(new Promenna('E', [1, 5], []));
-
-    AlgoritmusUtils.prevedOmezeni(seznamPromennych);
+//    var seznamPromennych = [];
+//    seznamPromennych.push(new Promenna('A', [1, 2, 3, 4, 5], [new Omezeni('p', [[1, 2], [3, 4]], 'C')]));
+//    // seznamPromennych.push(new Promenna("A", [1,2,3,4, 5], [new Omezeni("=",["C","E"])]))
+//    seznamPromennych.push(new Promenna('B', [4, 3, 2], []));
+//    seznamPromennych.push(new Promenna('C', [3, 1], [new Omezeni('p', [[6, 5]], 'A')]));
+//    // seznamPromennych.push(new Promenna("C", [3,1], [new Omezeni("=",["B"])]))
+//    seznamPromennych.push(new Promenna('D', [4], []));
+//    seznamPromennych.push(new Promenna('E', [1, 5], []));
+//
+//    AlgoritmusUtils.prevedOmezeni(seznamPromennych);
 
   }
 

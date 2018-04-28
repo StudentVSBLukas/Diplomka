@@ -32,105 +32,106 @@ export default class AlgoritmusUtils {
         var omezeni = promenna.omezeni[j];
         switch (omezeni.typOmezeni) {
           case '<':
-            for (var l = 0; l < omezeni.hodnotyOmezeni.length; l++) {
-              var porovnavaneOmezeni = omezeni.hodnotyOmezeni[l];
+            for (var l = 0; l < omezeni.omezeniProPromennou.length; l++) {
+              var porovnavaneOmezeni = omezeni.omezeniProPromennou[l];
               if (AlgoritmusUtils.index(seznamPromennych, porovnavaneOmezeni) > i) {
                 var porovnavanaPromenna = AlgoritmusUtils.najdi(seznamPromennych, porovnavaneOmezeni);
                 for (var m = 0; m < porovnavanaPromenna.omezeni.length; m++) {
                   if (porovnavanaPromenna.omezeni[m].typOmezeni === '>') {
-                    porovnavanaPromenna.omezeni[m].hodnotyOmezeni.push(promenna.nazev);
+                    porovnavanaPromenna.omezeni[m].omezeniProPromennou.push(promenna.nazev);
                     zmeneno = true;
                   }
                 }
                 if (!zmeneno) {
-                  porovnavanaPromenna.omezeni.push(new Omezeni('>', [promenna.nazev], null));
+                  porovnavanaPromenna.omezeni.push(new Omezeni('>', [promenna.nazev]));
                 }
                 zmeneno = false;
-                omezeni.hodnotyOmezeni.splice(l, 1);
+                omezeni.omezeniProPromennou.splice(l, 1);
                 l--;
               }
             }
-            if (omezeni.hodnotyOmezeni.length === 0) {
+            if (omezeni.omezeniProPromennou.length === 0) {
               promenna.omezeni.splice(j, 1);
               j--;
             }
             break;
           case '>':
-            for (var l = 0; l < omezeni.hodnotyOmezeni.length; l++) {
-              var porovnavaneOmezeni = omezeni.hodnotyOmezeni[l];
+            for (var l = 0; l < omezeni.omezeniProPromennou.length; l++) {
+              var porovnavaneOmezeni = omezeni.omezeniProPromennou[l];
               if (AlgoritmusUtils.index(seznamPromennych, porovnavaneOmezeni) > i) {
                 var porovnavanaPromenna = AlgoritmusUtils.najdi(seznamPromennych, porovnavaneOmezeni);
                 for (var m = 0; m < porovnavanaPromenna.omezeni.length; m++) {
                   if (porovnavanaPromenna.omezeni[m].typOmezeni === '<') {
-                    porovnavanaPromenna.omezeni[m].hodnotyOmezeni.push(promenna.nazev);
+                    porovnavanaPromenna.omezeni[m].omezeniProPromennou.push(promenna.nazev);
                     zmeneno = true;
                   }
                 }
                 if (!zmeneno) {
-                  porovnavanaPromenna.omezeni.push(new Omezeni('<', [promenna.nazev], null));
+                  porovnavanaPromenna.omezeni.push(new Omezeni('<', [promenna.nazev]));
                 }
                 zmeneno = false;
-                omezeni.hodnotyOmezeni.splice(l, 1);
+                omezeni.omezeniProPromennou.splice(l, 1);
                 l--;
               }
             }
-            if (omezeni.hodnotyOmezeni.length === 0) {
+            if (omezeni.omezeniProPromennou.length === 0) {
               promenna.omezeni.splice(j, 1);
               j--;
             }
             break;
           case '=':
-            for (var l = 0; l < omezeni.hodnotyOmezeni.length; l++) {
-              var porovnavaneOmezeni = omezeni.hodnotyOmezeni[l];
+            for (var l = 0; l < omezeni.omezeniProPromennou.length; l++) {
+              var porovnavaneOmezeni = omezeni.omezeniProPromennou[l];
               if (AlgoritmusUtils.index(seznamPromennych, porovnavaneOmezeni) > i) {
                 var porovnavanaPromenna = AlgoritmusUtils.najdi(seznamPromennych, porovnavaneOmezeni);
                 for (var m = 0; m < porovnavanaPromenna.omezeni.length; m++) {
                   if (porovnavanaPromenna.omezeni[m].typOmezeni === '=') {
-                    porovnavanaPromenna.omezeni[m].hodnotyOmezeni.push(promenna.nazev);
+                    porovnavanaPromenna.omezeni[m].omezeniProPromennou.push(promenna.nazev);
                     zmeneno = true;
                   }
                 }
                 if (!zmeneno) {
-                  porovnavanaPromenna.omezeni.push(new Omezeni('=', [promenna.nazev], null));
+                  porovnavanaPromenna.omezeni.push(new Omezeni('=', [promenna.nazev]));
                 }
                 zmeneno = false;
-                omezeni.hodnotyOmezeni.splice(l, 1);
+                omezeni.omezeniProPromennou.splice(l, 1);
                 l--;
               }
             }
-            if (omezeni.hodnotyOmezeni.length === 0) {
+            if (omezeni.omezeniProPromennou.length === 0) {
               promenna.omezeni.splice(j, 1);
               j--;
             }
             break;
           case '!':
-            for (var l = 0; l < omezeni.hodnotyOmezeni.length; l++) {
-              var porovnavaneOmezeni = omezeni.hodnotyOmezeni[l];
+            for (var l = 0; l < omezeni.omezeniProPromennou.length; l++) {
+              var porovnavaneOmezeni = omezeni.omezeniProPromennou[l];
               if (AlgoritmusUtils.index(seznamPromennych, porovnavaneOmezeni) > i) {
                 var porovnavanaPromenna = AlgoritmusUtils.najdi(seznamPromennych, porovnavaneOmezeni);
                 for (var m = 0; m < porovnavanaPromenna.omezeni.length; m++) {
                   if (porovnavanaPromenna.omezeni[m].typOmezeni === '!') {
-                    porovnavanaPromenna.omezeni[m].hodnotyOmezeni.push(promenna.nazev);
+                    porovnavanaPromenna.omezeni[m].omezeniProPromennou.push(promenna.nazev);
                     zmeneno = true;
                   }
                 }
                 if (!zmeneno) {
-                  porovnavanaPromenna.omezeni.push(new Omezeni('!', [promenna.nazev], null));
+                  porovnavanaPromenna.omezeni.push(new Omezeni('!', [promenna.nazev]));
                 }
                 zmeneno = false;
-                omezeni.hodnotyOmezeni.splice(l, 1);
+                omezeni.omezeniProPromennou.splice(l, 1);
                 l--;
               }
             }
-            if (omezeni.hodnotyOmezeni.length === 0) {
+            if (omezeni.omezeniProPromennou.length === 0) {
               promenna.omezeni.splice(j, 1);
               j--;
             }
             break;
           case 'p':
             var pomocnaPromenna;
-            if (AlgoritmusUtils.index(seznamPromennych, omezeni.omezeniProPromennou) > i) {
-              var porovnavanaPromenna = AlgoritmusUtils.najdi(seznamPromennych, omezeni.omezeniProPromennou);
+            var omezeniProPromennou = omezeni.omezeniProPromennou[0];
+            if (AlgoritmusUtils.index(seznamPromennych, omezeniProPromennou) > i) {
+              var porovnavanaPromenna = AlgoritmusUtils.najdi(seznamPromennych, omezeniProPromennou);
               var seznamDvojic = omezeni.hodnotyOmezeni;
               for (var k = 0; k < seznamDvojic.length; k++) {
                 var dvojice = seznamDvojic[k];
@@ -140,15 +141,16 @@ export default class AlgoritmusUtils {
               }
               var jesteNeexistujeOmezeni = true;
               for (var k = 0; k < porovnavanaPromenna.omezeni.length; k++) {
-                if (porovnavanaPromenna.omezeni[k].omezeniProPromennou == promenna.nazev) {
+                var existujiciOmezeni = porovnavanaPromenna.omezeni[k];
+                if (existujiciOmezeni.typOmezeni === 'p' && existujiciOmezeni.omezeniProPromennou[0] === promenna.nazev) {
                   jesteNeexistujeOmezeni = false;
                   for (var l = 0; l < seznamDvojic.length; l++) {
-                    porovnavanaPromenna.omezeni[k].hodnotyOmezeni.push(seznamDvojic[l]);
+                    existujiciOmezeni.hodnotyOmezeni.push(seznamDvojic[l]);
                   }
                 }
               }
               if (jesteNeexistujeOmezeni) {
-                porovnavanaPromenna.omezeni.push(new Omezeni('p', seznamDvojic, promenna.nazev));
+                porovnavanaPromenna.omezeni.push(new Omezeni('p', [promenna.nazev], seznamDvojic));
               }
               promenna.omezeni.splice(j, 1);
               j--;
@@ -156,8 +158,9 @@ export default class AlgoritmusUtils {
             break;
           case 'z':
             var pomocnaPromenna;
-            if (AlgoritmusUtils.index(seznamPromennych, omezeni.omezeniProPromennou) > i) {
-              var porovnavanaPromenna = AlgoritmusUtils.najdi(seznamPromennych, omezeni.omezeniProPromennou);
+            var omezeniProPromennou = omezeni.omezeniProPromennou[0];
+            if (AlgoritmusUtils.index(seznamPromennych, omezeniProPromennou) > i) {
+              var porovnavanaPromenna = AlgoritmusUtils.najdi(seznamPromennych, omezeniProPromennou);
               var seznamDvojic = omezeni.hodnotyOmezeni;
               for (var k = 0; k < seznamDvojic.length; k++) {
                 var dvojice = seznamDvojic[k];
@@ -167,15 +170,16 @@ export default class AlgoritmusUtils {
               }
               var jesteNeexistujeOmezeni = true;
               for (var k = 0; k < porovnavanaPromenna.omezeni.length; k++) {
-                if (porovnavanaPromenna.omezeni[k].omezeniProPromennou == promenna.nazev) {
+                var existujiciOmezeni = porovnavanaPromenna.omezeni[k];
+                if (existujiciOmezeni.typOmezeni === 'z' && existujiciOmezeni.omezeniProPromennou[0] === promenna.nazev) {
                   jesteNeexistujeOmezeni = false;
                   for (var l = 0; l < seznamDvojic.length; l++) {
-                    porovnavanaPromenna.omezeni[k].hodnotyOmezeni.push(seznamDvojic[l]);
+                    existujiciOmezeni.hodnotyOmezeni.push(seznamDvojic[l]);
                   }
                 }
               }
               if (jesteNeexistujeOmezeni) {
-                porovnavanaPromenna.omezeni.push(new Omezeni('z', seznamDvojic, promenna.nazev));
+                porovnavanaPromenna.omezeni.push(new Omezeni('z', [promenna.nazev], seznamDvojic));
               }
               promenna.omezeni.splice(j, 1);
               j--;
@@ -200,11 +204,10 @@ export default class AlgoritmusUtils {
 
       switch (omezeni.typOmezeni) {
         case '<':
-          for (var j = 0; j < omezeni.hodnotyOmezeni.length; j++) {
-            var porovnavanaPromenna = omezeni.hodnotyOmezeni[j];
+          for (var j = 0; j < omezeni.omezeniProPromennou.length; j++) {
+            var porovnavanaPromenna = omezeni.omezeniProPromennou[j];
             var porovnavanaHodnota = AlgoritmusUtils.najdi(seznamPromennych, porovnavanaPromenna).vratPrirazenouHodnotu();
             if (!(cislo < porovnavanaHodnota)) {
-              omezeni.omezeniProPromennou = porovnavanaPromenna;
               var popis = new LokalizovanaZprava();
               popis.klic = 'popis.omezeni.nesplneno';
               popis.parametry = { 'nazev': promenna.nazev, 'porovnavanaPromenna': porovnavanaPromenna, 'hondnota': cislo, 'porovnavanaHodnota': porovnavanaHodnota, 'typOmezeni': omezeni.typOmezeni }
@@ -218,11 +221,10 @@ export default class AlgoritmusUtils {
           }
           break;
         case '>':
-          for (var j = 0; j < omezeni.hodnotyOmezeni.length; j++) {
-            var porovnavanaPromenna = omezeni.hodnotyOmezeni[j];
+          for (var j = 0; j < omezeni.omezeniProPromennou.length; j++) {
+            var porovnavanaPromenna = omezeni.omezeniProPromennou[j];
             var porovnavanaHodnota = AlgoritmusUtils.najdi(seznamPromennych, porovnavanaPromenna).vratPrirazenouHodnotu();
             if (!(cislo > porovnavanaHodnota)) {
-              omezeni.omezeniProPromennou = porovnavanaPromenna;
               var popis = new LokalizovanaZprava();
               popis.klic = 'popis.omezeni.nesplneno';
               popis.parametry = { 'nazev': promenna.nazev, 'porovnavanaPromenna': porovnavanaPromenna, 'hondnota': cislo, 'porovnavanaHodnota': porovnavanaHodnota, 'typOmezeni': omezeni.typOmezeni }
@@ -236,11 +238,10 @@ export default class AlgoritmusUtils {
           }
           break;
         case '=':
-          for (var j = 0; j < omezeni.hodnotyOmezeni.length; j++) {
-            var porovnavanaPromenna = omezeni.hodnotyOmezeni[j];
+          for (var j = 0; j < omezeni.omezeniProPromennou.length; j++) {
+            var porovnavanaPromenna = omezeni.omezeniProPromennou[j];
             var porovnavanaHodnota = AlgoritmusUtils.najdi(seznamPromennych, porovnavanaPromenna).vratPrirazenouHodnotu();
             if (cislo !== porovnavanaHodnota) {
-              omezeni.omezeniProPromennou = porovnavanaPromenna;
               var popis = new LokalizovanaZprava();
               popis.klic = 'popis.omezeni.nesplneno';
               popis.parametry = { 'nazev': promenna.nazev, 'porovnavanaPromenna': porovnavanaPromenna, 'hondnota': cislo, 'porovnavanaHodnota': porovnavanaHodnota, 'typOmezeni': omezeni.typOmezeni }
@@ -254,11 +255,10 @@ export default class AlgoritmusUtils {
           }
           break;
         case '!':
-          for (var j = 0; j < omezeni.hodnotyOmezeni.length; j++) {
-            var porovnavanaPromenna = omezeni.hodnotyOmezeni[j];
+          for (var j = 0; j < omezeni.omezeniProPromennou.length; j++) {
+            var porovnavanaPromenna = omezeni.omezeniProPromennou[j];
             var porovnavanaHodnota = AlgoritmusUtils.najdi(seznamPromennych, porovnavanaPromenna).vratPrirazenouHodnotu();
             if (cislo === porovnavanaHodnota) {
-              omezeni.omezeniProPromennou = porovnavanaPromenna;
               var popis = new LokalizovanaZprava();
               popis.klic = 'popis.omezeni.nesplneno';
               popis.parametry = { 'nazev': promenna.nazev, 'porovnavanaPromenna': porovnavanaPromenna, 'hondnota': cislo, 'porovnavanaHodnota': porovnavanaHodnota, 'typOmezeni': omezeni.typOmezeni }
@@ -272,7 +272,7 @@ export default class AlgoritmusUtils {
           }
           break;
         case 'p':
-          var porovnavanaPromenna = omezeni.omezeniProPromennou;
+          var porovnavanaPromenna = omezeni.omezeniProPromennou[0];
           var porovnavanaHodnota = AlgoritmusUtils.najdi(seznamPromennych, porovnavanaPromenna).vratPrirazenouHodnotu();
           var nalezeno = false;
           for (var j = 0; j < omezeni.hodnotyOmezeni.length; j++) {
@@ -296,7 +296,7 @@ export default class AlgoritmusUtils {
           popisPrubehuOmezeni.push(popis);
           break;
         case 'z':
-          var porovnavanaPromenna = omezeni.omezeniProPromennou;
+          var porovnavanaPromenna = omezeni.omezeniProPromennou[0];
           var porovnavanaHodnota = AlgoritmusUtils.najdi(seznamPromennych, porovnavanaPromenna).vratPrirazenouHodnotu();
           for (var j = 0; j < omezeni.hodnotyOmezeni.length; j++) {
             if (cislo === omezeni.hodnotyOmezeni[j][0] && porovnavanaHodnota === omezeni.hodnotyOmezeni[j][1]) {

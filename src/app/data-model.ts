@@ -25,13 +25,13 @@ export class Omezeni {
   // TODO predelat na Enum a zmenit i atribut ve tride Omezeni
   id: number;
   typOmezeni: string;
-  hodnotyOmezeni: any;
-  omezeniProPromennou: any;
-  constructor(typOmezeni: string, hodnotyOmezeni: any[] = [], omezeniProPromennou: string = null) {
+  hodnotyOmezeni: Array<Array<number>>;
+  omezeniProPromennou: Array<string>;
+  constructor(typOmezeni: string, omezeniProPromennou: Array<string> = [], hodnotyOmezeni: Array<Array<number>> = []) {
     this.id = Omezeni.id_sequence++;
     this.typOmezeni = typOmezeni;
-    this.hodnotyOmezeni = hodnotyOmezeni;
     this.omezeniProPromennou = omezeniProPromennou;
+    this.hodnotyOmezeni = hodnotyOmezeni;
   }
 }
 

@@ -14,7 +14,7 @@ export class DialogOmezeniComponent implements OnInit {
   @Output() close = new EventEmitter<Promenna>();
 
 
-  filtrovanePromenne: Array<Promenna>;
+  filtrovanePromenne: Array<any>;
   // TODO vytahnout do enums
   typyOmezeni = [
     {label: 'omezeni.typ.<', value: '<'},
@@ -31,6 +31,8 @@ export class DialogOmezeniComponent implements OnInit {
   ngOnInit() {
     this.filtrovanePromenne = this.promennaService.list().filter(
       (p: Promenna) => p.nazev !== this.promenna.nazev
+    ).map(
+      (p: Promenna) => ({ label: p.nazev, value: p.nazev })
     );
   }
 
@@ -51,9 +53,9 @@ export class DialogOmezeniComponent implements OnInit {
     }
   }
 
-  pridejOmezeni(promenna: Promenna, typ: string, cilovaPromenna: Promenna) {
+  pridejOmezeni(promenna: Promenna, typ: string, cilovaPromenna: string) {
     const omezeni = new Omezeni(typ);
-    omezeni.omezeniProPromennou = cilovaPromenna;
+    omezeni.omezeniProPromennou.push(cilovaPromenna);
     promenna.omezeni.push(omezeni);
   }
 
@@ -79,14 +81,8 @@ export class DialogOmezeniComponent implements OnInit {
     vysledek.omezeni = p.omezeni.map( function(item) {
       const o =  Object.assign({}, item);
 
-      if (this.jeJednoducheOmezeni(o.typOmezeni)) {
-        o.hodnotyOmezeni = item.hodnotyOmezeni.map(
-          (hodnota: string) => this.promennaService.vrat(hodnota)
-        );
-      } else {
-        o.hodnotyOmezeni = item.hodnotyOmezeni.join(' ');
-        o.omezeniProPromennou = this.promennaService.vrat(item.omezeniProPromennou);
-      }
+      o.omezeniProPromennou = item.omezeniProPromennou.slice();
+      o.hodnotyOmezeni = <any> item.hodnotyOmezeni.join(' ');
 
       return o;
     }, this);
@@ -100,17 +96,12 @@ export class DialogOmezeniComponent implements OnInit {
     original.omezeni = cil.omezeni.map( function(item) {
       const o =  Object.assign({}, item);
 
-      if (this.jeJednoducheOmezeni(o.typOmezeni)) {
-        o.hodnotyOmezeni = item.hodnotyOmezeni.map(
-          (promenna: Promenna) => promenna.nazev
-        );
-      } else {
-        const dvojiceHodnot = item.hodnotyOmezeni.match(/\s*(-?\d+\s*,\s*-?\d+)/g);
-        o.hodnotyOmezeni = dvojiceHodnot.map(
+      o.omezeniProPromennou = item.omezeniProPromennou.slice();
+
+      const dvojiceHodnot = (<any> item.hodnotyOmezeni).match(/\s*(-?\d+\s*,\s*-?\d+)/g);
+      o.hodnotyOmezeni = dvojiceHodnot.map(
           (dvojice: string) => dvojice.split(',').map(Number)
-        );
-        o.omezeniProPromennou = item.omezeniProPromennou.nazev;
-      }
+      );
 
       return o;
     }, this);
@@ -118,7 +109,6 @@ export class DialogOmezeniComponent implements OnInit {
     return original;
   }
 
-  // TODO zbavit se tohoto - upravit patricne atributy omezeni
   jeJednoducheOmezeni(typOmezeni: string) {
     return typOmezeni === '<' || typOmezeni === '>' || typOmezeni === '=' || typOmezeni === '!';
   }

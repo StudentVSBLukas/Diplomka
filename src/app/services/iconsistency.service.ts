@@ -37,16 +37,10 @@ export class IconsistencyService implements Algoritmus {
       var promenna = seznamPromennych[i];
       var seznamPromennychproOmezeni = [];
       for (var j = 0; j < promenna.omezeni.length; j++) {
-        var typOmezeni = promenna.omezeni[j].typOmezeni;
-        if (typOmezeni == 'p' || typOmezeni == 'z') {
-          if (seznamPromennychproOmezeni.indexOf(promenna.omezeni[j].omezeniProPromennou) == -1) {
-            seznamPromennychproOmezeni.push(promenna.omezeni[j].omezeniProPromennou);
-          }
-        } else {
-          for (var k = 0; k < promenna.omezeni[j].hodnotyOmezeni.length; k++) {
-            if (seznamPromennychproOmezeni.indexOf(promenna.omezeni[j].hodnotyOmezeni[k]) == -1) {
-              seznamPromennychproOmezeni.push(promenna.omezeni[j].hodnotyOmezeni[k]);
-            }
+      var typOmezeni = promenna.omezeni[j].typOmezeni;
+        for (var k = 0; k < promenna.omezeni[j].hodnotyOmezeni.length; k++) {
+          if (seznamPromennychproOmezeni.indexOf(promenna.omezeni[j].omezeniProPromennou[k]) == -1) {
+            seznamPromennychproOmezeni.push(promenna.omezeni[j].omezeniProPromennou[k]);
           }
         }
       }
@@ -119,8 +113,8 @@ export class IconsistencyService implements Algoritmus {
 
       switch (omezeni.typOmezeni) {
         case '<':
-          for (var j = 0; j < omezeni.hodnotyOmezeni.length; j++) {
-            var porovnavanaPromenna = omezeni.hodnotyOmezeni[j];
+          for (var j = 0; j < omezeni.omezeniProPromennou.length; j++) {
+            var porovnavanaPromenna = omezeni.omezeniProPromennou[j];
             if (porovnavanaPromenna != iOmezeni) {
               continue;
             }
@@ -131,8 +125,8 @@ export class IconsistencyService implements Algoritmus {
           }
           break;
         case '>':
-          for (var j = 0; j < omezeni.hodnotyOmezeni.length; j++) {
-            var porovnavanaPromenna = omezeni.hodnotyOmezeni[j];
+          for (var j = 0; j < omezeni.omezeniProPromennou.length; j++) {
+            var porovnavanaPromenna = omezeni.omezeniProPromennou[j];
             if (porovnavanaPromenna != iOmezeni) {
               continue;
             }
@@ -143,8 +137,8 @@ export class IconsistencyService implements Algoritmus {
           }
           break;
         case '=':
-          for (var j = 0; j < omezeni.hodnotyOmezeni.length; j++) {
-            var porovnavanaPromenna = omezeni.hodnotyOmezeni[j];
+          for (var j = 0; j < omezeni.omezeniProPromennou.length; j++) {
+            var porovnavanaPromenna = omezeni.omezeniProPromennou[j];
             if (porovnavanaPromenna != iOmezeni) {
               continue;
             }
@@ -155,8 +149,8 @@ export class IconsistencyService implements Algoritmus {
           }
           break;
         case '!':
-          for (var j = 0; j < omezeni.hodnotyOmezeni.length; j++) {
-            var porovnavanaPromenna = omezeni.hodnotyOmezeni[j];
+          for (var j = 0; j < omezeni.omezeniProPromennou.length; j++) {
+            var porovnavanaPromenna = omezeni.omezeniProPromennou[j];
             if (porovnavanaPromenna != iOmezeni) {
               continue;
             }

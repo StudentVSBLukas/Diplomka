@@ -32,7 +32,9 @@
 	       		<div *ngFor="let o of promenna.omezeni" class="">
 	        		<div class="col-sm-1"></div>
 	     			<div class="col-sm-11">
-	       				<span class="operator">{{o.typOmezeni}}{{o.omezeniProPromennou}}</span> {{o.hodnotyOmezeni}}
+	       				<span class="operator">{{o.typOmezeni}}</span>
+	       				{{o.omezeniProPromennou}}
+	       				<span *ngIf="o.hodnotyOmezeni">= {{'{'}}{{o.hodnotyOmezeni}}{{'}'}}</span>
 	       			</div>
 	       		</div>
 			</fieldset>
