@@ -1,4 +1,4 @@
-import { Promenna, Omezeni } from '../data-model';
+import { Promenna, Omezeni, TypOmezeni } from '../data-model';
 import { PromennaService } from '../services/promenna.service';
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
@@ -17,12 +17,12 @@ export class DialogOmezeniComponent implements OnInit {
   filtrovanePromenne: Array<any>;
   // TODO vytahnout do enums
   typyOmezeni = [
-    {label: 'omezeni.typ.<', value: '<'},
-    {label: 'omezeni.typ.>', value: '>'},
-    {label: 'omezeni.typ.=', value: '='},
-    {label: 'omezeni.typ.!', value: '!'},
-    {label: 'omezeni.typ.p', value: 'p'},
-    {label: 'omezeni.typ.z', value: 'z'}
+    { label: 'omezeni.typ.<', value: TypOmezeni.mensi },
+    { label: 'omezeni.typ.>', value: TypOmezeni.vetsi },
+    { label: 'omezeni.typ.=', value: TypOmezeni.rovno },
+    { label: 'omezeni.typ.!', value: TypOmezeni.nerovno },
+    { label: 'omezeni.typ.p', value: TypOmezeni.povoleno },
+    { label: 'omezeni.typ.z', value: TypOmezeni.zakazano }
   ];
 
   constructor(private promennaService: PromennaService) {
@@ -33,7 +33,7 @@ export class DialogOmezeniComponent implements OnInit {
       (p: Promenna) => p.nazev !== this.promenna.nazev
     ).map(
       (p: Promenna) => ({ label: p.nazev, value: p.nazev })
-    );
+      );
   }
 
   @Input()
@@ -53,12 +53,12 @@ export class DialogOmezeniComponent implements OnInit {
     }
   }
 
-  pridejOmezeni(promenna: Promenna, typ: string, cilovaPromenna: string) {
-    const omezeni = new Omezeni(typ);
+  pridejOmezeni(promenna: Promenna, typ: TypOmezeni, cilovaPromenna: string) {
+    const omezeni = new Omezeni(typ, [cilovaPromenna], <any>'');
     if (cilovaPromenna) {
       omezeni.omezeniProPromennou.push(cilovaPromenna);
     }
-    omezeni.hodnotyOmezeni = <any> '';
+    omezeni.hodnotyOmezeni = <any>'';
     promenna.omezeni.push(omezeni);
   }
 
@@ -81,11 +81,11 @@ export class DialogOmezeniComponent implements OnInit {
   private prevedPromennou(p: Promenna) {
     const vysledek = Object.assign({}, p);
 
-    vysledek.omezeni = p.omezeni.map( function(item) {
-      const o =  Object.assign({}, item);
+    vysledek.omezeni = p.omezeni.map(function (item) {
+      const o = Object.assign({}, item);
 
       o.omezeniProPromennou = item.omezeniProPromennou.slice();
-      o.hodnotyOmezeni = <any> item.hodnotyOmezeni.join(' ');
+      o.hodnotyOmezeni = <any>item.hodnotyOmezeni.join(' ');
 
       return o;
     }, this);
@@ -96,23 +96,19 @@ export class DialogOmezeniComponent implements OnInit {
   private upravPromennou(original: Promenna, cil: Promenna) {
     Object.assign(original, cil);
 
-    original.omezeni = cil.omezeni.map( function(item) {
-      const o =  Object.assign({}, item);
+    original.omezeni = cil.omezeni.map(function (item) {
+      const o = Object.assign({}, item);
 
       o.omezeniProPromennou = item.omezeniProPromennou.slice();
 
-      const dvojiceHodnot = (<any> item.hodnotyOmezeni).match(/\s*(-?\d+\s*,\s*-?\d+)/g) || [];
+      const dvojiceHodnot = (<any>item.hodnotyOmezeni).match(/\s*(-?\d+\s*,\s*-?\d+)/g) || [];
       o.hodnotyOmezeni = dvojiceHodnot.map(
-          (dvojice: string) => dvojice.split(',').map(Number)
+        (dvojice: string) => dvojice.split(',').map(Number)
       );
 
       return o;
     }, this);
 
     return original;
-  }
-
-  jeJednoducheOmezeni(typOmezeni: string) {
-    return typOmezeni === '<' || typOmezeni === '>' || typOmezeni === '=' || typOmezeni === '!';
   }
 }

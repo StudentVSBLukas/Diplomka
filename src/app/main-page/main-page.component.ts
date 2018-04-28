@@ -1,4 +1,4 @@
-import { Promenna, Omezeni, KrokAlgoritmu, LokalizovanaZprava, TypKroku } from '../data-model';
+import { Promenna, Omezeni, KrokAlgoritmu, LokalizovanaZprava, TypKroku, TypOmezeni } from '../data-model';
 import { APP_ALGORITMY, Algoritmus } from '../services/algoritmus';
 import { PromennaService } from '../services/promenna.service';
 import { Component, OnInit, ElementRef, ViewChild, Inject } from '@angular/core';
@@ -49,14 +49,14 @@ export class MainPageComponent implements OnInit {
 
     // TODO odstranit zakladni nastaveni vstupu
     const a = this.listPromennych[0];
-    const ogt = new Omezeni('<', ['B']);
-    const one = new Omezeni('!', ['C']);
-    const op = new Omezeni('p', ['B'], [[4, 5], [2, 1]]);
+    const ogt = new Omezeni(TypOmezeni.mensi, ['B']);
+    const one = new Omezeni(TypOmezeni.nerovno, ['C']);
+    const op = new Omezeni(TypOmezeni.povoleno, ['B'], [[4, 5], [2, 1]]);
     a.omezeni = [ogt, one, op];
 
     //    const c = this.listPromennych[2];
     //    c.domena.push(7);
-    //    c.omezeni.push(new Omezeni('z', [[7,5]], 'B'));
+    //    c.omezeni.push(new Omezeni(TypOmezeni.zakazano, [[7,5]], 'B'));
   }
 
   pridejPromennou() {
@@ -74,11 +74,6 @@ export class MainPageComponent implements OnInit {
 
   zobrazImport() {
     this.zobrazImportDialog = true;
-  }
-
-  // TODO zbavit se tohoto - upravit patricne atributy omezeni
-  jeJednoducheOmezeni(typOmezeni: string) {
-    return typOmezeni === '<' || typOmezeni === '>' || typOmezeni === '=' || typOmezeni === '!';
   }
 
   run() {
@@ -123,10 +118,10 @@ export class MainPageComponent implements OnInit {
 
     // TODO Test ze zadani
 //    var seznamPromennych = [];
-//    seznamPromennych.push(new Promenna('A', [1, 2, 3, 4, 5], [new Omezeni('p', [[1, 2], [3, 4]], 'C')]));
+//    seznamPromennych.push(new Promenna('A', [1, 2, 3, 4, 5], [new Omezeni(TypOmezeni.povoleno, [[1, 2], [3, 4]], 'C')]));
 //    // seznamPromennych.push(new Promenna("A", [1,2,3,4, 5], [new Omezeni("=",["C","E"])]))
 //    seznamPromennych.push(new Promenna('B', [4, 3, 2], []));
-//    seznamPromennych.push(new Promenna('C', [3, 1], [new Omezeni('p', [[6, 5]], 'A')]));
+//    seznamPromennych.push(new Promenna('C', [3, 1], [new Omezeni(TypOmezeni.povoleno, [[6, 5]], 'A')]));
 //    // seznamPromennych.push(new Promenna("C", [3,1], [new Omezeni("=",["B"])]))
 //    seznamPromennych.push(new Promenna('D', [4], []));
 //    seznamPromennych.push(new Promenna('E', [1, 5], []));

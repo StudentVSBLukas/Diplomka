@@ -1,4 +1,4 @@
-import {Promenna, KrokAlgoritmu, LokalizovanaZprava} from '../data-model';
+import {Promenna, KrokAlgoritmu, LokalizovanaZprava, StavKroku} from '../data-model';
 import { Algoritmus } from './algoritmus';
 import { Injectable } from '@angular/core';
 import AlgoritmusUtils from './algoritmus-utils';
@@ -16,10 +16,10 @@ export class RandomBacktrackingService implements Algoritmus {
     //    // seznamPromennych.push(new Promenna("A", [1,2,3,4,5], []))
     //    // seznamPromennych.push(new Promenna("B", [1,2,3,4,5], [new Omezeni("=", ["A"], null)]))
     //    seznamPromennych.push(new Promenna('A', [1, 2], []));
-    //    seznamPromennych.push(new Promenna('B', [4, 5], [new Omezeni('=', ['A'], null)]));
+    //    seznamPromennych.push(new Promenna('B', [4, 5], [new Omezeni(TypOmezeni.rovno, ['A'], null)]));
     //    seznamPromennych.push(new Promenna('C', [1, 2, 3, 4, 5], []));
     //    seznamPromennych.push(new Promenna('D', [1, 2, 3, 4, 5], []));
-    //    seznamPromennych.push(new Promenna('E', [1, 2, 3, 4, 5], [new Omezeni('>', ['A'], null)]));
+    //    seznamPromennych.push(new Promenna('E', [1, 2, 3, 4, 5], [new Omezeni(TypOmezeni.vetsi, ['A'], null)]));
     //    //AlgoritmusUtils.prevedOmezeni(seznamPromennych);
     //    seznamPromennych[0].zalohaDomeny = seznamPromennych[0].domena.slice();
     //    seznamPromennych[1].zalohaDomeny = seznamPromennych[1].domena.slice();
@@ -28,12 +28,18 @@ export class RandomBacktrackingService implements Algoritmus {
     //    seznamPromennych[4].zalohaDomeny = seznamPromennych[4].domena.slice();
     AlgoritmusUtils.prevedOmezeni(seznamPromennych);
 
+    var postupTvoreniGrafu = new Array();
+    var startKrok = new KrokAlgoritmu();
+    startKrok.hodnota = 'Random backtracking';
+    startKrok.popis.push(new LokalizovanaZprava('popis.random.start'));
+    postupTvoreniGrafu.push(startKrok);
+
+
     // Zaloha domeny - vzdy se vracime k vstupnimu stavu
     seznamPromennych.forEach(
       (p: Promenna) => p.zalohaDomeny = p.domena.slice()
     );
 
-    var postupTvoreniGrafu = new Array();
     var pocetReseni = 0;
     var promenna = 0;
     while (promenna >= 0 && (!pozadovanychReseni || pocetReseni < pozadovanychReseni)) {
@@ -71,12 +77,12 @@ export class RandomBacktrackingService implements Algoritmus {
         lokalizovanaZprava.klic = 'popis.random.deadend';
         lokalizovanaZprava.parametry = { 'nazev': krokAlgoritmu.nazev, 'hodnota': krokAlgoritmu.hodnota }
         krokAlgoritmu.popis.push(lokalizovanaZprava);
-        krokAlgoritmu.stav = 'deadend';
+        krokAlgoritmu.stav = StavKroku.deadend;
         zpracovavanaPromenna.domena.splice(zpracovavanaPromenna.pozice, 1);
       } else {
         if (promenna === (seznamPromennych.length - 1)) {
           pocetReseni++;
-          krokAlgoritmu.stav = 'reseni';
+          krokAlgoritmu.stav = StavKroku.reseni;
           var lokalizovanaZprava = new LokalizovanaZprava();
           lokalizovanaZprava.klic = 'popis.random.reseni';
           lokalizovanaZprava.parametry = { 'nazev': krokAlgoritmu.nazev, 'hodnota': krokAlgoritmu.hodnota }

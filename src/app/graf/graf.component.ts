@@ -1,4 +1,4 @@
-import { KrokAlgoritmu, LokalizovanaZprava, TypKroku } from '../data-model';
+import { KrokAlgoritmu, LokalizovanaZprava, TypKroku, StavKroku } from '../data-model';
 import { Component, OnInit, Input, OnChanges, SimpleChange, SimpleChanges } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import * as go from 'gojs';
@@ -11,7 +11,7 @@ import * as go from 'gojs';
 export class GrafComponent implements OnInit, OnChanges {
 
   @Input() postup: Array<KrokAlgoritmu>;
-  
+
   graf: any;
   aktualniKrok: KrokAlgoritmu;
 
@@ -20,7 +20,7 @@ export class GrafComponent implements OnInit, OnChanges {
   ngOnInit() {
     this.initGraph()
   }
-  
+
   ngOnChanges(zmeny: SimpleChanges) {
     const novyPostup = zmeny['postup'];
     if (novyPostup) {
@@ -51,13 +51,13 @@ export class GrafComponent implements OnInit, OnChanges {
     function colorConverter(krok) {
         const stav = krok.stav;
 
-        if (stav === 'reseni') {
+        if (stav === StavKroku.reseni) {
             return '#72E91B';
         }
-        if (stav === 'deadend') {
+        if (stav === StavKroku.deadend) {
             return '#FFB40E';
         }
-        if (stav === 'nic') {
+        if (stav === StavKroku.uzel) {
             return 'gray';
         }
 
@@ -100,7 +100,7 @@ export class GrafComponent implements OnInit, OnChanges {
             $(go.Link,
                     {routing: go.Link.Orthogonal, corner: 5, selectable: false},
                     $(go.Shape, {strokeWidth: 3, stroke: '#424242'}));
-    
+
     this.reloadGraph();
   }
 
@@ -112,17 +112,14 @@ export class GrafComponent implements OnInit, OnChanges {
       return;
     }
 
-    // TODO tento prvni krok si nechat definovat algoritmem
-    this.aktualniKrok = new KrokAlgoritmu();
-    this.aktualniKrok.hodnota = 'Start'; 
-    // TODO this.aktualniKrok.hodnota = this.translate.instant(this.vybranyAlgoritmus.nazev);
-    this.aktualniKrok.popis.push(new LokalizovanaZprava('popis.start'));
-    const nodeDataArray = [{key: 0, krok: this.aktualniKrok}];
-    this.graf.model = new go.TreeModel(nodeDataArray);
+    this.graf.model = new go.TreeModel();
+    this.krokuj();
+    this.fakeTransaction();
   }
 
   krokuj() {
-      const modelManager = this.graf.model.undoManager;
+      const model = this.graf.model;
+      const modelManager = model.undoManager;
       const krok = modelManager.historyIndex + 1;
       if (krok === this.postup.length) {
           return false;
@@ -134,25 +131,22 @@ export class GrafComponent implements OnInit, OnChanges {
         return true;
       }
 
-      this.graf.model.startTransaction('make new node');
       if (this.aktualniKrok.typ === TypKroku.akce) {
         // Akce prida novy uzel
-        this.graf.model.addNodeData({key: (krok + 1), parent: this.aktualniKrok.rodic, krok: this.aktualniKrok});
+        model.startTransaction('make new node');
+        model.addNodeData({key: krok, parent: this.aktualniKrok.rodic, krok: this.aktualniKrok});
+        model.commitTransaction('make new node');
       } else {
-        // Jiny typ kroku zmeni popis, domenu, pole
-        // Musime provest zmenu na diagramu, aby ji zaznamenal undoManager
-        const root = this.graf.model.findNodeDataForKey(0);
-        this.graf.model.setDataProperty(root, 'aktualniKrok', krok);
+        this.fakeTransaction();
       }
-      this.graf.model.commitTransaction('make new node');
 
-    return true;
+      return true;
   }
 
   krokujReseni() {
     while (this.krokuj()) {
       const krok = this.postup[this.graf.model.undoManager.historyIndex];
-      if (krok.stav === 'reseni') {
+      if (krok.stav === StavKroku.reseni) {
         break;
       }
     }
@@ -164,25 +158,21 @@ export class GrafComponent implements OnInit, OnChanges {
 
   odkrokuj() {
       const modelManager = this.graf.model.undoManager;
-      const krok = modelManager.historyIndex;
-      if (krok >= 0) {
-          this.aktualniKrok = this.postup[krok];
-      } else {
-          this.aktualniKrok = this.graf.model.findNodeDataForKey(0).krok;
+      const krok = modelManager.historyIndex - 1;
+      if (krok < 0) {
+        return false;
       }
 
-      if (modelManager.canUndo()) {
-        modelManager.undo();
-        return true;
-      }
+      this.aktualniKrok = this.postup[krok];
+      modelManager.undo();
 
-    return false;
+      return true;
   }
 
   odkrokujReseni() {
     while (this.odkrokuj()) {
       const krok = this.graf.model.undoManager.historyIndex;
-      if (krok >= 0 && this.postup[krok].stav === 'reseni') {
+      if (krok >= 0 && this.postup[krok].stav === StavKroku.reseni) {
         break;
       }
     }
@@ -207,4 +197,12 @@ export class GrafComponent implements OnInit, OnChanges {
     this.graf.zoomToFit();
   }
 
+  private fakeTransaction() {
+    const model = this.graf.model;
+
+    model.startTransaction('Fake transaction');
+    const root = model.findNodeDataForKey(0);
+    model.setDataProperty(root, 'aktualniKrok', this.graf.model.undoManager.historyIndex);
+    model.commitTransaction('FakeTransaction');
+  }
 }

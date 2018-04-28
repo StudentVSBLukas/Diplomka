@@ -61,6 +61,7 @@
 		"backtracking": {
 			"nazev": "Backtracking",
 			"definice" : "TODO: Napsat definici algoritmu Backtracking. Muzes pouzit HTML!!",
+			"start": "Byl spuštěn algoritmus Backtracking.",
 			"prirazeni": "Vybírám první volnou hodnotu z domény proměnné {{nazev}} = {{hodnota}}.\n",
 			"uzel": "Tato hodnota neporušuje žádné omezení, proto pokračuji dopřednou fází k další proměnné.\n",
 			"deadend": "Jelikož je porušeno omezení započne zpětná fáze.\n",
@@ -69,6 +70,7 @@
 		"backjumping": {
 			"nazev": "Backjumping",
 			"definice" : "TODO: Napsat definici algoritmu Backtracking. Muzes pouzit HTML!!",
+			"start": "Byl spuštěn algoritmus Backjumping.",
 			"prirazeni": "Vybírám první volnou hodnotu z domény proměnné {{nazev}} = {{hodnota}}.\n",
 			"uzel": "Tato hodnota neporušuje žádné omezení, proto pokračuji dopřednou fází k další proměnné.\n",
 			"deadend": "Jelikož je porušeno omezení započne zpětná fáze.\n",
@@ -79,6 +81,7 @@
 		"forwardCheck": {
 			"nazev": "Forward checking",
 			"definice" : "TODO: Napsat definici algoritmu Backtracking. Muzes pouzit HTML!!",
+			"start": "Byl spuštěn algoritmus Forward checking.",
 			"prirazeni": "Vybírám první volnou hodnotu z domény proměnné {{nazev}} = {{hodnota}}.\n",
 			"uzel": "Vybírám první volnou hodnotu z domény proměnné {{nazev}} - {{hodnota}}.\nTato hodnota neporušuje žádné omezení, proto pokračuji dopřednou fází k další proměnné.\n",
 			"prazdnaDomena": "Po odebrání prvku se doména proměnné {{porovnavanaPromenna}} stala prázdnou a tudíž pro dané přiřazení neexistuje řešení.\nZahájení zpetné fáze.\n",
@@ -90,12 +93,15 @@
 		},
 		"arcConsistency": {
 			"nazev": "Arc consistency",
+			"definice" : "TODO: Napsat definici algoritmu Arc consistency. Muzes pouzit HTML!!",
+			"start": "Byl spuštěn algoritmus Arc consistency.",
 			"upravaDomeny": "U proměnné {{nazev}} se odebral prvek {{hodnota}} z domény, jelikož v proměnné {{porovnavanaPromenna}} neexistuje prvek v doméně, který by splňoval omezení {{nazev}} {{typ}} {{porovnavanaPromenna}}.\n",
 			"prazdnaDomena": "U proměnné {{nazev}} vznikla prázdná doména, tudíž pro tento problém neexistuje řešení.\n"
 		},
 		"random": {
-			"nazev": "Random",
+			"nazev": "Random backtracking",
 			"definice" : "TODO: Napsat definici algoritmu Backtracking. Muzes pouzit HTML!!",
+			"start": "Byl spuštěn algoritmus Random backtracking.",
 			"prirazeni": "Vybírám náhodnou hodnotu z domény proměnné {{nazev}} = {{hodnota}}.\n",
 			"uzel": "Tato hodnota neporušuje žádné omezení, proto pokračuji dopřednou fází k další proměnné.\n",
 			"deadend": "Jelikož je porušeno omezení započne zpětná fáze.\n",
@@ -104,6 +110,7 @@
 		"dynamicOrder": {
 			"nazev": "Dynamic value ordering",
 			"definice" : "TODO: Napsat definici algoritmu Backtracking. Muzes pouzit HTML!!",
+			"start": "Byl spuštěn algoritmus Dynamic order.",
 			"prirazeni": "Vybírám náhodnou hodnotu z domény proměnné {{nazev}} = {{hodnota}}.\n",
 			"uzel": "Tato hodnota neporušuje žádné omezení, proto pokračuji dopřednou fází k další proměnné.\n",
 			"deadend": "Jelikož je porušeno omezení započne zpětná fáze.\n",
@@ -122,11 +129,13 @@
 		},
 		"iConsistency": {
 			"nazev": "iConsistency",
-			"definice": "TODO: Napsat definici algoritmu iConsistency"
+			"definice": "TODO: Napsat definici algoritmu iConsistency",
+			"start": "Byl spuštěn algoritmus iConsistency."
 		},
 		"forwarCheckDynamicOrder": {
 			"nazev": "Forward checking + DVO",
-			"definice": "TODO: Napsat definici algoritmu iConsistency"
+			"definice": "TODO: Napsat definici algoritmu iConsistency",
+			"start": "Byl spuštěn algoritmus Forward checking v kombinaci s Dynamic value ordering."
 		}
 	},
 	"promennePanel": {

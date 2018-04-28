@@ -1,4 +1,4 @@
-import {Promenna, LokalizovanaZprava, KrokAlgoritmu} from '../data-model';
+import {Promenna, LokalizovanaZprava, KrokAlgoritmu, StavKroku} from '../data-model';
 import { Algoritmus } from './algoritmus';
 import { Injectable } from '@angular/core';
 import AlgoritmusUtils from './algoritmus-utils';
@@ -13,21 +13,27 @@ export class BackjumpingService implements Algoritmus {
   run(seznamPromennych: Array<Promenna>, pozadovanychReseni:  number): Array<KrokAlgoritmu> {
     // TODO Test ze zadani
 //    seznamPromennych = [];
-//    seznamPromennych.push(new Promenna('A', [1, 2, 3], [new Omezeni('!', ['B', 'C', 'D', 'G'], null)]));
-//    seznamPromennych.push(new Promenna('B', [2, 3], [new Omezeni('!', ['F'], null)]));
-//    seznamPromennych.push(new Promenna('C', [1, 2], [new Omezeni('!', ['G'], null)]));
-//    seznamPromennych.push(new Promenna('D', [1, 2], [new Omezeni('!', ['E', 'G'], null)]));
-//    seznamPromennych.push(new Promenna('E', [2, 3], [new Omezeni('!', ['F', 'G'], null)]));
+//    seznamPromennych.push(new Promenna('A', [1, 2, 3], [new Omezeni(TypOmezeni.nerovno, ['B', 'C', 'D', 'G'], null)]));
+//    seznamPromennych.push(new Promenna('B', [2, 3], [new Omezeni(TypOmezeni.nerovno, ['F'], null)]));
+//    seznamPromennych.push(new Promenna('C', [1, 2], [new Omezeni(TypOmezeni.nerovno, ['G'], null)]));
+//    seznamPromennych.push(new Promenna('D', [1, 2], [new Omezeni(TypOmezeni.nerovno, ['E', 'G'], null)]));
+//    seznamPromennych.push(new Promenna('E', [2, 3], [new Omezeni(TypOmezeni.nerovno, ['F', 'G'], null)]));
 //    seznamPromennych.push(new Promenna('F', [1, 3, 4]));
 //    seznamPromennych.push(new Promenna('G', [1, 2]));
 
     AlgoritmusUtils.prevedOmezeni(seznamPromennych);
 
+    var postupTvoreniGrafu = new Array();
+    var startKrok = new KrokAlgoritmu();
+    startKrok.hodnota = 'Backjumping';
+    startKrok.popis.push(new LokalizovanaZprava('popis.backjumping.start'));
+    postupTvoreniGrafu.push(startKrok);
+
+
     var leafend = new Array();
     for (var i = 0; i < seznamPromennych.length; i++) {
       leafend.push(false);
     }
-    var postupTvoreniGrafu = new Array();
     var pocetReseni = 0;
     var promenna = 0;
     while ((!pozadovanychReseni || pocetReseni < pozadovanychReseni)) {
@@ -51,7 +57,7 @@ export class BackjumpingService implements Algoritmus {
 
         if (promenna === seznamPromennych.length - 1) {
           pocetReseni++;
-          krokAlgoritmu2.stav = 'reseni';
+          krokAlgoritmu2.stav = StavKroku.reseni;
           var lokalizovanaZprava = new LokalizovanaZprava();
           lokalizovanaZprava.klic = 'popis.backjumping.reseni';
           lokalizovanaZprava.parametry = { 'nazev': krokAlgoritmu2.nazev, 'hodnota': krokAlgoritmu2.hodnota }
@@ -126,7 +132,7 @@ export class BackjumpingService implements Algoritmus {
           if (!poruseneOmezeni) {
             if (promenna === seznamPromennych.length - 1) {
               pocetReseni++;
-              krokAlgoritmu2.stav = 'reseni';
+              krokAlgoritmu2.stav = StavKroku.reseni;
               var lokalizovanaZprava = new LokalizovanaZprava();
               lokalizovanaZprava.klic = 'popis.backjumping.reseni';
               lokalizovanaZprava.parametry = { 'nazev': krokAlgoritmu2.nazev, 'hodnota': krokAlgoritmu2.hodnota }
@@ -146,7 +152,7 @@ export class BackjumpingService implements Algoritmus {
             lokalizovanaZprava.klic = 'popis.backjumping.deadendNedokonceny';
             lokalizovanaZprava.parametry = { 'nazev': krokAlgoritmu2.nazev, 'hodnota': krokAlgoritmu2.hodnota }
             krokAlgoritmu2.popis.push(lokalizovanaZprava);
-            krokAlgoritmu2.stav = 'deadend';
+            krokAlgoritmu2.stav = StavKroku.deadend;
             postupTvoreniGrafu.push(krokAlgoritmu2);
 
           }

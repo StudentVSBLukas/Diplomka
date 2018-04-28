@@ -1,4 +1,4 @@
-import {Promenna, KrokAlgoritmu, LokalizovanaZprava} from '../data-model';
+import {Promenna, KrokAlgoritmu, LokalizovanaZprava, StavKroku} from '../data-model';
 import { Algoritmus } from './algoritmus';
 import { Injectable } from '@angular/core';
 import AlgoritmusUtils from './algoritmus-utils';
@@ -20,13 +20,19 @@ export class ForwardCheckingDynamicOrderService extends ForwardCheckingService {
     //    seznamPromennych.push(new Promenna('B', [2], []));
     //    seznamPromennych.push(new Promenna('C', [3], []));
     //    seznamPromennych.push(new Promenna('D', [4], []));
-    //    seznamPromennych.push(new Promenna('E', [1, 2, 3, 4, 5], [new Omezeni('=', ['A', 'D'], null)]));
+    //    seznamPromennych.push(new Promenna('E', [1, 2, 3, 4, 5], [new Omezeni(TypOmezeni.rovno, ['A', 'D'], null)]));
 
     AlgoritmusUtils.prevedOmezeni(seznamPromennych);
 
+    var postupTvoreniGrafu = new Array();
+    var startKrok = new KrokAlgoritmu();
+    startKrok.hodnota = 'Forward checking + DVO';
+    startKrok.popis.push(new LokalizovanaZprava('popis.forwarCheckDynamicOrder.start'));
+    postupTvoreniGrafu.push(startKrok);
+
+
     var vstup = new Array();
 
-    var postupTvoreniGrafu = new Array();
     var pocetReseni = 0;
     var promenna = 0;
     while (promenna >= 0 && (!pozadovanychReseni || pocetReseni < pozadovanychReseni)) {
@@ -93,11 +99,11 @@ export class ForwardCheckingDynamicOrderService extends ForwardCheckingService {
         lokalizovanaZprava.klic = 'popis.forwardCheck.deadend';
         lokalizovanaZprava.parametry = { 'nazev': krokAlgoritmu.nazev, 'hodnota': krokAlgoritmu.hodnota }
         krokAlgoritmu.popis.push(lokalizovanaZprava);
-        krokAlgoritmu.stav = 'deadend';
+        krokAlgoritmu.stav = StavKroku.deadend;
       } else {
         if (promenna === (seznamPromennych.length - 1)) {
           pocetReseni++;
-          krokAlgoritmu.stav = 'reseni';
+          krokAlgoritmu.stav = StavKroku.reseni;
           var lokalizovanaZprava = new LokalizovanaZprava();
           lokalizovanaZprava.klic = 'popis.forwardCheck.reseni';
           lokalizovanaZprava.parametry = { 'nazev': krokAlgoritmu.nazev, 'hodnota': krokAlgoritmu.hodnota }
@@ -109,7 +115,7 @@ export class ForwardCheckingDynamicOrderService extends ForwardCheckingService {
             krokAlgoritmu.popis.push(tmp[2][i]);
           }
           if (tmp[0] === null) {
-            krokAlgoritmu.stav = 'deadend';
+            krokAlgoritmu.stav = StavKroku.deadend;
           } else {
             seznamPromennych = tmp[0];
             var lokalizovanaZprava = new LokalizovanaZprava();
