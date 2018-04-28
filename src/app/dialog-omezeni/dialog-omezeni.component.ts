@@ -111,4 +111,9 @@ export class DialogOmezeniComponent implements OnInit {
 
     return original;
   }
+
+  jeJednoducheOmezeni(typOmezeni: TypOmezeni) {
+    return typOmezeni === TypOmezeni.mensi || typOmezeni === TypOmezeni.vetsi
+      || typOmezeni === TypOmezeni.rovno || typOmezeni === TypOmezeni.nerovno;
+  }
 }

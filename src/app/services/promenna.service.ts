@@ -39,7 +39,21 @@ export class PromennaService {
       this.listPromennych.splice(index, 1);
     }
 
-    // TODO odstranit vsechna omezeni s promennou
+    this.listPromennych.forEach(
+      (p: Promenna) => {
+        // Odstranim z omezeni vazby na mazanou promennou
+        p.omezeni.forEach(
+          (o: Omezeni) => o.omezeniProPromennou = o.omezeniProPromennou.filter(
+            (nazev: string) => nazev !== promenna.nazev
+          )
+        );
+
+        // Odstranim omezeni, ktere nemaji vazby
+        p.omezeni = p.omezeni.filter(
+          (o: Omezeni) => o.omezeniProPromennou.length
+        );
+      }
+    )
   }
 
   export(): string {
