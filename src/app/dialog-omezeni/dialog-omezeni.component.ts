@@ -54,8 +54,7 @@ export class DialogOmezeniComponent implements OnInit {
   }
 
   pridejOmezeni(promenna: Promenna, typ: string, cilovaPromenna: string) {
-    const omezeni = new Omezeni(typ);
-    omezeni.omezeniProPromennou.push(cilovaPromenna);
+    const omezeni = new Omezeni(typ, [cilovaPromenna], <any> '');
     promenna.omezeni.push(omezeni);
   }
 
@@ -98,12 +97,10 @@ export class DialogOmezeniComponent implements OnInit {
 
       o.omezeniProPromennou = item.omezeniProPromennou.slice();
 
-      if (item.hodnotyOmezeni.length) {
-        const dvojiceHodnot = (<any> item.hodnotyOmezeni).match(/\s*(-?\d+\s*,\s*-?\d+)/g);
-        o.hodnotyOmezeni = dvojiceHodnot.map(
-            (dvojice: string) => dvojice.split(',').map(Number)
-        );
-      }
+      const dvojiceHodnot = (<any> item.hodnotyOmezeni).match(/\s*(-?\d+\s*,\s*-?\d+)/g) || [];
+      o.hodnotyOmezeni = dvojiceHodnot.map(
+          (dvojice: string) => dvojice.split(',').map(Number)
+      );
 
       return o;
     }, this);
