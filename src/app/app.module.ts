@@ -16,12 +16,14 @@ import { PromennaService } from './promenna.service';
 import { PromennePanelComponent } from './promenne-panel/promenne-panel.component';
 import { FormsModule } from '@angular/forms';
 import { DropdownModule } from 'primeng/dropdown';
+import { FileUploadModule } from 'primeng/fileupload';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { DialogImportComponent } from './dialog-import/dialog-import.component';
 
 export function HttpLoaderFactory(http: HttpClient) {
     return new TranslateHttpLoader(http);
@@ -37,6 +39,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     PromennePanelComponent,
     DialogAlgoritmusComponent,
     GrafComponent,
+    DialogImportComponent,
   ],
   imports: [
     BrowserModule,
@@ -48,6 +51,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     InputTextModule,
     InputTextareaModule,
     MultiSelectModule,
+    FileUploadModule,
     TranslateModule.forRoot({
             loader: {
                 provide: TranslateLoader,

@@ -128,5 +128,13 @@
 	},
 	"promennePanel": {
 		"empty": "Vložte novou proměnnou kliknutím na + výše"
+	},
+	"import": {
+		"header": "Import zadání",
+		"zavrit": "Zrušit",
+		"soubor": {
+			"label": "Importovat ze souboru",
+			"vybrat": "Vybrat soubor"
+		}
 	}
 }
