@@ -34,7 +34,7 @@
 	     			<div class="col-sm-11">
 	       				<span class="operator">{{o.typOmezeni}}</span>
 	       				{{o.omezeniProPromennou}}
-	       				<span *ngIf="o.hodnotyOmezeni">= {{'{'}}{{o.hodnotyOmezeni}}{{'}'}}</span>
+	       				<span *ngIf="o.hodnotyOmezeni.length">= {{'{'}}{{o.hodnotyOmezeni}}{{'}'}}</span>
 	       			</div>
 	       		</div>
 			</fieldset>

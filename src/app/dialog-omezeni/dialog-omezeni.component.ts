@@ -98,10 +98,12 @@ export class DialogOmezeniComponent implements OnInit {
 
       o.omezeniProPromennou = item.omezeniProPromennou.slice();
 
-      const dvojiceHodnot = (<any> item.hodnotyOmezeni).match(/\s*(-?\d+\s*,\s*-?\d+)/g);
-      o.hodnotyOmezeni = dvojiceHodnot.map(
-          (dvojice: string) => dvojice.split(',').map(Number)
-      );
+      if (item.hodnotyOmezeni.length) {
+        const dvojiceHodnot = (<any> item.hodnotyOmezeni).match(/\s*(-?\d+\s*,\s*-?\d+)/g);
+        o.hodnotyOmezeni = dvojiceHodnot.map(
+            (dvojice: string) => dvojice.split(',').map(Number)
+        );
+      }
 
       return o;
     }, this);

@@ -23,9 +23,6 @@ import { FileUploadModule } from 'primeng/fileupload';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-<<<<<<< HEAD
-import { DialogImportComponent} from './dialog-import/dialog-import.component';
-=======
 import { DialogImportComponent } from './dialog-import/dialog-import.component';
 import { APP_ALGORITMY } from './services/algoritmus';
 import { ArcConsistencyService } from './services/arc-consistency.service';
@@ -36,7 +33,6 @@ import { ForwardCheckingDynamicOrderService } from './services/forward-checking-
 import { ForwardCheckingService } from './services/forward-checking.service';
 import { IconsistencyService } from './services/iconsistency.service';
 import { RandomBacktrackingService } from './services/random-backtracking.service';
->>>>>>> fc59b659532545f869d475e4fab030ae0a014e01
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
