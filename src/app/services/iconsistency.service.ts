@@ -28,6 +28,13 @@ export class IconsistencyService implements Algoritmus {
 
     AlgoritmusUtils.prevedOmezeni(seznamPromennych);
 
+    var postupTvoreniGrafu = new Array();
+    var startKrok = new KrokAlgoritmu();
+    startKrok.hodnota = 'iConsistency';
+    startKrok.popis.push(new LokalizovanaZprava('popis.iConsistency.start'));
+    postupTvoreniGrafu.push(startKrok);
+
+
     if (iPocet < 1) {
       // TODO CHYBOVA HLASKA ZE CISLO MUSI BYT ASPON 1
     }
@@ -48,7 +55,9 @@ export class IconsistencyService implements Algoritmus {
     }
     while (this._iConsistencyKontrola(iPocet, seznamPromennych, seznamVsechPromennychOmezeni)
     ) { }
-    return this.backtracking.run(seznamPromennych, pozadovanychReseni);
+    
+    var backtrackingPostup = this.backtracking.run(seznamPromennych, pozadovanychReseni);
+    return postupTvoreniGrafu.concat(backtrackingPostup);
   }
 
   _iConsistencyKontrola(iPocet, seznamPromennych, seznamVsechPromennychOmezeni) {

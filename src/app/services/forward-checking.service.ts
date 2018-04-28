@@ -23,12 +23,18 @@ export class ForwardCheckingService implements Algoritmus {
 
     AlgoritmusUtils.prevedOmezeni(seznamPromennych);
 
+    var postupTvoreniGrafu = new Array();
+    var startKrok = new KrokAlgoritmu();
+    startKrok.hodnota = 'Forward checking';
+    startKrok.popis.push(new LokalizovanaZprava('popis.forwardCheck.start'));
+    postupTvoreniGrafu.push(startKrok);
+
+
     var vstup = new Array();
     for (var i = 0; i < seznamPromennych.length; i++) {
       vstup.push(seznamPromennych[i].nazev);
     }
 
-    var postupTvoreniGrafu = new Array();
     var pocetReseni = 0;
     var promenna = 0;
     while (promenna >= 0 && (!pozadovanychReseni || pocetReseni < pozadovanychReseni)) {

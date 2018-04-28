@@ -24,9 +24,15 @@ export class ForwardCheckingDynamicOrderService extends ForwardCheckingService {
 
     AlgoritmusUtils.prevedOmezeni(seznamPromennych);
 
+    var postupTvoreniGrafu = new Array();
+    var startKrok = new KrokAlgoritmu();
+    startKrok.hodnota = 'Forward checking + DVO';
+    startKrok.popis.push(new LokalizovanaZprava('popis.forwarCheckDynamicOrder.start'));
+    postupTvoreniGrafu.push(startKrok);
+
+
     var vstup = new Array();
 
-    var postupTvoreniGrafu = new Array();
     var pocetReseni = 0;
     var promenna = 0;
     while (promenna >= 0 && (!pozadovanychReseni || pocetReseni < pozadovanychReseni)) {

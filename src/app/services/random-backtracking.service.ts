@@ -28,12 +28,18 @@ export class RandomBacktrackingService implements Algoritmus {
     //    seznamPromennych[4].zalohaDomeny = seznamPromennych[4].domena.slice();
     AlgoritmusUtils.prevedOmezeni(seznamPromennych);
 
+    var postupTvoreniGrafu = new Array();
+    var startKrok = new KrokAlgoritmu();
+    startKrok.hodnota = 'Random backtracking';
+    startKrok.popis.push(new LokalizovanaZprava('popis.random.start'));
+    postupTvoreniGrafu.push(startKrok);
+
+
     // Zaloha domeny - vzdy se vracime k vstupnimu stavu
     seznamPromennych.forEach(
       (p: Promenna) => p.zalohaDomeny = p.domena.slice()
     );
 
-    var postupTvoreniGrafu = new Array();
     var pocetReseni = 0;
     var promenna = 0;
     while (promenna >= 0 && (!pozadovanychReseni || pocetReseni < pozadovanychReseni)) {

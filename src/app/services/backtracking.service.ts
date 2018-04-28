@@ -22,8 +22,13 @@ export class BacktrackingService implements Algoritmus {
 //    seznamPromennych.push(new Promenna('G', [1, 2]));
 
     AlgoritmusUtils.prevedOmezeni(seznamPromennych);
-
+    
     var postupTvoreniGrafu = new Array();
+    var startKrok = new KrokAlgoritmu();
+    startKrok.hodnota = 'Backtracking'; 
+    startKrok.popis.push(new LokalizovanaZprava('popis.backtracking.start'));
+    postupTvoreniGrafu.push(startKrok);    
+
     var pocetReseni = 0;
     var promenna = 0;
     while (promenna >= 0 && (!pozadovanychReseni || pocetReseni < pozadovanychReseni)) {

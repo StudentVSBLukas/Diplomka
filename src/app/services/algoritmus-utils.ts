@@ -315,14 +315,13 @@ export default class AlgoritmusUtils {
     }
   }
 
-  // TODO predelat do stromu a vracet v rodici KrokAlogritmu
   static najdiRodice(promenna: Promenna, postupTvoreniGrafu: Array<KrokAlgoritmu>) {
     if (!promenna) {
       return 0;
     }
     for (let i = postupTvoreniGrafu.length - 1; i >= 0; i--) {
       if (postupTvoreniGrafu[i].nazev === promenna.nazev) {
-        return i + 1; // Uzly jsu cislovany od 1, 0 je root
+        return i;
       }
     }
 

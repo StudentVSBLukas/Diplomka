@@ -23,11 +23,17 @@ export class BackjumpingService implements Algoritmus {
 
     AlgoritmusUtils.prevedOmezeni(seznamPromennych);
 
+    var postupTvoreniGrafu = new Array();
+    var startKrok = new KrokAlgoritmu();
+    startKrok.hodnota = 'Backjumping';
+    startKrok.popis.push(new LokalizovanaZprava('popis.backjumping.start'));
+    postupTvoreniGrafu.push(startKrok);
+
+
     var leafend = new Array();
     for (var i = 0; i < seznamPromennych.length; i++) {
       leafend.push(false);
     }
-    var postupTvoreniGrafu = new Array();
     var pocetReseni = 0;
     var promenna = 0;
     while ((!pozadovanychReseni || pocetReseni < pozadovanychReseni)) {

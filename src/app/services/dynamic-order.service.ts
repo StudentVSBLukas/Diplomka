@@ -20,8 +20,13 @@ export class DynamicOrderService implements Algoritmus {
     //    seznamPromennych.push(new Promenna('E', [1, 5], []));
 
     AlgoritmusUtils.prevedOmezeni(seznamPromennych);
-
+    
     var postupTvoreniGrafu = new Array();
+    var startKrok = new KrokAlgoritmu();
+    startKrok.hodnota = 'Dynamic value ordering'; 
+    startKrok.popis.push(new LokalizovanaZprava('popis.dynamicOrder.start'));
+    postupTvoreniGrafu.push(startKrok);    
+
     var pocetReseni = 0;
     var promenna = 0;
 
