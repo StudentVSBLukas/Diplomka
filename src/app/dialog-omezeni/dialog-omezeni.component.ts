@@ -33,7 +33,7 @@ export class DialogOmezeniComponent implements OnInit {
       (p: Promenna) => p.nazev !== this.promenna.nazev
     ).map(
       (p: Promenna) => ({ label: p.nazev, value: p.nazev })
-    );
+      );
   }
 
   @Input()
@@ -53,7 +53,11 @@ export class DialogOmezeniComponent implements OnInit {
   }
 
   pridejOmezeni(promenna: Promenna, typ: TypOmezeni, cilovaPromenna: string) {
-    const omezeni = new Omezeni(typ, [cilovaPromenna], <any> '');
+    const omezeni = new Omezeni(typ, [cilovaPromenna], <any>'');
+    if (cilovaPromenna) {
+      omezeni.omezeniProPromennou.push(cilovaPromenna);
+    }
+    omezeni.hodnotyOmezeni = <any>'';
     promenna.omezeni.push(omezeni);
   }
 
@@ -75,11 +79,11 @@ export class DialogOmezeniComponent implements OnInit {
   private prevedPromennou(p: Promenna) {
     const vysledek = Object.assign({}, p);
 
-    vysledek.omezeni = p.omezeni.map( function(item) {
-      const o =  Object.assign({}, item);
+    vysledek.omezeni = p.omezeni.map(function (item) {
+      const o = Object.assign({}, item);
 
       o.omezeniProPromennou = item.omezeniProPromennou.slice();
-      o.hodnotyOmezeni = <any> item.hodnotyOmezeni.join(' ');
+      o.hodnotyOmezeni = <any>item.hodnotyOmezeni.join(' ');
 
       return o;
     }, this);
@@ -90,14 +94,14 @@ export class DialogOmezeniComponent implements OnInit {
   private upravPromennou(original: Promenna, cil: Promenna) {
     Object.assign(original, cil);
 
-    original.omezeni = cil.omezeni.map( function(item) {
-      const o =  Object.assign({}, item);
+    original.omezeni = cil.omezeni.map(function (item) {
+      const o = Object.assign({}, item);
 
       o.omezeniProPromennou = item.omezeniProPromennou.slice();
 
-      const dvojiceHodnot = (<any> item.hodnotyOmezeni).match(/\s*(-?\d+\s*,\s*-?\d+)/g) || [];
+      const dvojiceHodnot = (<any>item.hodnotyOmezeni).match(/\s*(-?\d+\s*,\s*-?\d+)/g) || [];
       o.hodnotyOmezeni = dvojiceHodnot.map(
-          (dvojice: string) => dvojice.split(',').map(Number)
+        (dvojice: string) => dvojice.split(',').map(Number)
       );
 
       return o;

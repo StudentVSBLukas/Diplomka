@@ -114,18 +114,20 @@ export class DynamicOrderService implements Algoritmus {
   }
 
   _dynamicOrder(promenna, seznamPromennych) {
-    var nejmensiDelkaDomeny = seznamPromennych[promenna].domena.length;
-    var pozicePromenneSNejmensiDelkouDomeny = promenna;
+    var nejmensiDelkaDomeny;
+    var pozicePromenneSNejmensiDelkouDomeny;
     for (var i = promenna; i < seznamPromennych.length; i++) {
-      for (var j = i; j < seznamPromennych.length; j++) {
-        if (seznamPromennych[i].domena.length < nejmensiDelkaDomeny) {
-          nejmensiDelkaDomeny = seznamPromennych[i].domena.length;
-          pozicePromenneSNejmensiDelkouDomeny = i;
+      nejmensiDelkaDomeny = seznamPromennych[i].domena.length;
+      pozicePromenneSNejmensiDelkouDomeny = i;
+        for (var j = i+1; j < seznamPromennych.length; j++) {
+        if (seznamPromennych[j].domena.length < nejmensiDelkaDomeny) {
+          nejmensiDelkaDomeny = seznamPromennych[j].domena.length;
+          pozicePromenneSNejmensiDelkouDomeny = j;
         }
       }
       var pom = seznamPromennych[pozicePromenneSNejmensiDelkouDomeny];
-      seznamPromennych[pozicePromenneSNejmensiDelkouDomeny] = seznamPromennych[promenna];
-      seznamPromennych[promenna] = pom;
+      seznamPromennych[pozicePromenneSNejmensiDelkouDomeny] = seznamPromennych[i];
+      seznamPromennych[i] = pom;
     }
     return seznamPromennych;
   }
