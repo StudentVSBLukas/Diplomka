@@ -102,7 +102,7 @@
 			"reseni": "Jelikož jsou všechna omezení splněna a všechny proměnné mají přiřazenou hodnotu jedná se o řešení.\n"
 		},
 		"dynamicOrder": {
-			"nazev": "Dynamic order",
+			"nazev": "Dynamic value ordering",
 			"definice" : "TODO: Napsat definici algoritmu Backtracking. Muzes pouzit HTML!!",
 			"prirazeni": "Vybírám náhodnou hodnotu z domény proměnné {{nazev}} = {{hodnota}}.\n",
 			"uzel": "Tato hodnota neporušuje žádné omezení, proto pokračuji dopřednou fází k další proměnné.\n",
@@ -123,6 +123,10 @@
 		},
 		"iConsistency": {
 			"nazev": "iConsistency",
+			"definice": "TODO: Napsat definici algoritmu iConsistency"
+		},
+		"forwarCheckDynamicOrder": {
+			"nazev": "Forward checking + DVO",
 			"definice": "TODO: Napsat definici algoritmu iConsistency"
 		}
 	},
