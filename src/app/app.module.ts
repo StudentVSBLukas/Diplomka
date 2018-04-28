@@ -22,12 +22,6 @@ import { MultiSelectModule } from 'primeng/multiselect';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-import { LokalizaceComponentComponent } from './lokalizace-component/lokalizace-component.component';
-import { PromennaService } from './promenna.service';
-import { DialogOmezeniComponent } from './dialog-omezeni/dialog-omezeni.component';
-import { PromennePanelComponent } from './promenne-panel/promenne-panel.component';
-import { DialogAlgoritmusComponent } from './dialog-algoritmus/dialog-algoritmus.component';
-import { GrafComponent } from './graf/graf.component';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
