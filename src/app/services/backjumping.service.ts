@@ -1,4 +1,4 @@
-import {Promenna, LokalizovanaZprava, KrokAlgoritmu} from '../data-model';
+import {Promenna, LokalizovanaZprava, KrokAlgoritmu, StavKroku} from '../data-model';
 import { Algoritmus } from './algoritmus';
 import { Injectable } from '@angular/core';
 import AlgoritmusUtils from './algoritmus-utils';
@@ -57,7 +57,7 @@ export class BackjumpingService implements Algoritmus {
 
         if (promenna === seznamPromennych.length - 1) {
           pocetReseni++;
-          krokAlgoritmu2.stav = 'reseni';
+          krokAlgoritmu2.stav = StavKroku.reseni;
           var lokalizovanaZprava = new LokalizovanaZprava();
           lokalizovanaZprava.klic = 'popis.backjumping.reseni';
           lokalizovanaZprava.parametry = { 'nazev': krokAlgoritmu2.nazev, 'hodnota': krokAlgoritmu2.hodnota }
@@ -132,7 +132,7 @@ export class BackjumpingService implements Algoritmus {
           if (!poruseneOmezeni) {
             if (promenna === seznamPromennych.length - 1) {
               pocetReseni++;
-              krokAlgoritmu2.stav = 'reseni';
+              krokAlgoritmu2.stav = StavKroku.reseni;
               var lokalizovanaZprava = new LokalizovanaZprava();
               lokalizovanaZprava.klic = 'popis.backjumping.reseni';
               lokalizovanaZprava.parametry = { 'nazev': krokAlgoritmu2.nazev, 'hodnota': krokAlgoritmu2.hodnota }
@@ -152,7 +152,7 @@ export class BackjumpingService implements Algoritmus {
             lokalizovanaZprava.klic = 'popis.backjumping.deadendNedokonceny';
             lokalizovanaZprava.parametry = { 'nazev': krokAlgoritmu2.nazev, 'hodnota': krokAlgoritmu2.hodnota }
             krokAlgoritmu2.popis.push(lokalizovanaZprava);
-            krokAlgoritmu2.stav = 'deadend';
+            krokAlgoritmu2.stav = StavKroku.deadend;
             postupTvoreniGrafu.push(krokAlgoritmu2);
 
           }

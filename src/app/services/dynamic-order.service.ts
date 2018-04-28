@@ -1,4 +1,4 @@
-import { Promenna, KrokAlgoritmu, LokalizovanaZprava, TypKroku } from '../data-model';
+import { Promenna, KrokAlgoritmu, LokalizovanaZprava, TypKroku, StavKroku } from '../data-model';
 import { Algoritmus } from './algoritmus';
 import { Injectable } from '@angular/core';
 import AlgoritmusUtils from './algoritmus-utils';
@@ -91,11 +91,11 @@ export class DynamicOrderService implements Algoritmus {
         lokalizovanaZprava.klic = 'popis.dynamicOrder.deadend';
         lokalizovanaZprava.parametry = { 'nazev': krokAlgoritmu.nazev, 'hodnota': krokAlgoritmu.hodnota }
         krokAlgoritmu.popis.push(lokalizovanaZprava);
-        krokAlgoritmu.stav = 'deadend';
+        krokAlgoritmu.stav = StavKroku.deadend;
       } else {
         if (promenna === (seznamPromennych.length - 1)) {
           pocetReseni++;
-          krokAlgoritmu.stav = 'reseni';
+          krokAlgoritmu.stav = StavKroku.reseni;
           var lokalizovanaZprava = new LokalizovanaZprava();
           lokalizovanaZprava.klic = 'popis.dynamicOrder.reseni';
           lokalizovanaZprava.parametry = { 'nazev': krokAlgoritmu.nazev, 'hodnota': krokAlgoritmu.hodnota }

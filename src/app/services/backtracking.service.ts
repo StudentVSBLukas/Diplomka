@@ -1,4 +1,4 @@
-import {Promenna, KrokAlgoritmu, LokalizovanaZprava} from '../data-model';
+import {Promenna, KrokAlgoritmu, LokalizovanaZprava, StavKroku} from '../data-model';
 import { Algoritmus } from './algoritmus';
 import { Injectable } from '@angular/core';
 import AlgoritmusUtils from './algoritmus-utils';
@@ -63,7 +63,7 @@ export class BacktrackingService implements Algoritmus {
         lokalizovanaZprava.klic = 'popis.backtracking.deadend';
         lokalizovanaZprava.parametry = { 'nazev': krokAlgoritmu.nazev, 'hodnota': krokAlgoritmu.hodnota }
         krokAlgoritmu.popis.push(lokalizovanaZprava);
-        krokAlgoritmu.stav = 'deadend';
+        krokAlgoritmu.stav = StavKroku.deadend;
       } else {
         if (promenna === (seznamPromennych.length - 1)) {
           pocetReseni++;
@@ -71,7 +71,7 @@ export class BacktrackingService implements Algoritmus {
           lokalizovanaZprava.klic = 'popis.backtracking.reseni';
           lokalizovanaZprava.parametry = { 'nazev': krokAlgoritmu.nazev, 'hodnota': krokAlgoritmu.hodnota }
           krokAlgoritmu.popis.push(lokalizovanaZprava);
-          krokAlgoritmu.stav = 'reseni';
+          krokAlgoritmu.stav = StavKroku.reseni;
         } else {
           promenna++;
           var lokalizovanaZprava = new LokalizovanaZprava();

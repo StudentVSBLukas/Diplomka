@@ -1,4 +1,4 @@
-import {Promenna, KrokAlgoritmu, LokalizovanaZprava, TypOmezeni} from '../data-model';
+import {Promenna, KrokAlgoritmu, LokalizovanaZprava, TypOmezeni, StavKroku} from '../data-model';
 import { Algoritmus } from './algoritmus';
 import { Injectable } from '@angular/core';
 import AlgoritmusUtils from './algoritmus-utils';
@@ -71,11 +71,11 @@ export class ForwardCheckingService implements Algoritmus {
         lokalizovanaZprava.klic = 'popis.forwardCheck.deadend';
         lokalizovanaZprava.parametry = { 'nazev': krokAlgoritmu.nazev, 'hodnota': krokAlgoritmu.hodnota }
         krokAlgoritmu.popis.push(lokalizovanaZprava);
-        krokAlgoritmu.stav = 'deadend';
+        krokAlgoritmu.stav = StavKroku.deadend;
       } else {
         if (promenna === (seznamPromennych.length - 1)) {
           pocetReseni++;
-          krokAlgoritmu.stav = 'reseni';
+          krokAlgoritmu.stav = StavKroku.reseni;
           var lokalizovanaZprava = new LokalizovanaZprava();
           lokalizovanaZprava.klic = 'popis.forwardCheck.reseni';
           lokalizovanaZprava.parametry = { 'nazev': krokAlgoritmu.nazev, 'hodnota': krokAlgoritmu.hodnota }
@@ -89,7 +89,7 @@ export class ForwardCheckingService implements Algoritmus {
           //pokud je prazdna domena nastane uvaznuti
           if (tmp[0] === null) {
             // krokAlgoritmu.popis = 'popis.forwardCheck.checkFail';
-            krokAlgoritmu.stav = 'deadend';
+            krokAlgoritmu.stav = StavKroku.deadend;
           } else {
             seznamPromennych = tmp[0];
             var lokalizovanaZprava = new LokalizovanaZprava();

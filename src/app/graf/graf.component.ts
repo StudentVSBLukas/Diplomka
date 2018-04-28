@@ -1,4 +1,4 @@
-import { KrokAlgoritmu, LokalizovanaZprava, TypKroku } from '../data-model';
+import { KrokAlgoritmu, LokalizovanaZprava, TypKroku, StavKroku } from '../data-model';
 import { Component, OnInit, Input, OnChanges, SimpleChange, SimpleChanges } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import * as go from 'gojs';
@@ -51,13 +51,13 @@ export class GrafComponent implements OnInit, OnChanges {
     function colorConverter(krok) {
         const stav = krok.stav;
 
-        if (stav === 'reseni') {
+        if (stav === StavKroku.reseni) {
             return '#72E91B';
         }
-        if (stav === 'deadend') {
+        if (stav === StavKroku.deadend) {
             return '#FFB40E';
         }
-        if (stav === 'nic') {
+        if (stav === StavKroku.uzel) {
             return 'gray';
         }
 
@@ -146,7 +146,7 @@ export class GrafComponent implements OnInit, OnChanges {
   krokujReseni() {
     while (this.krokuj()) {
       const krok = this.postup[this.graf.model.undoManager.historyIndex];
-      if (krok.stav === 'reseni') {
+      if (krok.stav === StavKroku.reseni) {
         break;
       }
     }
@@ -172,7 +172,7 @@ export class GrafComponent implements OnInit, OnChanges {
   odkrokujReseni() {
     while (this.odkrokuj()) {
       const krok = this.graf.model.undoManager.historyIndex;
-      if (krok >= 0 && this.postup[krok].stav === 'reseni') {
+      if (krok >= 0 && this.postup[krok].stav === StavKroku.reseni) {
         break;
       }
     }

@@ -54,17 +54,24 @@ export enum TypKroku {
   popis,
 }
 
+export enum StavKroku {
+  uzel = 'uzel',
+  deadend = 'deadend',
+  reseni = 'reseni,'
+}
+
 export class KrokAlgoritmu {
   nazev: string;
   hodnota: any;
   rodic: number;
   popis = new Array<LokalizovanaZprava>();
-  stav: string; // TODO enum
+  stav: StavKroku;
   typ: TypKroku;
   omezeni: Omezeni;
   hodnotaDomenKroku = new Array<any>();
 
   constructor() {
+    this.stav = StavKroku.uzel; 
     this.typ = TypKroku.akce;
   }
 }

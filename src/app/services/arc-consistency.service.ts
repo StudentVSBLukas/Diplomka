@@ -1,4 +1,4 @@
-import {Promenna, KrokAlgoritmu, LokalizovanaZprava, TypKroku, TypOmezeni} from '../data-model';
+import {Promenna, KrokAlgoritmu, LokalizovanaZprava, TypKroku, TypOmezeni, StavKroku} from '../data-model';
 import { Algoritmus } from './algoritmus';
 import { Injectable } from '@angular/core';
 import AlgoritmusUtils from './algoritmus-utils';
@@ -495,7 +495,7 @@ export class ArcConsistencyService implements Algoritmus {
     krokAlgoritmu.nazev = promenna.nazev;
     krokAlgoritmu.hodnota = null;
     krokAlgoritmu.rodic = 0;
-    krokAlgoritmu.stav = 'deadend';
+    krokAlgoritmu.stav = StavKroku.deadend;
 
     return [krokAlgoritmu];
   }
