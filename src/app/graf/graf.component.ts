@@ -116,11 +116,7 @@ export class GrafComponent implements OnInit, OnChanges {
     this.aktualniKrok = new KrokAlgoritmu();
     this.aktualniKrok.hodnota = 'Start'; 
     // TODO this.aktualniKrok.hodnota = this.translate.instant(this.vybranyAlgoritmus.nazev);
-<<<<<<< HEAD
-    // this.aktualniKrok.popis = 'popis.start';
-=======
     this.aktualniKrok.popis.push(new LokalizovanaZprava('popis.start'));
->>>>>>> 669fff7638560aa38d653bf1b1aca3a7e6e7e463
     const nodeDataArray = [{key: 0, krok: this.aktualniKrok}];
     this.graf.model = new go.TreeModel(nodeDataArray);
   }

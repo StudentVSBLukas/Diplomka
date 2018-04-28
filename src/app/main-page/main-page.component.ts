@@ -451,7 +451,6 @@ export class MainPageComponent implements OnInit {
     //    seznamPromennych.push(new Promenna('C', [3], []));
     //    seznamPromennych.push(new Promenna('D', [4], []));
     //    seznamPromennych.push(new Promenna('E', [1, 2, 3, 4, 5], [new Omezeni('=', ['A', 'D'], null)]));
-
     this._prevodOmezeni(seznamPromennych);
 
     var vstup = new Array();
@@ -776,7 +775,6 @@ export class MainPageComponent implements OnInit {
     //    // seznamPromennych.push(new Promenna("E", [1, 2, 3, 4, 5], [new Omezeni("p", [[1,1],[2,2],[3,3],[4,4],[5,5]], "A"),new Omezeni("p", [[1,1],[2,2],[3,3],[4,4],[5,5]], "D")]))
     //    seznamPromennych.push(new Promenna('E', [4, 5], [new Omezeni('z', [[5, 5]], 'A'), new Omezeni('z', [[4, 4]], 'D')]));
 
-
     this._prevodOmezeni(seznamPromennych);
 
     var zmeneno;
@@ -892,7 +890,7 @@ export class MainPageComponent implements OnInit {
             }
             break;
           case 'p':
-            var porovnavanaPromenna = this.promennaService.najdi(seznamPromennych, promenna.omezeni[j].omezeniProPromennou);
+            var porovnavanaPromenna = this.promennaService.najdi(seznamPromennych, promenna.omezeni[j].hodnotyOmezeni[k]);
             const krokAlgoritmu = new KrokAlgoritmu();
             selhani = this._arcConsistencyPovoleneDvojice(promenna, porovnavanaPromenna, 0, 1, j, 1);
             switch (selhani[0]) {
@@ -916,7 +914,7 @@ export class MainPageComponent implements OnInit {
             }
             break;
           case 'z':
-            var porovnavanaPromenna = this.promennaService.najdi(seznamPromennych, promenna.omezeni[j].omezeniProPromennou);
+            var porovnavanaPromenna = this.promennaService.najdi(seznamPromennych, promenna.omezeni[j].hodnotyOmezeni[k]);
             selhani = this._arcConsistencyZakazanDvojice(promenna, porovnavanaPromenna, 0, j, 1);
             switch (selhani[0]) {
               case "uprava":
@@ -967,7 +965,7 @@ export class MainPageComponent implements OnInit {
         provedlaSeUprava = 'uprava';
         var zprava = new LokalizovanaZprava();
         zprava.klic = 'popis.arcConsistency.prazdnaDomena';
-        zprava.parametry = { 'nazev': promennaA.nazev, 'hodnota': promennaA.domena[i], 'porovnavanaPromenna': promennaB.nazev, "typ": "<" }
+        zprava.parametry = { 'nazev': promennaA.nazev, 'hodnota': promennaA.domena[i], 'porovnavanaPromenna': promennaB.nazev, "typ": "=" }
         popisUpravy.push(zprava)
         if (promennaA.domena.length === 0) {
           var zprava = new LokalizovanaZprava();
@@ -999,7 +997,7 @@ export class MainPageComponent implements OnInit {
         provedlaSeUprava = 'uprava';
         var zprava = new LokalizovanaZprava();
         zprava.klic = 'popis.arcConsistency.prazdnaDomena';
-        zprava.parametry = { 'nazev': promennaA.nazev, 'hodnota': promennaA.domena[i], 'porovnavanaPromenna': promennaB.nazev, "typ": ">" }
+        zprava.parametry = { 'nazev': promennaA.nazev, 'hodnota': promennaA.domena[i], 'porovnavanaPromenna': promennaB.nazev, "typ": "=" }
         popisUpravy.push(zprava)
         if (promennaA.domena.length === 0) {
           var zprava = new LokalizovanaZprava();
@@ -1085,9 +1083,6 @@ export class MainPageComponent implements OnInit {
     var remove, pomoc;
     var vlastniDvojice = [];
     var indexyHodnot = [];
-    var popisUpravy = new Array<LokalizovanaZprava>();
-    var provedlaSeUprava = 'nic';
-
     if (volani === 1) {
       var domenaA = promennaA.domena;
       var domenaB = promennaB.domena;
@@ -1115,36 +1110,17 @@ export class MainPageComponent implements OnInit {
       if (remove && volani === 1) {
         promennaA.domena.splice(i, 1);
         i--;
-        provedlaSeUprava = 'uprava';
-        var zprava = new LokalizovanaZprava();
-        zprava.klic = 'popis.arcConsistency.prazdnaDomena';
-        zprava.parametry = { 'nazev': promennaA.nazev, 'hodnota': promennaA.domena[i], 'porovnavanaPromenna': promennaB.nazev, "typ": "p" }
-        popisUpravy.push(zprava)
         if (promennaA.domena.length === 0) {
-          var zprava = new LokalizovanaZprava();
-          zprava.klic = 'popis.arcConsistency.prazdnaDomena';
-          zprava.parametry = { 'nazev': promennaA.nazev }
-          popisUpravy.push(zprava)
-          return ['prazdna domena', popisUpravy];
+          return 'popis.arcConsistency.prazdnaDomena';
         }
       } else if (remove && volani === 2) {
         promennaB.domena.splice(i, 1);
         i--;
-        provedlaSeUprava = 'uprava';
-        var zprava = new LokalizovanaZprava();
-        zprava.klic = 'popis.arcConsistency.prazdnaDomena';
-        zprava.parametry = { 'nazev': promennaA.nazev, 'hodnota': promennaA.domena[i], 'porovnavanaPromenna': promennaB.nazev, "typ": "p" }
-        popisUpravy.push(zprava)
         if (promennaB.domena.length === 0) {
-          var zprava = new LokalizovanaZprava();
-          zprava.klic = 'popis.arcConsistency.prazdnaDomena';
-          zprava.parametry = { 'nazev': promennaA.nazev }
-          popisUpravy.push(zprava)
-          return ['prazdna domena', popisUpravy];
+          return 'popis.arcConsistency.prazdnaDomena';
         }
       }
     }
-    return [provedlaSeUprava, popisUpravy]
   }
 
   _arcConsistencyZakazanDvojice(promennaA, promennaB, d, index, volani) {
@@ -1152,8 +1128,6 @@ export class MainPageComponent implements OnInit {
     var vlastniDvojice = [];
     var indexyHodnot = [];
     var povoleneDvojice = [];
-    var popisUpravy = new Array<LokalizovanaZprava>();
-    var provedlaSeUprava = 'nic';
     if (volani === 1) {
       var domenaA = promennaA.domena;
       var domenaB = promennaB.domena;
@@ -1209,33 +1183,15 @@ export class MainPageComponent implements OnInit {
       if (remove && volani === 1) {
         promennaA.domena.splice(i, 1);
         if (promennaA.domena.length === 0) {
-          var zprava = new LokalizovanaZprava();
-          zprava.klic = 'popis.arcConsistency.prazdnaDomena';
-          zprava.parametry = { 'nazev': promennaA.nazev }
-          popisUpravy.push(zprava)
-          return ['prazdna domena', popisUpravy];
+          return 'popis.arcConsistency.prazdnaDomena';
         }
         i--;
-        provedlaSeUprava = 'uprava';
-        var zprava = new LokalizovanaZprava();
-        zprava.klic = 'popis.arcConsistency.prazdnaDomena';
-        zprava.parametry = { 'nazev': promennaA.nazev, 'hodnota': promennaA.domena[i], 'porovnavanaPromenna': promennaB.nazev, "typ": "p" }
-        popisUpravy.push(zprava)
       } else if (remove && volani === 2) {
         promennaB.domena.splice(i, 1);
         if (promennaB.domena.length === 0) {
-          var zprava = new LokalizovanaZprava();
-          zprava.klic = 'popis.arcConsistency.prazdnaDomena';
-          zprava.parametry = { 'nazev': promennaA.nazev }
-          popisUpravy.push(zprava)
-          return ['prazdna domena', popisUpravy];
+          return 'popis.arcConsistency.prazdnaDomena';
         }
         i--;
-        provedlaSeUprava = 'uprava';
-        var zprava = new LokalizovanaZprava();
-        zprava.klic = 'popis.arcConsistency.prazdnaDomena';
-        zprava.parametry = { 'nazev': promennaA.nazev, 'hodnota': promennaA.domena[i], 'porovnavanaPromenna': promennaB.nazev, "typ": "p" }
-        popisUpravy.push(zprava)
       }
     }
   }
@@ -1344,7 +1300,6 @@ export class MainPageComponent implements OnInit {
     //    seznamPromennych.push(new Promenna('C', [3, 1], []));
     //    seznamPromennych.push(new Promenna('D', [4], []));
     //    seznamPromennych.push(new Promenna('E', [1, 5], []));
-
     this._prevodOmezeni(seznamPromennych);
 
     var postupTvoreniGrafu = new Array();
@@ -1353,8 +1308,6 @@ export class MainPageComponent implements OnInit {
 
     const krokAlgoritmu = new KrokAlgoritmu();
 
-<<<<<<< HEAD
-=======
     var lokalizovanaZprava = new LokalizovanaZprava();
     lokalizovanaZprava.klic = 'popis.dynamicOrder.poradiPred';
     krokAlgoritmu.popis.push(lokalizovanaZprava);
@@ -1367,7 +1320,6 @@ export class MainPageComponent implements OnInit {
       krokAlgoritmu.popis.push(lokalizovanaZprava);
     }
 
->>>>>>> 669fff7638560aa38d653bf1b1aca3a7e6e7e463
     seznamPromennych = this._dynamicOrder(promenna, seznamPromennych);
 
     const krokAlgoritmu2 = new KrokAlgoritmu();
@@ -1451,7 +1403,6 @@ export class MainPageComponent implements OnInit {
     //    seznamPromennych.push(new Promenna('D', [4, 5], []));
     //    seznamPromennych.push(new Promenna('E', [4, 5], [new Omezeni('=', ['C', 'D'], null)]));
     //    iPocet = 3;
-
     this._prevodOmezeni(seznamPromennych);
 
     if (iPocet < 1) {
