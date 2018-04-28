@@ -54,7 +54,11 @@ export class DialogOmezeniComponent implements OnInit {
   }
 
   pridejOmezeni(promenna: Promenna, typ: string, cilovaPromenna: string) {
-    const omezeni = new Omezeni(typ, [cilovaPromenna], <any> '');
+    const omezeni = new Omezeni(typ);
+    if (cilovaPromenna) {
+      omezeni.omezeniProPromennou.push(cilovaPromenna);
+    }
+    omezeni.hodnotyOmezeni = <any> '';
     promenna.omezeni.push(omezeni);
   }
 
