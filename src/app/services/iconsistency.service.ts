@@ -12,15 +12,6 @@ export class IconsistencyService implements Algoritmus {
   constructor(private backtracking: BacktrackingService) { }
 
   run(seznamPromennych: Array<Promenna>, pozadovanychReseni: number, iPocet: number): Array<KrokAlgoritmu> {
-    seznamPromennych = [];
-    seznamPromennych.push(new Promenna('A', [1, 2, 3], [new Omezeni(TypOmezeni.nerovno, ['B', 'C', 'D', 'G'], null)]));
-    seznamPromennych.push(new Promenna('B', [2, 3], [new Omezeni(TypOmezeni.nerovno, ['F'], null)]));
-    seznamPromennych.push(new Promenna('C', [1, 2], [new Omezeni(TypOmezeni.nerovno, ['G'], null)]));
-    seznamPromennych.push(new Promenna('D', [1, 2], [new Omezeni(TypOmezeni.nerovno, ['E', 'G'], null)]));
-    seznamPromennych.push(new Promenna('E', [2, 3], [new Omezeni(TypOmezeni.nerovno, ['F', 'G'], null)]));
-    seznamPromennych.push(new Promenna('F', [1, 3, 4]));
-    seznamPromennych.push(new Promenna('G', [1, 2])); 
-    
     AlgoritmusUtils.prevedOmezeni(seznamPromennych);
     var postupTvoreniGrafu = new Array();
     var startKrok = new KrokAlgoritmu();
