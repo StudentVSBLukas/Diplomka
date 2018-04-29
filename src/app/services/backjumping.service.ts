@@ -11,6 +11,23 @@ export class BackjumpingService implements Algoritmus {
   constructor() { }
 
   run(seznamPromennych: Array<Promenna>, pozadovanychReseni: number): Array<KrokAlgoritmu> {
+    // TODO Test ze zadani
+    // seznamPromennych = [];
+    // seznamPromennych.push(new Promenna('A', [1, 2, 3], [new Omezeni(TypOmezeni.nerovno, ['B', 'C', 'D', 'G'], null)]));
+    // seznamPromennych.push(new Promenna('B', [2, 3], [new Omezeni(TypOmezeni.nerovno, ['F'], null)]));
+    // seznamPromennych.push(new Promenna('C', [1, 2], [new Omezeni(TypOmezeni.nerovno, ['G'], null)]));
+    // seznamPromennych.push(new Promenna('D', [1, 2], [new Omezeni(TypOmezeni.nerovno, ['E', 'G'], null)]));
+    // seznamPromennych.push(new Promenna('E', [2, 3], [new Omezeni(TypOmezeni.nerovno, ['F', 'G'], null)]));
+    // seznamPromennych.push(new Promenna('F', [1, 3, 4]));
+    // seznamPromennych.push(new Promenna('G', [1, 2]));
+
+    // seznamPromennych.push(new Promenna('A', [1, 2, 4], ));
+    // seznamPromennych.push(new Promenna('B', [1, 3, 5], ));
+    // seznamPromennych.push(new Promenna('C', [1, 2, 5], [new Omezeni(TypOmezeni.rovno, ['A'], null)]));
+    // seznamPromennych.push(new Promenna('D', [1, 3, 5], ));
+    // seznamPromennych.push(new Promenna('E', [2, 4, 5], [new Omezeni(TypOmezeni.rovno, ['C'], null)]));
+
+
     AlgoritmusUtils.prevedOmezeni(seznamPromennych);
 
     var postupTvoreniGrafu = new Array();
@@ -98,7 +115,6 @@ export class BackjumpingService implements Algoritmus {
             krokAlgoritmu = new KrokAlgoritmu();
             krokAlgoritmu.typ = TypKroku.popis;
             krokAlgoritmu.popis.push(lokalizovanaZprava);
-            krokAlgoritmu.stav = StavKroku.deadend;
             postupTvoreniGrafu.push(krokAlgoritmu);
           } else {
             lokalizovanaZprava = new LokalizovanaZprava();
@@ -106,7 +122,6 @@ export class BackjumpingService implements Algoritmus {
             krokAlgoritmu = new KrokAlgoritmu();
             krokAlgoritmu.typ = TypKroku.popis;
             krokAlgoritmu.popis.push(lokalizovanaZprava);
-            krokAlgoritmu.stav = StavKroku.deadend;
             postupTvoreniGrafu.push(krokAlgoritmu);
             for (var i = 0; i < zpracovavanaPromenna.omezeni.length; i++) {
               const omezeni = zpracovavanaPromenna.omezeni[i];
@@ -121,7 +136,6 @@ export class BackjumpingService implements Algoritmus {
             krokAlgoritmu = new KrokAlgoritmu();
             krokAlgoritmu.typ = TypKroku.popis;
             krokAlgoritmu.popis.push(lokalizovanaZprava);
-            krokAlgoritmu.stav = StavKroku.deadend;
             postupTvoreniGrafu.push(krokAlgoritmu);
           }
           for (var i = promenna; i > backjump; i--) {
@@ -133,7 +147,6 @@ export class BackjumpingService implements Algoritmus {
           krokAlgoritmu = new KrokAlgoritmu();
           krokAlgoritmu.typ = TypKroku.popis;
           krokAlgoritmu.popis.push(lokalizovanaZprava);
-          krokAlgoritmu.stav = StavKroku.deadend;
           postupTvoreniGrafu.push(krokAlgoritmu);
           promenna = backjump;
         } else {
@@ -165,7 +178,7 @@ export class BackjumpingService implements Algoritmus {
 
           const poruseneOmezeni = AlgoritmusUtils.porovnej(zpracovavanaPromenna, seznamPromennych);
           if (!poruseneOmezeni) {
-              if (promenna === seznamPromennych.length - 1) {
+            if (promenna === seznamPromennych.length - 1) {
               pocetReseni++;
               var lokalizovanaZprava = new LokalizovanaZprava();
               lokalizovanaZprava.klic = 'popis.backjumping.reseni';
@@ -190,7 +203,7 @@ export class BackjumpingService implements Algoritmus {
             krokAlgoritmu.typ = TypKroku.popis;
             krokAlgoritmu.popis.push(poruseneOmezeni);
             postupTvoreniGrafu.push(krokAlgoritmu);
-              if (zpracovavanaPromenna.domena.length > zpracovavanaPromenna.pozice + 1) {
+            if (zpracovavanaPromenna.domena.length > zpracovavanaPromenna.pozice + 1) {
               lokalizovanaZprava = new LokalizovanaZprava();
               lokalizovanaZprava.klic = 'popis.backjumping.pokracovaniPrirazeni';
               krokAlgoritmu = new KrokAlgoritmu();

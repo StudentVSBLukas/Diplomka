@@ -1,4 +1,4 @@
-import { Promenna, KrokAlgoritmu, LokalizovanaZprava, TypOmezeni, StavKroku, TypKroku } from '../data-model';
+import { Promenna, KrokAlgoritmu, LokalizovanaZprava, TypOmezeni, StavKroku, TypKroku, Omezeni } from '../data-model';
 import { Algoritmus } from './algoritmus';
 import { Injectable } from '@angular/core';
 import AlgoritmusUtils from './algoritmus-utils';
@@ -44,6 +44,7 @@ export class ForwardCheckingService implements Algoritmus {
       krokAlgoritmu.nazev = zpracovavanaPromenna.nazev;
       krokAlgoritmu.hodnota = zpracovavanaPromenna.domena[zpracovavanaPromenna.pozice];
       krokAlgoritmu.rodic = AlgoritmusUtils.najdiRodice(seznamPromennych[promenna - 1], postupTvoreniGrafu);
+      krokAlgoritmu.hodnotaDomenKroku = this._forwardChechHodnotaDomen(seznamPromennych);
       postupTvoreniGrafu.push(krokAlgoritmu);
 
       var lokalizovanaZprava = new LokalizovanaZprava();
@@ -56,6 +57,7 @@ export class ForwardCheckingService implements Algoritmus {
       krokAlgoritmu = new KrokAlgoritmu();
       krokAlgoritmu.typ = TypKroku.popis;
       krokAlgoritmu.popis.push(lokalizovanaZprava);
+      krokAlgoritmu.hodnotaDomenKroku = this._forwardChechHodnotaDomen(seznamPromennych);
       postupTvoreniGrafu.push(krokAlgoritmu);
 
       const poruseneOmezeni = AlgoritmusUtils.porovnej(zpracovavanaPromenna, seznamPromennych);
@@ -63,6 +65,7 @@ export class ForwardCheckingService implements Algoritmus {
         krokAlgoritmu = new KrokAlgoritmu();
         krokAlgoritmu.typ = TypKroku.popis;
         krokAlgoritmu.popis.push(poruseneOmezeni);
+        krokAlgoritmu.hodnotaDomenKroku = this._forwardChechHodnotaDomen(seznamPromennych);
         postupTvoreniGrafu.push(krokAlgoritmu);
         if (zpracovavanaPromenna.domena.length > zpracovavanaPromenna.pozice + 1) {
           lokalizovanaZprava = new LokalizovanaZprava();
@@ -72,6 +75,7 @@ export class ForwardCheckingService implements Algoritmus {
           krokAlgoritmu.typ = TypKroku.popis;
           krokAlgoritmu.popis.push(lokalizovanaZprava);
           krokAlgoritmu.stav = StavKroku.deadend;
+          krokAlgoritmu.hodnotaDomenKroku = this._forwardChechHodnotaDomen(seznamPromennych);
           postupTvoreniGrafu.push(krokAlgoritmu);
         } else {
           lokalizovanaZprava = new LokalizovanaZprava();
@@ -80,13 +84,14 @@ export class ForwardCheckingService implements Algoritmus {
           krokAlgoritmu.typ = TypKroku.popis;
           krokAlgoritmu.popis.push(lokalizovanaZprava);
           krokAlgoritmu.stav = StavKroku.deadend;
+          krokAlgoritmu.hodnotaDomenKroku = this._forwardChechHodnotaDomen(seznamPromennych);
           postupTvoreniGrafu.push(krokAlgoritmu);
         }
       } else {
         if (promenna === (seznamPromennych.length - 1)) {
           pocetReseni++;
           var lokalizovanaZprava = new LokalizovanaZprava();
-          lokalizovanaZprava.klic = 'popis.forwardCheck.uzel';
+          lokalizovanaZprava.klic = 'popis.forwardCheck.reseni';
           krokAlgoritmu = new KrokAlgoritmu();
           krokAlgoritmu.typ = TypKroku.popis;
           krokAlgoritmu.popis.push(lokalizovanaZprava);
@@ -99,6 +104,7 @@ export class ForwardCheckingService implements Algoritmus {
           krokAlgoritmu = new KrokAlgoritmu();
           krokAlgoritmu.typ = TypKroku.popis;
           krokAlgoritmu.popis.push(lokalizovanaZprava);
+          krokAlgoritmu.hodnotaDomenKroku = this._forwardChechHodnotaDomen(seznamPromennych);
           postupTvoreniGrafu.push(krokAlgoritmu);
 
           var tmp = this._forwardCheck(promenna + 1, zpracovavanaPromenna, seznamPromennych, vstup);
@@ -106,6 +112,7 @@ export class ForwardCheckingService implements Algoritmus {
             krokAlgoritmu = new KrokAlgoritmu();
             krokAlgoritmu.typ = TypKroku.popis;
             krokAlgoritmu.popis.push(tmp[2][i]);
+            krokAlgoritmu.hodnotaDomenKroku = this._forwardChechHodnotaDomen(seznamPromennych);
             postupTvoreniGrafu.push(krokAlgoritmu);
           }
           //pokud je prazdna domena nastane uvaznuti
@@ -118,6 +125,7 @@ export class ForwardCheckingService implements Algoritmus {
               krokAlgoritmu.typ = TypKroku.popis;
               krokAlgoritmu.popis.push(lokalizovanaZprava);
               krokAlgoritmu.stav = StavKroku.deadend;
+              krokAlgoritmu.hodnotaDomenKroku = this._forwardChechHodnotaDomen(seznamPromennych);
               postupTvoreniGrafu.push(krokAlgoritmu);
             } else {
               lokalizovanaZprava = new LokalizovanaZprava();
@@ -126,6 +134,7 @@ export class ForwardCheckingService implements Algoritmus {
               krokAlgoritmu.typ = TypKroku.popis;
               krokAlgoritmu.popis.push(lokalizovanaZprava);
               krokAlgoritmu.stav = StavKroku.deadend;
+              krokAlgoritmu.hodnotaDomenKroku = this._forwardChechHodnotaDomen(seznamPromennych);
               postupTvoreniGrafu.push(krokAlgoritmu);
             }
           } else {
@@ -136,6 +145,7 @@ export class ForwardCheckingService implements Algoritmus {
             lokalizovanaZprava.klic = 'popis.forwardCheck.uzel';
             lokalizovanaZprava.parametry = { 'nazev': krokAlgoritmu.nazev, 'hodnota': krokAlgoritmu.hodnota }
             krokAlgoritmu.popis.push(lokalizovanaZprava);
+            krokAlgoritmu.hodnotaDomenKroku = this._forwardChechHodnotaDomen(seznamPromennych);
             postupTvoreniGrafu.push(krokAlgoritmu);
             promenna++;
           }
@@ -234,12 +244,12 @@ export class ForwardCheckingService implements Algoritmus {
                   for (var k = 0; k < seznamPromennych[i].domena.length; k++) {
                     porovnavanaHodnota = seznamPromennych[i].domena[k];
                     if (hodnota === porovnavanaHodnota) {
+                      seznamPromennych[i].domena.splice(k, 1);
                       k--;
                       var popis = new LokalizovanaZprava();
                       popis.klic = 'popis.forwardCheck.nesplneno';
                       popis.parametry = { 'nazev': zpracovavanaPromenna.nazev, 'porovnavanaPromenna': seznamPromennych[i].nazev, 'hodnota': hodnota, 'porovnavanaHodnota': porovnavanaHodnota, 'typOmezeni': TypOmezeni.nerovno }
                       popisPrubehuOmezeni.push(popis);
-                      seznamPromennych[i].domena.splice(k, 1);
                       if (seznamPromennych[i].domena.length === 0) {
                         hodnotaDomen = this._forwardChechHodnotaDomen(seznamPromennych);
                         this._forwardCheckBack(promenna, seznamPromennych, vstup);

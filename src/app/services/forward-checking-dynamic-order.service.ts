@@ -1,4 +1,4 @@
-import {Promenna, KrokAlgoritmu, LokalizovanaZprava, StavKroku} from '../data-model';
+import { Promenna, KrokAlgoritmu, LokalizovanaZprava, StavKroku, TypKroku, Omezeni, TypOmezeni } from '../data-model';
 import { Algoritmus } from './algoritmus';
 import { Injectable } from '@angular/core';
 import AlgoritmusUtils from './algoritmus-utils';
@@ -13,7 +13,21 @@ export class ForwardCheckingDynamicOrderService extends ForwardCheckingService {
     super();
   }
 
-  run(seznamPromennych: Array<Promenna>, pozadovanychReseni:  number): Array<KrokAlgoritmu> {
+  run(seznamPromennych: Array<Promenna>, pozadovanychReseni: number): Array<KrokAlgoritmu> {
+    // TODO Test ze zadani
+    //    seznamPromennych = [];
+    //    seznamPromennych.push(new Promenna('A', [5, 4], []));
+    //    seznamPromennych.push(new Promenna('B', [2], []));
+    //    seznamPromennych.push(new Promenna('C', [3], []));
+    //    seznamPromennych.push(new Promenna('D', [4], []));
+    //    seznamPromennych.push(new Promenna('E', [1, 2, 3, 4, 5], [new Omezeni(TypOmezeni.rovno, ['A', 'D'], null)]));
+
+    // seznamPromennych = [];
+    // seznamPromennych.push(new Promenna('A', [1, 2, 3], []));
+    // seznamPromennych.push(new Promenna('B', [4, 5, 6], [new Omezeni(TypOmezeni.mensi, ['C', 'D'], null)]));
+    // seznamPromennych.push(new Promenna('C', [1, 5, 7], ));
+    // seznamPromennych.push(new Promenna('D', [3, 4, 8], [new Omezeni(TypOmezeni.mensi, ['C'], null)]));
+
     AlgoritmusUtils.prevedOmezeni(seznamPromennych);
 
     var postupTvoreniGrafu = new Array();
@@ -24,17 +38,22 @@ export class ForwardCheckingDynamicOrderService extends ForwardCheckingService {
 
 
     var vstup = new Array();
+    for (var i = 0; i < seznamPromennych.length; i++) {
+      vstup.push(seznamPromennych[i].nazev);
+    }
 
     var pocetReseni = 0;
     var promenna = 0;
     while (promenna >= 0 && (!pozadovanychReseni || pocetReseni < pozadovanychReseni)) {
-      var hodnotyDomen = new Array();
 
-      const krokAlgoritmu = new KrokAlgoritmu();
 
+      var krokAlgoritmu = new KrokAlgoritmu();
       var lokalizovanaZprava = new LokalizovanaZprava();
       lokalizovanaZprava.klic = 'popis.dynamicOrder.poradiPred';
       krokAlgoritmu.popis.push(lokalizovanaZprava);
+      krokAlgoritmu.typ = TypKroku.popis;
+      krokAlgoritmu.hodnotaDomenKroku = this._forwardChechHodnotaDomen(seznamPromennych);
+      postupTvoreniGrafu.push(krokAlgoritmu);
       for (var i = 0; i < seznamPromennych.length; i++) {
         var lokalizovanaZprava = new LokalizovanaZprava();
         lokalizovanaZprava.klic = 'popis.dynamicOrder.poradiInfo';
@@ -42,8 +61,18 @@ export class ForwardCheckingDynamicOrderService extends ForwardCheckingService {
         krokAlgoritmu.popis.push(lokalizovanaZprava);
       }
 
+      var krokAlgoritmu = new KrokAlgoritmu();
+      var lokalizovanaZprava = new LokalizovanaZprava();
+      lokalizovanaZprava.klic = 'popis.dynamicOrder.zacinamSerazovat';
+      krokAlgoritmu.popis.push(lokalizovanaZprava);
+      krokAlgoritmu.typ = TypKroku.popis;
+      krokAlgoritmu.hodnotaDomenKroku = this._forwardChechHodnotaDomen(seznamPromennych);
+      postupTvoreniGrafu.push(krokAlgoritmu);
+
+
       seznamPromennych = this._dynamicOrder(promenna, seznamPromennych);
       AlgoritmusUtils.prevedOmezeni(seznamPromennych);
+      var vstup = new Array();
       for (var i = 0; i < seznamPromennych.length; i++) {
         vstup.push(seznamPromennych[i].nazev);
       }
@@ -51,14 +80,18 @@ export class ForwardCheckingDynamicOrderService extends ForwardCheckingService {
       var lokalizovanaZprava = new LokalizovanaZprava();
       lokalizovanaZprava.klic = 'popis.dynamicOrder.poradiPo';
       krokAlgoritmu.popis.push(lokalizovanaZprava);
+      krokAlgoritmu.typ = TypKroku.popis;
+      krokAlgoritmu.hodnotaDomenKroku = this._forwardChechHodnotaDomen(seznamPromennych);
+      postupTvoreniGrafu.push(krokAlgoritmu);
       for (var i = 0; i < seznamPromennych.length; i++) {
         var lokalizovanaZprava = new LokalizovanaZprava();
         lokalizovanaZprava.klic = 'popis.dynamicOrder.poradiInfo';
         lokalizovanaZprava.parametry = { 'nazev': seznamPromennych[i].nazev, 'delka': seznamPromennych[i].domena.length }
+        krokAlgoritmu.hodnotaDomenKroku = this._forwardChechHodnotaDomen(seznamPromennych);
         krokAlgoritmu.popis.push(lokalizovanaZprava);
       }
 
-
+      var hodnotyDomen = new Array();
       var zpracovavanaPromenna = seznamPromennych[promenna];
       zpracovavanaPromenna.pozice++;
       if (zpracovavanaPromenna.pozice > zpracovavanaPromenna.domena.length - 1) {
@@ -69,46 +102,113 @@ export class ForwardCheckingDynamicOrderService extends ForwardCheckingService {
         promenna--;
         continue;
       }
-
+      var krokAlgoritmu = new KrokAlgoritmu();
       krokAlgoritmu.nazev = zpracovavanaPromenna.nazev;
       krokAlgoritmu.hodnota = zpracovavanaPromenna.domena[zpracovavanaPromenna.pozice];
       krokAlgoritmu.rodic = AlgoritmusUtils.najdiRodice(seznamPromennych[promenna - 1], postupTvoreniGrafu);
+      krokAlgoritmu.hodnotaDomenKroku = this._forwardChechHodnotaDomen(seznamPromennych);
+      postupTvoreniGrafu.push(krokAlgoritmu);
 
       var lokalizovanaZprava = new LokalizovanaZprava();
       lokalizovanaZprava.klic = 'popis.forwardCheck.prirazeni';
       lokalizovanaZprava.parametry = { 'nazev': krokAlgoritmu.nazev, 'hodnota': krokAlgoritmu.hodnota }
       krokAlgoritmu.popis.push(lokalizovanaZprava);
 
+      lokalizovanaZprava = new LokalizovanaZprava();
+      lokalizovanaZprava.klic = 'popis.forwardCheck.kontrolaOmezeni';
+      krokAlgoritmu = new KrokAlgoritmu();
+      krokAlgoritmu.typ = TypKroku.popis;
+      krokAlgoritmu.popis.push(lokalizovanaZprava);
+      krokAlgoritmu.hodnotaDomenKroku = this._forwardChechHodnotaDomen(seznamPromennych);
+      postupTvoreniGrafu.push(krokAlgoritmu);
 
       const poruseneOmezeni = AlgoritmusUtils.porovnej(zpracovavanaPromenna, seznamPromennych);
       if (poruseneOmezeni) {
-        var lokalizovanaZprava = new LokalizovanaZprava();
-        lokalizovanaZprava.klic = 'popis.forwardCheck.deadend';
-        lokalizovanaZprava.parametry = { 'nazev': krokAlgoritmu.nazev, 'hodnota': krokAlgoritmu.hodnota }
-        krokAlgoritmu.popis.push(lokalizovanaZprava);
-        krokAlgoritmu.stav = StavKroku.deadend;
+        krokAlgoritmu = new KrokAlgoritmu();
+        krokAlgoritmu.typ = TypKroku.popis;
+        krokAlgoritmu.popis.push(poruseneOmezeni);
+        krokAlgoritmu.hodnotaDomenKroku = this._forwardChechHodnotaDomen(seznamPromennych);
+        postupTvoreniGrafu.push(krokAlgoritmu);
+        if (zpracovavanaPromenna.domena.length > zpracovavanaPromenna.pozice + 1) {
+          lokalizovanaZprava = new LokalizovanaZprava();
+          lokalizovanaZprava.klic = 'popis.forwardCheck.pokracovaniPrirazeni';
+          lokalizovanaZprava.parametry = { 'nazev': krokAlgoritmu.nazev, 'hodnota': krokAlgoritmu.hodnota }
+          krokAlgoritmu = new KrokAlgoritmu();
+          krokAlgoritmu.typ = TypKroku.popis;
+          krokAlgoritmu.popis.push(lokalizovanaZprava);
+          krokAlgoritmu.stav = StavKroku.deadend;
+          krokAlgoritmu.hodnotaDomenKroku = this._forwardChechHodnotaDomen(seznamPromennych);
+          postupTvoreniGrafu.push(krokAlgoritmu);
+        } else {
+          lokalizovanaZprava = new LokalizovanaZprava();
+          lokalizovanaZprava.klic = 'popis.forwardCheck.deadend';
+          krokAlgoritmu = new KrokAlgoritmu();
+          krokAlgoritmu.typ = TypKroku.popis;
+          krokAlgoritmu.popis.push(lokalizovanaZprava);
+          krokAlgoritmu.stav = StavKroku.deadend;
+          krokAlgoritmu.hodnotaDomenKroku = this._forwardChechHodnotaDomen(seznamPromennych);
+          postupTvoreniGrafu.push(krokAlgoritmu);
+        }
       } else {
         if (promenna === (seznamPromennych.length - 1)) {
           pocetReseni++;
-          krokAlgoritmu.stav = StavKroku.reseni;
           var lokalizovanaZprava = new LokalizovanaZprava();
           lokalizovanaZprava.klic = 'popis.forwardCheck.reseni';
-          lokalizovanaZprava.parametry = { 'nazev': krokAlgoritmu.nazev, 'hodnota': krokAlgoritmu.hodnota }
+          krokAlgoritmu = new KrokAlgoritmu();
+          krokAlgoritmu.typ = TypKroku.popis;
+          krokAlgoritmu.popis.push(lokalizovanaZprava);
+          krokAlgoritmu.stav = StavKroku.reseni;
+          krokAlgoritmu.hodnotaDomenKroku = this._forwardChechHodnotaDomen(seznamPromennych);
+          postupTvoreniGrafu.push(krokAlgoritmu);
+        } else {
+          var lokalizovanaZprava = new LokalizovanaZprava();
+          lokalizovanaZprava.klic = 'popis.forwardCheck.splneniOmezeni';
+          krokAlgoritmu = new KrokAlgoritmu();
+          krokAlgoritmu.typ = TypKroku.popis;
           krokAlgoritmu.popis.push(lokalizovanaZprava);
           krokAlgoritmu.hodnotaDomenKroku = this._forwardChechHodnotaDomen(seznamPromennych);
-        } else {
+          postupTvoreniGrafu.push(krokAlgoritmu);
+
           var tmp = this._forwardCheck(promenna + 1, zpracovavanaPromenna, seznamPromennych, vstup);
           for (var i = 0; i < tmp[2].length; i++) {
+            krokAlgoritmu = new KrokAlgoritmu();
+            krokAlgoritmu.typ = TypKroku.popis;
             krokAlgoritmu.popis.push(tmp[2][i]);
+            krokAlgoritmu.hodnotaDomenKroku = this._forwardChechHodnotaDomen(seznamPromennych);
+            postupTvoreniGrafu.push(krokAlgoritmu);
           }
+          //pokud je prazdna domena nastane uvaznuti
           if (tmp[0] === null) {
-            krokAlgoritmu.stav = StavKroku.deadend;
+            if (zpracovavanaPromenna.domena.length > zpracovavanaPromenna.pozice + 1) {
+              lokalizovanaZprava = new LokalizovanaZprava();
+              lokalizovanaZprava.klic = 'popis.backtracking.pokracovaniPrirazeni';
+              lokalizovanaZprava.parametry = { 'nazev': krokAlgoritmu.nazev, 'hodnota': krokAlgoritmu.hodnota }
+              krokAlgoritmu = new KrokAlgoritmu();
+              krokAlgoritmu.typ = TypKroku.popis;
+              krokAlgoritmu.popis.push(lokalizovanaZprava);
+              krokAlgoritmu.stav = StavKroku.deadend;
+              krokAlgoritmu.hodnotaDomenKroku = this._forwardChechHodnotaDomen(seznamPromennych);
+              postupTvoreniGrafu.push(krokAlgoritmu);
+            } else {
+              lokalizovanaZprava = new LokalizovanaZprava();
+              lokalizovanaZprava.klic = 'popis.backtracking.deadend';
+              krokAlgoritmu = new KrokAlgoritmu();
+              krokAlgoritmu.typ = TypKroku.popis;
+              krokAlgoritmu.popis.push(lokalizovanaZprava);
+              krokAlgoritmu.stav = StavKroku.deadend;
+              krokAlgoritmu.hodnotaDomenKroku = this._forwardChechHodnotaDomen(seznamPromennych);
+              postupTvoreniGrafu.push(krokAlgoritmu);
+            }
           } else {
             seznamPromennych = tmp[0];
+            krokAlgoritmu = new KrokAlgoritmu();
+            krokAlgoritmu.typ = TypKroku.popis;
             var lokalizovanaZprava = new LokalizovanaZprava();
             lokalizovanaZprava.klic = 'popis.forwardCheck.uzel';
             lokalizovanaZprava.parametry = { 'nazev': krokAlgoritmu.nazev, 'hodnota': krokAlgoritmu.hodnota }
             krokAlgoritmu.popis.push(lokalizovanaZprava);
+            krokAlgoritmu.hodnotaDomenKroku = this._forwardChechHodnotaDomen(seznamPromennych);
+            postupTvoreniGrafu.push(krokAlgoritmu);
             promenna++;
           }
           krokAlgoritmu.hodnotaDomenKroku = tmp[1];
@@ -117,24 +217,27 @@ export class ForwardCheckingDynamicOrderService extends ForwardCheckingService {
       for (var i = 0; i < seznamPromennych.length; i++) {
         hodnotyDomen.push(seznamPromennych[i].domena.slice());
       }
-      postupTvoreniGrafu.push(krokAlgoritmu);
     }
     return postupTvoreniGrafu;
   }
 
+
   _dynamicOrder(promenna, seznamPromennych) {
-    var nejmensiDelkaDomeny = 999999999;
-    var pozicePromenneSNejmensiDelkouDomeny = 999999999;
+    var nejmensiDelkaDomeny;
+    var pozicePromenneSNejmensiDelkouDomeny;
     for (var i = promenna; i < seznamPromennych.length; i++) {
-      if (seznamPromennych[i].domena.length < nejmensiDelkaDomeny) {
-        nejmensiDelkaDomeny = seznamPromennych[i].domena.length;
-        pozicePromenneSNejmensiDelkouDomeny = i;
+      nejmensiDelkaDomeny = seznamPromennych[i].domena.length;
+      pozicePromenneSNejmensiDelkouDomeny = i;
+      for (var j = i + 1; j < seznamPromennych.length; j++) {
+        if (seznamPromennych[j].domena.length < nejmensiDelkaDomeny) {
+          nejmensiDelkaDomeny = seznamPromennych[j].domena.length;
+          pozicePromenneSNejmensiDelkouDomeny = j;
+        }
       }
+      var pom = seznamPromennych[pozicePromenneSNejmensiDelkouDomeny];
+      seznamPromennych[pozicePromenneSNejmensiDelkouDomeny] = seznamPromennych[i];
+      seznamPromennych[i] = pom;
     }
-    var pom = seznamPromennych[pozicePromenneSNejmensiDelkouDomeny];
-    seznamPromennych[pozicePromenneSNejmensiDelkouDomeny] = seznamPromennych[promenna];
-    seznamPromennych[promenna] = pom;
     return seznamPromennych;
   }
-
 }

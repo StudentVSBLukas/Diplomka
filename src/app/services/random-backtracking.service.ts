@@ -1,4 +1,4 @@
-import { Promenna, KrokAlgoritmu, LokalizovanaZprava, StavKroku } from '../data-model';
+import { Promenna, KrokAlgoritmu, LokalizovanaZprava, StavKroku, TypOmezeni, Omezeni } from '../data-model';
 import { Algoritmus } from './algoritmus';
 import { Injectable } from '@angular/core';
 import AlgoritmusUtils from './algoritmus-utils';
@@ -71,6 +71,7 @@ export class RandomBacktrackingService implements Algoritmus {
           lokalizovanaZprava.parametry = { 'nazev': krokAlgoritmu.nazev, 'hodnota': krokAlgoritmu.hodnota }
           krokAlgoritmu = new KrokAlgoritmu();
           krokAlgoritmu.typ = TypKroku.popis;
+          krokAlgoritmu.stav = StavKroku.deadend;
           krokAlgoritmu.popis.push(lokalizovanaZprava);
           postupTvoreniGrafu.push(krokAlgoritmu);
         } else {

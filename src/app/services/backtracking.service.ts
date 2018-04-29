@@ -1,4 +1,4 @@
-import { Promenna, KrokAlgoritmu, LokalizovanaZprava, StavKroku } from '../data-model';
+import { Promenna, KrokAlgoritmu, LokalizovanaZprava, StavKroku, Omezeni, TypOmezeni } from '../data-model';
 import { Algoritmus } from './algoritmus';
 import { Injectable } from '@angular/core';
 import AlgoritmusUtils from './algoritmus-utils';
@@ -12,6 +12,16 @@ export class BacktrackingService implements Algoritmus {
   constructor() { }
 
   run(seznamPromennych: Array<Promenna>, pozadovanychReseni: number): Array<KrokAlgoritmu> {
+    // TODO Test ze zadani
+      //  seznamPromennych = [];
+      //  seznamPromennych.push(new Promenna('A', [1, 2, 3], [new Omezeni(TypOmezeni.nerovno, ['B', 'C', 'D', 'G'], null)]));
+      //  seznamPromennych.push(new Promenna('B', [2, 3], [new Omezeni(TypOmezeni.nerovno, ['F'], null)]));
+      //  seznamPromennych.push(new Promenna('C', [1, 2], [new Omezeni(TypOmezeni.nerovno, ['G'], null)]));
+      //  seznamPromennych.push(new Promenna('D', [1, 2], [new Omezeni(TypOmezeni.nerovno, ['E', 'G'], null)]));
+      //  seznamPromennych.push(new Promenna('E', [2, 3], [new Omezeni(TypOmezeni.nerovno, ['F', 'G'], null)]));
+      //  seznamPromennych.push(new Promenna('F', [1, 3, 4]));
+      //  seznamPromennych.push(new Promenna('G', [1, 2]));
+
     AlgoritmusUtils.prevedOmezeni(seznamPromennych);
 
     var postupTvoreniGrafu = new Array();
