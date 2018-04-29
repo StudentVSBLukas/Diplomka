@@ -14,20 +14,6 @@ export class ForwardCheckingDynamicOrderService extends ForwardCheckingService {
   }
 
   run(seznamPromennych: Array<Promenna>, pozadovanychReseni: number): Array<KrokAlgoritmu> {
-    // TODO Test ze zadani
-    //    seznamPromennych = [];
-    //    seznamPromennych.push(new Promenna('A', [5, 4], []));
-    //    seznamPromennych.push(new Promenna('B', [2], []));
-    //    seznamPromennych.push(new Promenna('C', [3], []));
-    //    seznamPromennych.push(new Promenna('D', [4], []));
-    //    seznamPromennych.push(new Promenna('E', [1, 2, 3, 4, 5], [new Omezeni(TypOmezeni.rovno, ['A', 'D'], null)]));
-
-    // seznamPromennych = [];
-    // seznamPromennych.push(new Promenna('A', [1, 2, 3], []));
-    // seznamPromennych.push(new Promenna('B', [4, 5, 6], [new Omezeni(TypOmezeni.mensi, ['C', 'D'], null)]));
-    // seznamPromennych.push(new Promenna('C', [1, 5, 7], ));
-    // seznamPromennych.push(new Promenna('D', [3, 4, 8], [new Omezeni(TypOmezeni.mensi, ['C'], null)]));
-
     AlgoritmusUtils.prevedOmezeni(seznamPromennych);
 
     var postupTvoreniGrafu = new Array();
