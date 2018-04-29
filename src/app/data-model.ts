@@ -31,7 +31,6 @@ export enum TypOmezeni {
 export class Omezeni {
   static id_sequence = 0;
 
-  // TODO predelat na Enum a zmenit i atribut ve tride Omezeni
   id: number;
   typOmezeni: TypOmezeni;
   hodnotyOmezeni: Array<Array<number>>;

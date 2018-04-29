@@ -15,17 +15,17 @@ export class DialogOmezeniComponent implements OnInit {
 
 
   filtrovanePromenne: Array<any>;
-  // TODO vytahnout do enums
-  typyOmezeni = [
-    { label: 'omezeni.typ.<', value: TypOmezeni.mensi },
-    { label: 'omezeni.typ.>', value: TypOmezeni.vetsi },
-    { label: 'omezeni.typ.=', value: TypOmezeni.rovno },
-    { label: 'omezeni.typ.!', value: TypOmezeni.nerovno },
-    { label: 'omezeni.typ.p', value: TypOmezeni.povoleno },
-    { label: 'omezeni.typ.z', value: TypOmezeni.zakazano }
-  ];
+  typyOmezeni: Array<any>;
 
   constructor(private promennaService: PromennaService) {
+    this.typyOmezeni = [
+      {label: 'omezeni.typ.<', value: TypOmezeni.mensi},
+      {label: 'omezeni.typ.>', value: TypOmezeni.vetsi},
+      {label: 'omezeni.typ.=', value: TypOmezeni.rovno},
+      {label: 'omezeni.typ.!', value: TypOmezeni.nerovno},
+      {label: 'omezeni.typ.p', value: TypOmezeni.povoleno},
+      {label: 'omezeni.typ.z', value: TypOmezeni.zakazano}
+    ];
   }
 
   ngOnInit() {
@@ -45,7 +45,6 @@ export class DialogOmezeniComponent implements OnInit {
     return this._promenna;
   }
 
-  // TODO presunout na Promennou (spravny typ na vybranaPromenna)
   odeberOmezeni(promenna: Promenna, omezeni: Omezeni) {
     const index = promenna.omezeni.indexOf(omezeni);
     if (index !== -1) {
@@ -77,7 +76,6 @@ export class DialogOmezeniComponent implements OnInit {
     this.close.emit(null);
   }
 
-  // TODO Promenna Converter class
   private prevedPromennou(p: Promenna) {
     const vysledek = Object.assign({}, p);
 
