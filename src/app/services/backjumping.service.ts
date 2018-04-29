@@ -1,4 +1,4 @@
-import { Promenna, LokalizovanaZprava, KrokAlgoritmu, StavKroku, Omezeni, TypOmezeni } from '../data-model';
+import { Promenna, LokalizovanaZprava, KrokAlgoritmu, StavKroku, Omezeni, TypOmezeni, TypKroku } from '../data-model';
 import { Algoritmus } from './algoritmus';
 import { Injectable } from '@angular/core';
 import AlgoritmusUtils from './algoritmus-utils';
@@ -21,11 +21,11 @@ export class BackjumpingService implements Algoritmus {
     //    seznamPromennych.push(new Promenna('F', [1, 3, 4]));
     //    seznamPromennych.push(new Promenna('G', [1, 2]));
 
-    seznamPromennych.push(new Promenna('A', [1, 2, 3], [new Omezeni(TypOmezeni.nerovno, ['B', 'C', 'D', 'G'], null)]));
-    seznamPromennych.push(new Promenna('B', [2, 3], [new Omezeni(TypOmezeni.nerovno, ['F'], null)]));
-    seznamPromennych.push(new Promenna('C', [1, 2], [new Omezeni(TypOmezeni.nerovno, ['G'], null)]));
-    seznamPromennych.push(new Promenna('D', [1, 2], [new Omezeni(TypOmezeni.nerovno, ['E', 'G'], null)]));
-    seznamPromennych.push(new Promenna('E', [2, 3], [new Omezeni(TypOmezeni.nerovno, ['F', 'G'], null)]));
+    seznamPromennych.push(new Promenna('A', [1, 2, 4], ));
+    seznamPromennych.push(new Promenna('B', [1, 3, 5], ));
+    seznamPromennych.push(new Promenna('C', [1, 2, 5], [new Omezeni(TypOmezeni.rovno, ['A'], null)]));
+    seznamPromennych.push(new Promenna('D', [1, 3, 5], ));
+    seznamPromennych.push(new Promenna('E', [2, 4, 5], [new Omezeni(TypOmezeni.rovno, ['C'], null)]));
 
 
     AlgoritmusUtils.prevedOmezeni(seznamPromennych);
@@ -50,47 +50,54 @@ export class BackjumpingService implements Algoritmus {
         if (zpracovavanaPromenna.pozice === zpracovavanaPromenna.domena.length) {
           break;
         }
-        var krokAlgoritmu2 = new KrokAlgoritmu();
-        krokAlgoritmu2.nazev = zpracovavanaPromenna.nazev;
-        krokAlgoritmu2.hodnota = zpracovavanaPromenna.domena[zpracovavanaPromenna.pozice];
-        krokAlgoritmu2.rodic = 0;
-        postupTvoreniGrafu.push(krokAlgoritmu2);
+        var krokAlgoritmu = new KrokAlgoritmu();
+        krokAlgoritmu.nazev = zpracovavanaPromenna.nazev;
+        krokAlgoritmu.hodnota = zpracovavanaPromenna.domena[zpracovavanaPromenna.pozice];
+        krokAlgoritmu.rodic = 0;
+        postupTvoreniGrafu.push(krokAlgoritmu);
 
 
         var lokalizovanaZprava = new LokalizovanaZprava();
         lokalizovanaZprava.klic = 'popis.backjumping.prirazeni';
-        lokalizovanaZprava.parametry = { 'nazev': krokAlgoritmu2.nazev, 'hodnota': krokAlgoritmu2.hodnota }
-        krokAlgoritmu2.popis.push(lokalizovanaZprava);
+        lokalizovanaZprava.parametry = { 'nazev': krokAlgoritmu.nazev, 'hodnota': krokAlgoritmu.hodnota }
+        krokAlgoritmu.popis.push(lokalizovanaZprava);
 
         if (promenna === seznamPromennych.length - 1) {
           pocetReseni++;
-          krokAlgoritmu2.stav = StavKroku.reseni;
           var lokalizovanaZprava = new LokalizovanaZprava();
           lokalizovanaZprava.klic = 'popis.backjumping.reseni';
-          lokalizovanaZprava.parametry = { 'nazev': krokAlgoritmu2.nazev, 'hodnota': krokAlgoritmu2.hodnota }
-          krokAlgoritmu2.popis.push(lokalizovanaZprava);
+          lokalizovanaZprava.parametry = { 'nazev': krokAlgoritmu.nazev, 'hodnota': krokAlgoritmu.hodnota }
+          krokAlgoritmu = new KrokAlgoritmu();
+          krokAlgoritmu.typ = TypKroku.popis;
+          krokAlgoritmu.popis.push(lokalizovanaZprava);
+          krokAlgoritmu.stav = StavKroku.reseni;
+          postupTvoreniGrafu.push(krokAlgoritmu);
           leafend[promenna] = true;
         } else {
           var lokalizovanaZprava = new LokalizovanaZprava();
-          lokalizovanaZprava.klic = 'popis.backjumping.uzel';
-          lokalizovanaZprava.parametry = { 'nazev': krokAlgoritmu2.nazev, 'hodnota': krokAlgoritmu2.hodnota }
-          krokAlgoritmu2.popis.push(lokalizovanaZprava);
+          lokalizovanaZprava.klic = 'popis.backtracking.uzel';
+          lokalizovanaZprava.parametry = { 'nazev': krokAlgoritmu.nazev, 'hodnota': krokAlgoritmu.hodnota }
+          krokAlgoritmu = new KrokAlgoritmu();
+          krokAlgoritmu.typ = TypKroku.popis;
+          krokAlgoritmu.popis.push(lokalizovanaZprava);
+          postupTvoreniGrafu.push(krokAlgoritmu);
           leafend[promenna] = true;
           promenna++;
         }
       } else {
         zpracovavanaPromenna.pozice++;
 
-        var krokAlgoritmu2 = new KrokAlgoritmu();
-        krokAlgoritmu2.nazev = zpracovavanaPromenna.nazev;
-        krokAlgoritmu2.hodnota = zpracovavanaPromenna.domena[zpracovavanaPromenna.pozice];
-        krokAlgoritmu2.rodic = 0;
-
+        var krokAlgoritmu = new KrokAlgoritmu();
+        krokAlgoritmu.nazev = zpracovavanaPromenna.nazev;
+        krokAlgoritmu.hodnota = zpracovavanaPromenna.domena[zpracovavanaPromenna.pozice];
+        krokAlgoritmu.typ = TypKroku.akce;
 
         var lokalizovanaZprava = new LokalizovanaZprava();
         lokalizovanaZprava.klic = 'popis.backjumping.prirazeni';
-        lokalizovanaZprava.parametry = { 'nazev': krokAlgoritmu2.nazev, 'hodnota': krokAlgoritmu2.hodnota }
-        krokAlgoritmu2.popis.push(lokalizovanaZprava);
+        lokalizovanaZprava.parametry = { 'nazev': krokAlgoritmu.nazev, 'hodnota': krokAlgoritmu.hodnota }
+        krokAlgoritmu.popis.push(lokalizovanaZprava);
+        krokAlgoritmu.rodic = AlgoritmusUtils.najdiRodice(seznamPromennych[promenna - 1], postupTvoreniGrafu);
+        postupTvoreniGrafu.push(krokAlgoritmu);
 
 
         if (zpracovavanaPromenna.pozice === zpracovavanaPromenna.domena.length) {
@@ -99,10 +106,14 @@ export class BackjumpingService implements Algoritmus {
           if (leafend[promenna]) {
             leafend[promenna] = false;
             promenna--;
-            var lokalizovanaZprava = new LokalizovanaZprava();
-            lokalizovanaZprava.klic = 'popis.backjumping.deadend';
-            lokalizovanaZprava.parametry = { 'nazev': krokAlgoritmu2.nazev, 'hodnota': krokAlgoritmu2.hodnota }
-            krokAlgoritmu2.popis.push(lokalizovanaZprava);
+            // lokalizovanaZprava = new LokalizovanaZprava();
+            // lokalizovanaZprava.klic = 'popis.backtracking.deadend';
+            // lokalizovanaZprava.parametry = { 'nazev': krokAlgoritmu.nazev, 'hodnota': krokAlgoritmu.hodnota }
+            // krokAlgoritmu = new KrokAlgoritmu();
+            // krokAlgoritmu.typ = TypKroku.popis;
+            // krokAlgoritmu.popis.push(lokalizovanaZprava);
+            // krokAlgoritmu.stav = StavKroku.deadend;
+            // postupTvoreniGrafu.push(krokAlgoritmu);
             continue;
           }
           if (zpracovavanaPromenna.omezeni.length === 0) {
@@ -122,46 +133,69 @@ export class BackjumpingService implements Algoritmus {
           }
           var lokalizovanaZprava = new LokalizovanaZprava();
           lokalizovanaZprava.klic = 'popis.backjumping.backjump';
-          lokalizovanaZprava.parametry = { 'nazev': krokAlgoritmu2.nazev, 'hodnota': krokAlgoritmu2.hodnota }
-          krokAlgoritmu2.popis.push(lokalizovanaZprava);
+          lokalizovanaZprava.parametry = { 'nazev': krokAlgoritmu.nazev, 'hodnota': krokAlgoritmu.hodnota }
+          krokAlgoritmu.popis.push(lokalizovanaZprava);
+          postupTvoreniGrafu.push(krokAlgoritmu);
+          krokAlgoritmu.typ = TypKroku.popis;
           promenna = backjump;
         } else {
-          var krokAlgoritmu2 = new KrokAlgoritmu();
-          krokAlgoritmu2.nazev = zpracovavanaPromenna.nazev;
-          krokAlgoritmu2.hodnota = zpracovavanaPromenna.domena[zpracovavanaPromenna.pozice];
-          krokAlgoritmu2.rodic = AlgoritmusUtils.najdiRodice(seznamPromennych[promenna - 1], postupTvoreniGrafu);
+          var krokAlgoritmu = new KrokAlgoritmu();
+          krokAlgoritmu.nazev = zpracovavanaPromenna.nazev;
+          krokAlgoritmu.hodnota = zpracovavanaPromenna.domena[zpracovavanaPromenna.pozice];
+          krokAlgoritmu.rodic = AlgoritmusUtils.najdiRodice(seznamPromennych[promenna - 1], postupTvoreniGrafu);
+
+          lokalizovanaZprava = new LokalizovanaZprava();
+          lokalizovanaZprava.klic = 'popis.backjumping.kontrolaOmezeni';
+          lokalizovanaZprava.parametry = { 'nazev': krokAlgoritmu.nazev, 'hodnota': krokAlgoritmu.hodnota }
+          krokAlgoritmu = new KrokAlgoritmu();
+          krokAlgoritmu.typ = TypKroku.popis;
+          krokAlgoritmu.popis.push(lokalizovanaZprava);
+          postupTvoreniGrafu.push(krokAlgoritmu);
+
           const poruseneOmezeni = AlgoritmusUtils.porovnej(zpracovavanaPromenna, seznamPromennych);
-          if (poruseneOmezeni) {
-            for (var i = 0; i < poruseneOmezeni.length; i++) {
-              krokAlgoritmu2.popis.push(poruseneOmezeni[i]);
-            }
-          }
           if (!poruseneOmezeni) {
             if (promenna === seznamPromennych.length - 1) {
               pocetReseni++;
-              krokAlgoritmu2.stav = StavKroku.reseni;
               var lokalizovanaZprava = new LokalizovanaZprava();
-              lokalizovanaZprava.klic = 'popis.backjumping.reseni';
-              lokalizovanaZprava.parametry = { 'nazev': krokAlgoritmu2.nazev, 'hodnota': krokAlgoritmu2.hodnota }
-              krokAlgoritmu2.popis.push(lokalizovanaZprava);
+              lokalizovanaZprava.klic = 'popis.backtracking.reseni';
+              lokalizovanaZprava.parametry = { 'nazev': krokAlgoritmu.nazev, 'hodnota': krokAlgoritmu.hodnota }
+              krokAlgoritmu = new KrokAlgoritmu();
+              krokAlgoritmu.typ = TypKroku.popis;
+              krokAlgoritmu.popis.push(lokalizovanaZprava);
+              krokAlgoritmu.stav = StavKroku.reseni;
+              postupTvoreniGrafu.push(krokAlgoritmu);
               leafend[promenna] = true;
             } else {
               var lokalizovanaZprava = new LokalizovanaZprava();
-              lokalizovanaZprava.klic = 'popis.backjumping.uzel';
-              lokalizovanaZprava.parametry = { 'nazev': krokAlgoritmu2.nazev, 'hodnota': krokAlgoritmu2.hodnota }
-              krokAlgoritmu2.popis.push(lokalizovanaZprava);
+              lokalizovanaZprava.klic = 'popis.backtracking.uzel';
+              lokalizovanaZprava.parametry = { 'nazev': krokAlgoritmu.nazev, 'hodnota': krokAlgoritmu.hodnota }
+              krokAlgoritmu = new KrokAlgoritmu();
+              krokAlgoritmu.typ = TypKroku.popis;
+              krokAlgoritmu.popis.push(lokalizovanaZprava);
+              postupTvoreniGrafu.push(krokAlgoritmu);
               leafend[promenna] = true;
               promenna++;
             }
-            postupTvoreniGrafu.push(krokAlgoritmu2);
+            postupTvoreniGrafu.push(krokAlgoritmu);
           } else {
-            var lokalizovanaZprava = new LokalizovanaZprava();
-            lokalizovanaZprava.klic = 'popis.backjumping.deadendNedokonceny';
-            lokalizovanaZprava.parametry = { 'nazev': krokAlgoritmu2.nazev, 'hodnota': krokAlgoritmu2.hodnota }
-            krokAlgoritmu2.popis.push(lokalizovanaZprava);
-            krokAlgoritmu2.stav = StavKroku.deadend;
-            postupTvoreniGrafu.push(krokAlgoritmu2);
-
+            if (zpracovavanaPromenna.domena.length > zpracovavanaPromenna.pozice + 1) {
+              lokalizovanaZprava = new LokalizovanaZprava();
+              lokalizovanaZprava.klic = 'popis.backtracking.pokracovaniPrirazeni';
+              lokalizovanaZprava.parametry = { 'nazev': krokAlgoritmu.nazev, 'hodnota': krokAlgoritmu.hodnota }
+              krokAlgoritmu = new KrokAlgoritmu();
+              krokAlgoritmu.typ = TypKroku.popis;
+              krokAlgoritmu.popis.push(lokalizovanaZprava);
+              postupTvoreniGrafu.push(krokAlgoritmu);
+            } else {
+              lokalizovanaZprava = new LokalizovanaZprava();
+              lokalizovanaZprava.klic = 'popis.backtracking.deadend';
+              lokalizovanaZprava.parametry = { 'nazev': krokAlgoritmu.nazev, 'hodnota': krokAlgoritmu.hodnota }
+              krokAlgoritmu = new KrokAlgoritmu();
+              krokAlgoritmu.typ = TypKroku.popis;
+              krokAlgoritmu.popis.push(lokalizovanaZprava);
+              krokAlgoritmu.stav = StavKroku.deadend;
+              postupTvoreniGrafu.push(krokAlgoritmu);
+            }
           }
         }
       }
