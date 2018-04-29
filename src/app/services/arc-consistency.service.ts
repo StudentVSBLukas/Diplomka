@@ -12,10 +12,6 @@ export class ArcConsistencyService implements Algoritmus {
   constructor(private backtracking: BacktrackingService) { }
 
   run(seznamPromennych: Array<Promenna>, pozadovanychReseni: number): Array<KrokAlgoritmu> {
-    // seznamPromennych = [];
-    // seznamPromennych.push(new Promenna('A', [1, 2, 4], ));
-    // seznamPromennych.push(new Promenna('B', [5], [new Omezeni(TypOmezeni.nerovno, ['A'], null)]));
-    // seznamPromennych.push(new Promenna('C', [2, 4, 5], [new Omezeni(TypOmezeni.zakazano, ['B'], [[2, 5], [4, 5], [5, 5]])]));
     AlgoritmusUtils.prevedOmezeni(seznamPromennych);
 
     var postupTvoreniGrafu = new Array();

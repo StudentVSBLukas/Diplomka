@@ -11,15 +11,7 @@ export class DynamicOrderService implements Algoritmus {
   constructor() { }
 
   run(seznamPromennych: Array<Promenna>, pozadovanychReseni: number): Array<KrokAlgoritmu> {
-    // TODO Test ze zadani
-    //    seznamPromennych = [];
-    //    seznamPromennych.push(new Promenna('A', [1, 2, 3, 4, 5], []));
-    //    seznamPromennych.push(new Promenna('B', [4, 3, 2], []));
-    //    seznamPromennych.push(new Promenna('C', [3, 1], []));
-    //    seznamPromennych.push(new Promenna('D', [4], []));
-    //    seznamPromennych.push(new Promenna('E', [1, 5], []));
-
-    AlgoritmusUtils.prevedOmezeni(seznamPromennych);
+      AlgoritmusUtils.prevedOmezeni(seznamPromennych);
 
     var postupTvoreniGrafu = new Array();
     var startKrok = new KrokAlgoritmu();
