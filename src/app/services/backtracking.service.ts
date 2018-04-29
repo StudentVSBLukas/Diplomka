@@ -54,7 +54,6 @@ export class BacktrackingService implements Algoritmus {
 
       lokalizovanaZprava = new LokalizovanaZprava();
       lokalizovanaZprava.klic = 'popis.backtracking.kontrolaOmezeni';
-      lokalizovanaZprava.parametry = { 'nazev': krokAlgoritmu.nazev, 'hodnota': krokAlgoritmu.hodnota }
       krokAlgoritmu = new KrokAlgoritmu();
       krokAlgoritmu.typ = TypKroku.popis;
       krokAlgoritmu.popis.push(lokalizovanaZprava);
@@ -78,7 +77,6 @@ export class BacktrackingService implements Algoritmus {
         } else {
           lokalizovanaZprava = new LokalizovanaZprava();
           lokalizovanaZprava.klic = 'popis.backtracking.deadend';
-          lokalizovanaZprava.parametry = { 'nazev': krokAlgoritmu.nazev, 'hodnota': krokAlgoritmu.hodnota }
           krokAlgoritmu = new KrokAlgoritmu();
           krokAlgoritmu.typ = TypKroku.popis;
           krokAlgoritmu.popis.push(lokalizovanaZprava);
@@ -90,7 +88,6 @@ export class BacktrackingService implements Algoritmus {
           pocetReseni++;
           var lokalizovanaZprava = new LokalizovanaZprava();
           lokalizovanaZprava.klic = 'popis.backtracking.reseni';
-          lokalizovanaZprava.parametry = { 'nazev': krokAlgoritmu.nazev, 'hodnota': krokAlgoritmu.hodnota }
           krokAlgoritmu = new KrokAlgoritmu();
           krokAlgoritmu.typ = TypKroku.popis;
           krokAlgoritmu.popis.push(lokalizovanaZprava);
@@ -100,7 +97,6 @@ export class BacktrackingService implements Algoritmus {
           promenna++;
           var lokalizovanaZprava = new LokalizovanaZprava();
           lokalizovanaZprava.klic = 'popis.backtracking.uzel';
-          lokalizovanaZprava.parametry = { 'nazev': krokAlgoritmu.nazev, 'hodnota': krokAlgoritmu.hodnota }
           krokAlgoritmu = new KrokAlgoritmu();
           krokAlgoritmu.typ = TypKroku.popis;
           krokAlgoritmu.popis.push(lokalizovanaZprava);

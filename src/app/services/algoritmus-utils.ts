@@ -292,6 +292,7 @@ export default class AlgoritmusUtils {
           var porovnavanaHodnota = AlgoritmusUtils.najdi(seznamPromennych, porovnavanaPromenna).vratPrirazenouHodnotu();
           for (var j = 0; j < omezeni.hodnotyOmezeni.length; j++) {
             if (cislo === omezeni.hodnotyOmezeni[j][0] && porovnavanaHodnota === omezeni.hodnotyOmezeni[j][1]) {
+              var popis = new LokalizovanaZprava();
               popis.klic = 'popis.omezeni.zakazaneNesplneno';
               popis.parametry = { 'nazev': promenna.nazev, 'porovnavanaPromenna': porovnavanaPromenna, 'hodnota': cislo, 'porovnavanaHodnota': porovnavanaHodnota }
               return popis;
