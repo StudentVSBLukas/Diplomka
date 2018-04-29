@@ -144,6 +144,11 @@
 	"import": {
 		"header": "Import zadání",
 		"zavrit": "Zrušit",
+		"priklad": {
+			"label": "Importovat příklad",
+			"placeholder": "Vybrat příklad",
+			"akce": "Importovat"
+		},
 		"soubor": {
 			"label": "Importovat ze souboru",
 			"vybrat": "Vybrat soubor"

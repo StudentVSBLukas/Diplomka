@@ -32,10 +32,11 @@ import { DynamicOrderService } from './services/dynamic-order.service';
 import { ForwardCheckingDynamicOrderService } from './services/forward-checking-dynamic-order.service';
 import { ForwardCheckingService } from './services/forward-checking.service';
 import { IconsistencyService } from './services/iconsistency.service';
+import { ImportService } from './services/import.service';
 import { RandomBacktrackingService } from './services/random-backtracking.service';
 
 export function HttpLoaderFactory(http: HttpClient) {
-  return new TranslateHttpLoader(http);
+  return new TranslateHttpLoader(http, 'assets/i18n/');
 }
 
 @NgModule({
@@ -70,6 +71,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     }),
   ],
   providers: [PromennaService,
+    ImportService,
     BacktrackingService,
     { provide: APP_ALGORITMY, useClass: BacktrackingService, multi: true },
     { provide: APP_ALGORITMY, useClass: RandomBacktrackingService, multi: true },

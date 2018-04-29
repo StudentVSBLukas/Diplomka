@@ -12,6 +12,17 @@
             <div class="modal-body">
             	<form class="input-form">
 			        <div class="container-fluid">
+				        <div *ngIf="priklady" class="row form-group">
+				        	<div class="col-sm-12">
+		                 		<label for="importSouboru">{{'import.priklad.label' | translate}}</label>
+		                 	</div>
+		                  	<div class="col-sm-9">
+		                  		<p-dropdown name="vyberPriklad" #vyberPrikladControl [options]="priklady" placeholder="{{'import.priklad.placeholder' | translate}}"></p-dropdown>
+		                  	</div>
+		                  	<div class="col-sm-3">
+		                  		<button type="button" class="btn btn-success" (click)="importPrikladu(vyberPrikladControl.value)" [disabled]="!vyberPrikladControl.value">{{'import.priklad.akce' | translate}}</button>
+		                  	</div>
+				        </div>
 				        <div class="row form-group">
 				        	<div class="col-sm-12">
 		                 		<label for="importSouboru">{{'import.soubor.label' | translate}}</label>
