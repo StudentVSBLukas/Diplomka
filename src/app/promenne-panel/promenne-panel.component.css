@@ -19,3 +19,8 @@
 	font-size: 1.25em;
 	line-height: 1.45;
 }
+
+.operator {
+	display: inline-block;
+	width: 1.5em;
+}

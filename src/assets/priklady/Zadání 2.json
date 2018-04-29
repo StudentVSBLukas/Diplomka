@@ -1,0 +1,30 @@
+[
+  {
+    "nazev": "A",
+    "domena": [
+      1,
+      2,
+      4
+    ]
+  },
+  {
+    "nazev": "B",
+    "domena": [
+      2,
+      3,
+      5
+    ],
+    "omezeni": [],
+    "aktivni": true
+  },
+  {
+    "nazev": "C",
+    "domena": [
+      3,
+      4,
+      6
+    ],
+    "omezeni": [],
+    "aktivni": true
+  }
+]

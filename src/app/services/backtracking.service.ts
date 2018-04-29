@@ -73,6 +73,7 @@ export class BacktrackingService implements Algoritmus {
           krokAlgoritmu = new KrokAlgoritmu();
           krokAlgoritmu.typ = TypKroku.popis;
           krokAlgoritmu.popis.push(lokalizovanaZprava);
+          krokAlgoritmu.stav = StavKroku.deadend;
           postupTvoreniGrafu.push(krokAlgoritmu);
         } else {
           lokalizovanaZprava = new LokalizovanaZprava();

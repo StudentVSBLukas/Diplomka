@@ -40,11 +40,6 @@
 	line-height: 1.45;
 }
 
-.operator {
-	display: inline-block;
-	width: 1.5em;
-}
-
 .row-layout > * {
 	display: inline-block;
 }
