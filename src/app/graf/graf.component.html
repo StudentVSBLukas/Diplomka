@@ -9,11 +9,13 @@
 				</div>
 		        <div class="graf-navigation">
 	                <button (click)="odkrokujCele()">&lt;&lt;&lt;&lt;</button>
-	                <button (click)="odkrokujReseni()">&lt;&lt;</button>
+	                <button (click)="odkrokujReseni()">&lt;&lt;&lt;</button>
+	                <button (click)="odkrokujAkci()">&lt;&lt;</button>
 	                <button (click)="odkrokuj()">&lt;</button>
 	                <span class="graf-step">{{graf.model.undoManager.historyIndex + 1}}</span> / <span class="graf-step">{{postup.length}}</span>
 	                <button (click)="krokuj()">&gt;</button>
-	                <button (click)="krokujReseni()">&gt;&gt;</button>
+	                <button (click)="krokujAkci()">&gt;&gt;</button>
+	                <button (click)="krokujReseni()">&gt;&gt;&gt;</button>
 	                <button (click)="krokujCele()">&gt;&gt;&gt;&gt;</button>
 		        </div>
 

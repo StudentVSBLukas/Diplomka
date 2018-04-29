@@ -130,8 +130,15 @@ export class GrafComponent implements OnInit, OnChanges {
 
   krokujReseni() {
     while (this.krokuj()) {
-      const krok = this.postup[this.graf.model.undoManager.historyIndex];
-      if (krok.stav === StavKroku.reseni) {
+      if (this.aktualniKrok.stav === StavKroku.reseni) {
+        break;
+      }
+    }
+  }
+
+  krokujAkci() {
+    while (this.krokuj()) {
+      if (this.aktualniKrok.typ === TypKroku.akce) {
         break;
       }
     }
@@ -154,10 +161,17 @@ export class GrafComponent implements OnInit, OnChanges {
       return true;
   }
 
+  odkrokujAkci() {
+    while (this.odkrokuj()) {
+      if (this.aktualniKrok.typ === TypKroku.akce) {
+        break;
+      }
+    }
+  }
+
   odkrokujReseni() {
     while (this.odkrokuj()) {
-      const krok = this.graf.model.undoManager.historyIndex;
-      if (krok >= 0 && this.postup[krok].stav === StavKroku.reseni) {
+      if (this.aktualniKrok.stav === StavKroku.reseni) {
         break;
       }
     }
@@ -208,7 +222,7 @@ export class GrafComponent implements OnInit, OnChanges {
 
     return this.postup[0];
   }
-  
+
   private najdiBarvu(krok: KrokAlgoritmu) {
       const stav = krok.stav;
 
