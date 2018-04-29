@@ -15,9 +15,8 @@ import { ConfirmationService } from 'primeng/components/common/api';
   styleUrls: ['./main-page.component.css'],
   animations: [
   trigger('slideInOut', [
-    state('in', style({transform: 'translateX(0)'})),
     transition('void => *', [
-      style({transform: 'translateX(-100%)'}),
+      style({transform: 'translateX(0)'}),
       animate(250)
     ]),
     transition('* => void', [
@@ -37,7 +36,7 @@ export class MainPageComponent implements OnInit {
 
   lokalizace = ['cz', 'gb'];
 
-  zobrazPromenne = 'in';
+  zobrazPromenne = true;
   zobrazAlgoritmusDialog = false;
   zobrazImportDialog = false;
 
@@ -57,24 +56,6 @@ export class MainPageComponent implements OnInit {
 
 
   ngOnInit() {
-    // TODO dostranit
-    for (let i = 0; i < 3; i++) {
-      const p = this.promennaService.vytvor();
-      p.domena = [i + 1, i + 2, i + 4];
-    }
-
-    // TODO odstranit zakladni nastaveni vstupu
-    const a = this.listPromennych[0];
-    const ogt = new Omezeni(TypOmezeni.mensi, ['B']);
-    const one = new Omezeni(TypOmezeni.nerovno, ['C']);
-    const op = new Omezeni(TypOmezeni.povoleno, ['B'], [[4, 5], [2, 1]]);
-    a.omezeni = [ogt, one, op];
-
-    //    const c = this.listPromennych[2];
-    //    c.domena.push(7);
-    //    c.omezeni.push(new Omezeni(TypOmezeni.zakazano, [[7,5]], 'B'));
-//    this.listPromennych = this.test.forwardCheckingExample;
-//    this.promennaService.listPromennych = this.listPromennych;
   }
 
   pridejPromennou() {
@@ -105,11 +86,7 @@ export class MainPageComponent implements OnInit {
   }
 
   toggleZobrazPromenne() {
-    if (this.zobrazPromenne) {
-      this.zobrazPromenne = null;
-    } else {
-      this.zobrazPromenne = 'in';
-    }
+    this.zobrazPromenne = !this.zobrazPromenne;
   }
 
   run() {

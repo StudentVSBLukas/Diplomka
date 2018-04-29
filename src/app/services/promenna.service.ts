@@ -81,7 +81,6 @@ export class PromennaService {
       )
     );
 
-    // TODO validovat vstup
     this.listPromennych = promenne;
   }
 
