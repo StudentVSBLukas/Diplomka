@@ -1,5 +1,5 @@
-<div>
-    <div id="vstupy" class="form">
+<div id="page">
+    <div id="vstupy" *ngIf="zobrazPromenne" [@slideInOut]="zobrazPromenne" class="form">
         
 	     	<div class="row-layout container-fluid form-header">
 	     		<h3>{{'promenna.header' | translate}}</h3>
@@ -67,10 +67,15 @@
 	    </form>
     </div>
     
-    <div id="vstupySeparator"></div>
+    <div id="vstupySeparator">
+    	<div>
+    		<i class="fa fa-fw fa-caret-left clickable" *ngIf="zobrazPromenne" (click)="toggleZobrazPromenne()"></i>
+    		<i class="fa fa-fw fa-caret-right clickable" *ngIf="!zobrazPromenne" (click)="toggleZobrazPromenne()"></i>
+    	</div>
+    </div>
         
-    <div id="graf">
-		<app-graf *ngIf="postup" [postup]="postup"></app-graf>
+    <div id="graf" [class]="zobrazPromenne ? '' : 'full'">
+		<app-graf *ngIf="postup" [postup]="postup" [resize]="zobrazPromenne"></app-graf>
         <div *ngIf="!postup" class="navod">
         	<i class="fa fa-5x fa-edit"></i>
         		<span>{{'graf.navod.1' | translate}}</span>

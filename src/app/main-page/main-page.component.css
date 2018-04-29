@@ -8,6 +8,12 @@
 	float: left;
 	width: 30px;
 	height: 100vh;
+	text-align: center;
+}
+
+#vstupySeparator > div {
+	padding: 3px;
+	background-color: #cde6fc;
 }
 
 #graf {
@@ -15,6 +21,10 @@
 	width: calc(100% - 31em - 35px);
 	height: 100vh;
 	position: relative;
+}
+
+#graf.full {
+	width: calc(100% - 35px);
 }
 
 .lokalizace {

@@ -2,6 +2,7 @@ import { Promenna, Omezeni, KrokAlgoritmu, LokalizovanaZprava, TypKroku, TypOmez
 import { APP_ALGORITMY, Algoritmus } from '../services/algoritmus';
 import { AlgoritmusTestUtils } from '../services/algoritmus-test-utils';
 import { PromennaService } from '../services/promenna.service';
+import { trigger, state, transition, style, animate } from '@angular/animations';
 import { Component, OnInit, ElementRef, ViewChild, Inject } from '@angular/core';
 import { TranslateService, TranslatePipe } from '@ngx-translate/core';
 import { SelectItem } from 'primeng/api';
@@ -11,7 +12,19 @@ import { ConfirmationService } from 'primeng/components/common/api';
 @Component({
   selector: 'app-main-page',
   templateUrl: './main-page.component.html',
-  styleUrls: ['./main-page.component.css']
+  styleUrls: ['./main-page.component.css'],
+  animations: [
+  trigger('slideInOut', [
+    state('in', style({transform: 'translateX(0)'})),
+    transition('void => *', [
+      style({transform: 'translateX(-100%)'}),
+      animate(250)
+    ]),
+    transition('* => void', [
+      animate(250, style({transform: 'translateX(-100%)'}))
+    ])
+  ])
+]
 })
 export class MainPageComponent implements OnInit {
 
@@ -24,6 +37,7 @@ export class MainPageComponent implements OnInit {
 
   lokalizace = ['cz', 'gb'];
 
+  zobrazPromenne = 'in';
   zobrazAlgoritmusDialog = false;
   zobrazImportDialog = false;
 
@@ -88,6 +102,14 @@ export class MainPageComponent implements OnInit {
 
   zobrazImport() {
     this.zobrazImportDialog = true;
+  }
+
+  toggleZobrazPromenne() {
+    if (this.zobrazPromenne) {
+      this.zobrazPromenne = null;
+    } else {
+      this.zobrazPromenne = 'in';
+    }
   }
 
   run() {

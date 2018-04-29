@@ -11,6 +11,7 @@ import * as go from 'gojs';
 export class GrafComponent implements OnInit, OnChanges {
 
   @Input() postup: Array<KrokAlgoritmu>;
+  @Input() resize: any;
 
   graf: any;
   aktualniKrok: KrokAlgoritmu;
@@ -37,6 +38,11 @@ export class GrafComponent implements OnInit, OnChanges {
       }
 
       this.reloadGraph();
+    }
+    
+    // Resize
+    if (zmeny['resize']) {
+      this.graf && this.graf.requestUpdate();
     }
   }
 
