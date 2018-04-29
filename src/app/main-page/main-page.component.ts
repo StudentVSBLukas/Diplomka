@@ -95,7 +95,7 @@ export class MainPageComponent implements OnInit {
 
       // Filtruje omezeni s neaktivnimi promennymi
       kopiePromenne.omezeni = p.omezeni.map(function (o) {
-        const kopieOmezeni = Object.assign({}, o);
+        const kopieOmezeni = Object.assign(new Omezeni(o.typOmezeni), o);
         kopieOmezeni.omezeniProPromennou = o.omezeniProPromennou.filter(
           (cilovaPromenna: string) => this.promennaService.vrat(cilovaPromenna).aktivni
         );
