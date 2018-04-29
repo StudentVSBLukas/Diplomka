@@ -1,5 +1,6 @@
 * {
     box-sizing: border-box;
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
 }
 
 .form-header {
@@ -22,11 +23,11 @@ input:required, .ui-inputtext:required, p-dropdown[required] > .ui-dropdown, p-m
 	border-left: 2px solid orange;
 }
 
-.row .rowHover {
+.row-layout .rowHover, .row .rowHover {
 	visibility: hidden;
 }
 
-.row:hover .rowHover {
+.row-layout:hover .rowHover, .row:hover .rowHover {
 	visibility: visible;
 }
 
@@ -58,3 +59,13 @@ input:required, .ui-inputtext:required, p-dropdown[required] > .ui-dropdown, p-m
 .spacer {
 	margin-top: 2em;
 }
+
+button {
+	min-width: 4em;
+}
+
+/* Primefaces */
+.ui-widget-overlay {
+	background: inherit;
+}
+

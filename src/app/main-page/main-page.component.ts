@@ -1,11 +1,12 @@
 import { Promenna, Omezeni, KrokAlgoritmu, LokalizovanaZprava, TypKroku, TypOmezeni } from '../data-model';
 import { APP_ALGORITMY, Algoritmus } from '../services/algoritmus';
+import { AlgoritmusTestUtils } from '../services/algoritmus-test-utils';
 import { PromennaService } from '../services/promenna.service';
 import { Component, OnInit, ElementRef, ViewChild, Inject } from '@angular/core';
 import { TranslateService, TranslatePipe } from '@ngx-translate/core';
 import { SelectItem } from 'primeng/api';
 import { saveAs } from 'file-saver/FileSaver';
-import AlgoritmusUtils from '../services/algoritmus-utils';
+import { ConfirmationService } from 'primeng/components/common/api';
 
 @Component({
   selector: 'app-main-page',
@@ -29,7 +30,7 @@ export class MainPageComponent implements OnInit {
   postup;
 
   constructor(private promennaService: PromennaService, private translate: TranslateService,
-    @Inject(APP_ALGORITMY) algoritmy: Array<Algoritmus>) {
+    @Inject(APP_ALGORITMY) algoritmy: Array<Algoritmus>, private confirm: ConfirmationService) {
     this.listPromennych = promennaService.list();
     this.algoritmy = algoritmy.map(
       (a: Algoritmus) => ({ label: '-', value: a })
@@ -58,11 +59,23 @@ export class MainPageComponent implements OnInit {
     //    const c = this.listPromennych[2];
     //    c.domena.push(7);
     //    c.omezeni.push(new Omezeni(TypOmezeni.zakazano, [[7,5]], 'B'));
+//    this.listPromennych = this.test.forwardCheckingExample;
+//    this.promennaService.listPromennych = this.listPromennych;
   }
 
   pridejPromennou() {
     const promenna = this.promennaService.vytvor();
     this.listPromennych = this.promennaService.list();
+  }
+
+  odstranPromenne() {
+    this.confirm.confirm({
+        message: this.translate.instant('confirm.promenne'),
+        accept: () => {
+          this.promennaService.smazVse();
+          this.listPromennych = this.promennaService.list();
+        }
+    });
   }
 
   zobrazAlgoritmus() {
@@ -96,7 +109,7 @@ export class MainPageComponent implements OnInit {
 
       // Filtruje omezeni s neaktivnimi promennymi
       kopiePromenne.omezeni = p.omezeni.map(function (o) {
-        const kopieOmezeni = Object.assign({}, o);
+        const kopieOmezeni = Object.assign(new Omezeni(o.typOmezeni), o);
         kopieOmezeni.omezeniProPromennou = o.omezeniProPromennou.filter(
           (cilovaPromenna: string) => this.promennaService.vrat(cilovaPromenna).aktivni
         );

@@ -6,7 +6,7 @@
 	       		<div class="col-sm-11" *ngIf="promenna.aktivni">
 	       			<i class="fa fa-cog clickable" (click)="openDialogOmezeni(promenna)"></i>
 	       			<i class="fa fa-ban text-danger clickable rowHover" (click)="promenna.aktivni = false"></i>
-	       			<i class="fa fa-remove text-danger clickable rowHover" (click)="odeberPromennou(promenna)"></i>
+	       			<i class="fa fa-remove text-danger clickable rowHover" (click)="odeberPromennou(promenna, $event.shiftKey)"></i>
 	       		</div>
 	       		<div class="col-sm-11" *ngIf="!promenna.aktivni">
 	       			<i class="fa fa-cog clickable" class="invisible"></i>
@@ -52,3 +52,4 @@
 </div>
       
 <div id="modalAppendTo" #modalAppendTo></div>  
+

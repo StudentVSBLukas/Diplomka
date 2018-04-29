@@ -55,6 +55,10 @@ export class PromennaService {
       }
     )
   }
+  
+  smazVse() {
+    this.listPromennych = [];
+  }
 
   export(): string {
     return JSON.stringify(this.listPromennych, (key, value) => {

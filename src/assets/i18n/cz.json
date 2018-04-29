@@ -176,5 +176,13 @@
 			"label": "Importovat ze souboru",
 			"vybrat": "Vybrat soubor"
 		}
+	},
+	"confirm": {
+		"header": "Odstranit",
+		"accept": "Ano",
+		"reject": "Ne",
+		"promenna": "Opravdu chcete odstranit proměnnou?",
+		"promenne": "Opravdu chcete odstranit seznam proměnných?"
 	}
 }
+
