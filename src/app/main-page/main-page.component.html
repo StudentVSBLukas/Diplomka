@@ -3,10 +3,10 @@
         
 	     	<div class="row-layout container-fluid form-header">
 	     		<h3>{{'promenna.header' | translate}}</h3>
-	     		<i class="fa fa-fw fa-plus clickable" (click)="pridejPromennou()"></i>
-	     		<i class="fa fa-fw fa-upload clickable" (click)="zobrazImport()"></i>
-	     		<i class="fa fa-fw fa-download clickable" (click)="exportZadani()"></i>
-	     		<i class="fa fa-remove text-danger clickable rowHover" (click)="odstranPromenne()"></i>
+	     		<i class="fa fa-fw fa-plus clickable" (click)="pridejPromennou()" title="{{'promenna.vlozit' | translate}}"></i>
+	     		<i class="fa fa-fw fa-upload clickable" (click)="zobrazImport()" title="{{'promenna.import' | translate}}"></i>
+	     		<i class="fa fa-fw fa-download clickable" (click)="exportZadani()" title="{{'promenna.export' | translate}}"></i>
+	     		<i class="fa fa-remove text-danger clickable rowHover" (click)="odstranPromenne()" title="{{'promenna.smazatVse' | translate}}"></i>
 		     	<div class="lokalizace">
 		     		<app-lokalizace-component [lokalizace]="lokalizace"></app-lokalizace-component>
 		     	</div>
@@ -45,7 +45,7 @@
 		            	</p-dropdown>
 		            </div>
 		            <div class="col-sm-1">
-		            	<i class="fa fa-question-circle clickable" (click)="zobrazAlgoritmus()" ></i>
+		            	<i class="fa fa-question-circle clickable" (click)="zobrazAlgoritmus()" title="{{'algoritmus.definice' | translate}}"></i>
 		            </div>
 			    </div>
 		            

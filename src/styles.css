@@ -60,11 +60,11 @@ input:required, .ui-inputtext:required, p-dropdown[required] > .ui-dropdown, p-m
 	margin-top: 2em;
 }
 
-button {
+/* Primefaces */
+.ui-dialog-footer button {
 	min-width: 4em;
 }
 
-/* Primefaces */
 .ui-widget-overlay {
 	background: inherit;
 }

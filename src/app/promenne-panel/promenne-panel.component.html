@@ -4,13 +4,13 @@
 	 		<fieldset [disabled]="!promenna.aktivni">
 	   			<div class="col-sm-1">{{promenna.nazev}}</div>
 	       		<div class="col-sm-11" *ngIf="promenna.aktivni">
-	       			<i class="fa fa-cog clickable" (click)="openDialogOmezeni(promenna)"></i>
-	       			<i class="fa fa-ban text-danger clickable rowHover" (click)="promenna.aktivni = false"></i>
-	       			<i class="fa fa-remove text-danger clickable rowHover" (click)="odeberPromennou(promenna, $event.shiftKey)"></i>
+	       			<i class="fa fa-cog clickable" (click)="openDialogOmezeni(promenna)" title="{{'promenna.omezeni' | translate}}"></i>
+	       			<i class="fa fa-ban text-danger clickable rowHover" (click)="promenna.aktivni = false" title="{{'promenna.zakazat' | translate}}"></i>
+	       			<i class="fa fa-remove text-danger clickable rowHover" (click)="odeberPromennou(promenna, $event.shiftKey)" title="{{'promenna.smazat' | translate}}"></i>
 	       		</div>
 	       		<div class="col-sm-11" *ngIf="!promenna.aktivni">
 	       			<i class="fa fa-cog clickable" class="invisible"></i>
-	       			<i class="fa fa-check-circle text-success clickable rowHover" (click)="promenna.aktivni = true"></i>
+	       			<i class="fa fa-check-circle text-success clickable rowHover" (click)="promenna.aktivni = true" title="{{'promenna.povolit' | translate}}"></i>
 	       		</div>
 	       		<div class="clearfix"></div>
 	       
