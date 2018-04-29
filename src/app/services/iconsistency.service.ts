@@ -1,4 +1,4 @@
-import {Promenna, KrokAlgoritmu, LokalizovanaZprava, TypOmezeni} from '../data-model';
+import { Promenna, KrokAlgoritmu, LokalizovanaZprava, TypOmezeni, TypKroku, Omezeni, StavKroku } from '../data-model';
 import { Algoritmus } from './algoritmus';
 import { Injectable } from '@angular/core';
 import AlgoritmusUtils from './algoritmus-utils';
@@ -11,8 +11,11 @@ export class IconsistencyService implements Algoritmus {
 
   constructor(private backtracking: BacktrackingService) { }
 
-  run(seznamPromennych: Array<Promenna>, pozadovanychReseni:  number, iPocet: number): Array<KrokAlgoritmu> {
-    AlgoritmusUtils.prevedOmezeni(seznamPromennych);
+  run(seznamPromennych: Array<Promenna>, pozadovanychReseni: number, iPocet: number): Array<KrokAlgoritmu> {
+    seznamPromennych = [];
+    seznamPromennych.push(new Promenna('A', [1, 2, 4], ));
+    seznamPromennych.push(new Promenna('B', [5, 1], [new Omezeni(TypOmezeni.rovno, ['A'], null)]));
+    seznamPromennych.push(new Promenna('C', [2, 4, 5, 1], [new Omezeni(TypOmezeni.povoleno, ['B'], [[2, 5], [4, 5]])])); AlgoritmusUtils.prevedOmezeni(seznamPromennych);
 
     var postupTvoreniGrafu = new Array();
     var startKrok = new KrokAlgoritmu();
@@ -21,50 +24,52 @@ export class IconsistencyService implements Algoritmus {
     postupTvoreniGrafu.push(startKrok);
 
 
-    if (iPocet < 1) {
-      // TODO CHYBOVA HLASKA ZE CISLO MUSI BYT ASPON 1
-    }
-    //Zjisteni u kazde promenne, s jakymi promennymi musi splnovat omezeni
-    var seznamVsechPromennychOmezeni = [];
-    for (var i = 0; i < seznamPromennych.length; i++) {
-      var promenna = seznamPromennych[i];
-      var seznamPromennychproOmezeni = [];
-      for (var j = 0; j < promenna.omezeni.length; j++) {
-      var typOmezeni = promenna.omezeni[j].typOmezeni;
-        for (var k = 0; k < promenna.omezeni[j].hodnotyOmezeni.length; k++) {
-          if (seznamPromennychproOmezeni.indexOf(promenna.omezeni[j].omezeniProPromennou[k]) == -1) {
-            seznamPromennychproOmezeni.push(promenna.omezeni[j].omezeniProPromennou[k]);
+    if (iPocet > 0) {
+      //Zjisteni u kazde promenne, s jakymi promennymi musi splnovat omezeni
+      var seznamVsechPromennychOmezeni = [];
+      for (var i = 0; i < seznamPromennych.length; i++) {
+        var promenna = seznamPromennych[i];
+        var seznamPromennychproOmezeni = [];
+        for (var j = 0; j < promenna.omezeni.length; j++) {
+          for (var k = 0; k < promenna.omezeni[j].omezeniProPromennou.length; k++) {
+            if (seznamPromennychproOmezeni.indexOf(promenna.omezeni[j].omezeniProPromennou[k]) == -1) {
+              seznamPromennychproOmezeni.push(promenna.omezeni[j].omezeniProPromennou[k]);
+            }
           }
         }
+        seznamVsechPromennychOmezeni.push(seznamPromennychproOmezeni);
       }
-      seznamVsechPromennychOmezeni.push(seznamPromennychproOmezeni);
+      while (this._iConsistencyKontrola(iPocet, seznamPromennych, seznamVsechPromennychOmezeni, postupTvoreniGrafu)
+      ) { }
     }
-    while (this._iConsistencyKontrola(iPocet, seznamPromennych, seznamVsechPromennychOmezeni)
-    ) { }
-    
-    var backtrackingPostup = this.backtracking.run(seznamPromennych, pozadovanychReseni);
-    backtrackingPostup.shift();
-    return postupTvoreniGrafu.concat(backtrackingPostup);
+    if(postupTvoreniGrafu[postupTvoreniGrafu.length-1].stav=='deadend'){
+      postupTvoreniGrafu[postupTvoreniGrafu.length-1].stav=StavKroku.uzel;
+      return postupTvoreniGrafu;
+    }
+    return this.backtracking.backtrack(seznamPromennych, pozadovanychReseni, postupTvoreniGrafu);
   }
 
-  _iConsistencyKontrola(iPocet, seznamPromennych, seznamVsechPromennychOmezeni) {
+  _iConsistencyKontrola(iPocet, seznamPromennych, seznamVsechPromennychOmezeni, postupTvoreniGrafu) {
+    var krokAlgoritmu = new KrokAlgoritmu();
+    krokAlgoritmu.typ = TypKroku.popis;
+    var lokalizovanaZprava = new LokalizovanaZprava();
+    lokalizovanaZprava.klic = 'popis.arcConsistency.zacatekUpravy';
+    krokAlgoritmu.popis.push(lokalizovanaZprava);
+    postupTvoreniGrafu.push(krokAlgoritmu);
+
     var provedenaZmenaDomeny = false;
     for (var i = seznamPromennych.length - 1; i >= 0;) {
+      for (var j = 0; j < i; j++) {
+        seznamPromennych[j].pozice = -1;
+      }
       var promennaZ = seznamPromennych[i];
-      //TODO kontrolu preradi az pred odber, musi splnovat vsechna omezeni pokud je iConsistency>pocet omezeni
-      // if (seznamVsechPromennychOmezeni[i].length < iPocet) {
-      //   i--;
-      //   continue;
-      // }
       if (++promennaZ.pozice >= promennaZ.domena.length) {
         i--;
         continue;
       }
       var z = promennaZ.domena[promennaZ.pozice];
       var pocetUspesnychPromennych = 0;
-      for (var j = 0; j < i; j++) {
-        seznamPromennych[j].pozice = -1;
-      }
+
       for (var j = (i - 1); j >= 0; j--) {
         var promennaY = seznamPromennych[j];
         if (seznamVsechPromennychOmezeni[i].indexOf(promennaY.nazev) == -1) {
@@ -87,11 +92,28 @@ export class IconsistencyService implements Algoritmus {
       if (pocetUspesnychPromennych < iPocet) {
         if (pocetUspesnychPromennych == seznamVsechPromennychOmezeni[i].length) {
         } else {
-          //TODO zprava ze nebylo nalezeno dostatecny pocet prvku, proto odstranuju
-          // mozna nalezeno jen x misto i pozdovanych
+          var krokAlgoritmu = new KrokAlgoritmu();
+          krokAlgoritmu.typ = TypKroku.popis;
+          var lokalizovanaZprava = new LokalizovanaZprava();
+          lokalizovanaZprava.klic = 'popis.iConsistency.nedostacujiciPocet';
+          lokalizovanaZprava.parametry = { "pocetUspesnychPromennych": pocetUspesnychPromennych, "iPocet": iPocet, "prvek": promennaZ.domena[promennaZ.pozice], "nazev": promennaZ.nazev };
+          krokAlgoritmu.popis.push(lokalizovanaZprava);
+          postupTvoreniGrafu.push(krokAlgoritmu);
+
           promennaZ.domena.splice(promennaZ.pozice, 1);
           promennaZ.pozice--;
           provedenaZmenaDomeny = true;
+          if (promennaZ.domena.length === 0) {
+            var krokAlgoritmu = new KrokAlgoritmu();
+            krokAlgoritmu.typ = TypKroku.popis;
+            krokAlgoritmu.stav = StavKroku.deadend;
+            var lokalizovanaZprava = new LokalizovanaZprava();
+            lokalizovanaZprava.klic = 'popis.iConsistency.prazdnaDomena';
+            lokalizovanaZprava.parametry = { 'nazev': promennaZ.nazev }
+            krokAlgoritmu.popis.push(lokalizovanaZprava);
+            postupTvoreniGrafu.push(krokAlgoritmu);
+            return false;
+          }
         }
       }
     }

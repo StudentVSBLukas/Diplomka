@@ -13,14 +13,14 @@ export class BacktrackingService implements Algoritmus {
 
   run(seznamPromennych: Array<Promenna>, pozadovanychReseni: number): Array<KrokAlgoritmu> {
     // TODO Test ze zadani
-      //  seznamPromennych = [];
-      //  seznamPromennych.push(new Promenna('A', [1, 2, 3], [new Omezeni(TypOmezeni.nerovno, ['B', 'C', 'D', 'G'], null)]));
-      //  seznamPromennych.push(new Promenna('B', [2, 3], [new Omezeni(TypOmezeni.nerovno, ['F'], null)]));
-      //  seznamPromennych.push(new Promenna('C', [1, 2], [new Omezeni(TypOmezeni.nerovno, ['G'], null)]));
-      //  seznamPromennych.push(new Promenna('D', [1, 2], [new Omezeni(TypOmezeni.nerovno, ['E', 'G'], null)]));
-      //  seznamPromennych.push(new Promenna('E', [2, 3], [new Omezeni(TypOmezeni.nerovno, ['F', 'G'], null)]));
-      //  seznamPromennych.push(new Promenna('F', [1, 3, 4]));
-      //  seznamPromennych.push(new Promenna('G', [1, 2]));
+    //  seznamPromennych = [];
+    //  seznamPromennych.push(new Promenna('A', [1, 2, 3], [new Omezeni(TypOmezeni.nerovno, ['B', 'C', 'D', 'G'], null)]));
+    //  seznamPromennych.push(new Promenna('B', [2, 3], [new Omezeni(TypOmezeni.nerovno, ['F'], null)]));
+    //  seznamPromennych.push(new Promenna('C', [1, 2], [new Omezeni(TypOmezeni.nerovno, ['G'], null)]));
+    //  seznamPromennych.push(new Promenna('D', [1, 2], [new Omezeni(TypOmezeni.nerovno, ['E', 'G'], null)]));
+    //  seznamPromennych.push(new Promenna('E', [2, 3], [new Omezeni(TypOmezeni.nerovno, ['F', 'G'], null)]));
+    //  seznamPromennych.push(new Promenna('F', [1, 3, 4]));
+    //  seznamPromennych.push(new Promenna('G', [1, 2]));
 
     AlgoritmusUtils.prevedOmezeni(seznamPromennych);
 
@@ -29,7 +29,11 @@ export class BacktrackingService implements Algoritmus {
     startKrok.hodnota = 'Backtracking';
     startKrok.popis.push(new LokalizovanaZprava('popis.backtracking.start'));
     postupTvoreniGrafu.push(startKrok);
+    return this.backtrack(seznamPromennych,pozadovanychReseni,postupTvoreniGrafu);
 
+  }
+
+  backtrack(seznamPromennych: Array<Promenna>, pozadovanychReseni: number, postupTvoreniGrafu): Array<KrokAlgoritmu>  {
     var pocetReseni = 0;
     var promenna = 0;
     while (promenna >= 0 && (!pozadovanychReseni || pocetReseni < pozadovanychReseni)) {
@@ -50,7 +54,7 @@ export class BacktrackingService implements Algoritmus {
       var lokalizovanaZprava = new LokalizovanaZprava();
       lokalizovanaZprava.klic = 'popis.backtracking.prirazeni';
       lokalizovanaZprava.parametry = { 'nazev': krokAlgoritmu.nazev, 'hodnota': krokAlgoritmu.hodnota }
-      krokAlgoritmu.popis.push(lokalizovanaZprava);      
+      krokAlgoritmu.popis.push(lokalizovanaZprava);
 
       lokalizovanaZprava = new LokalizovanaZprava();
       lokalizovanaZprava.klic = 'popis.backtracking.kontrolaOmezeni';
@@ -65,7 +69,7 @@ export class BacktrackingService implements Algoritmus {
         krokAlgoritmu.typ = TypKroku.popis;
         krokAlgoritmu.popis.push(poruseneOmezeni);
         postupTvoreniGrafu.push(krokAlgoritmu);
-        if (zpracovavanaPromenna.domena.length > zpracovavanaPromenna.pozice+1) {
+        if (zpracovavanaPromenna.domena.length > zpracovavanaPromenna.pozice + 1) {
           lokalizovanaZprava = new LokalizovanaZprava();
           lokalizovanaZprava.klic = 'popis.backtracking.pokracovaniPrirazeni';
           lokalizovanaZprava.parametry = { 'nazev': krokAlgoritmu.nazev, 'hodnota': krokAlgoritmu.hodnota }
