@@ -15,6 +15,9 @@ export class GrafComponent implements OnInit, OnChanges {
   graf: any;
   aktualniKrok: KrokAlgoritmu;
 
+  zobrazDomenu = false;
+  zobrazDetailDomeny = true;
+
   constructor(private translate: TranslateService) { }
 
   ngOnInit() {
@@ -22,12 +25,24 @@ export class GrafComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(zmeny: SimpleChanges) {
-    const novyPostup = zmeny['postup'];
-    if (novyPostup) {
+    // Zmena postupu
+    if (zmeny['postup']) {
+      this.zobrazDomenu = false;
+      for (let i = 0; i < this.postup.length; i++) {
+        const domena = this.postup[i].hodnotaDomenKroku;
+        if (domena && domena.length) {
+          this.zobrazDomenu = true;
+          break;
+        }
+      }
+
       this.reloadGraph();
     }
   }
 
+  toggleDetailDomeny() {
+    this.zobrazDetailDomeny = !this.zobrazDetailDomeny;
+  }
 
 
   initGraph() {

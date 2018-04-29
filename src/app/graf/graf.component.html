@@ -25,9 +25,13 @@
 	                <button (click)="zoomOut()" title="{{'graf.zoomout' | translate}}"><i class="fa fa-minus"></i></button>
 	            </div>
 	            
-	            <div class="graf-domena">
-	            	<h4>{{'graf.popisDomeny' | translate}}</h4>
-	            	<div class="table-layout">
+	            <div *ngIf="zobrazDomenu" class="graf-domena">
+	            	<div class="row-layout">
+	            		<h4>{{'graf.popisDomeny' | translate}}</h4>
+			     		<i class="fa fa-fw fa-ban clickable" *ngIf="zobrazDetailDomeny" (click)="toggleDetailDomeny()" title="{{'graf.domena.skryj' | translate}}"></i>
+			     		<i class="fa fa-fw fa-check-circle clickable" *ngIf="!zobrazDetailDomeny" (click)="toggleDetailDomeny()" title="{{'graf.domena.zobraz' | translate}}"></i>
+	            	</div>
+	            	<div *ngIf="zobrazDetailDomeny" class="table-layout">
 		            	<div *ngFor="let p of aktualniKrok?.hodnotaDomenKroku">
 		            		<div>{{p.nazev}}</div>
 		            		<div><span>= &#123;</span>{{p.domena}}<span>&#125;</span></div>

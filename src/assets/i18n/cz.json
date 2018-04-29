@@ -78,6 +78,10 @@
 			"predchozi": "Předchozí krok",
 			"predchoziUzel": "Předchozí přiřazení",
 			"predchoziReseni": "Předchozí řešení"
+		},
+		"domena": {
+			"zobraz": "Zobraz doménu",
+			"skryj": "Skryj doménu"
 		}
 	},
 	"popis": {

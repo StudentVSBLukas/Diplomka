@@ -23,6 +23,26 @@ input:required, .ui-inputtext:required, p-dropdown[required] > .ui-dropdown, p-m
 	border-left: 2px solid orange;
 }
 
+.table-layout {
+	display: table;
+}
+
+.table-layout > div {
+	display: table-row;
+}
+
+.table-layout > div > div {
+	display: table-cell;
+}
+
+.row-layout > * {
+	display: inline-block;
+}
+
+.row-layout > * + * {
+	margin-left: 0.5em;
+}
+
 .row-layout .rowHover, .row .rowHover {
 	visibility: hidden;
 }

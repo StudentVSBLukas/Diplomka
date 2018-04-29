@@ -40,26 +40,6 @@
 	line-height: 1.45;
 }
 
-.row-layout > * {
-	display: inline-block;
-}
-
-.row-layout > * + * {
-	margin-left: 0.5em;
-}
-
-.table-layout {
-	display: table;
-}
-
-.table-layout > div {
-	display: table-row;
-}
-
-.table-layout > div > div {
-	display: table-cell;
-}
-
 .promenne-scroll {
 	max-height: calc(100vh - 24em);
     overflow-y: auto;
