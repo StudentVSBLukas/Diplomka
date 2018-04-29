@@ -138,7 +138,12 @@
 		"arcConsistency": {
 			"nazev": "Arc consistency",
 			"definice": "TODO: Napsat definici algoritmu Arc consistency. Muzes pouzit HTML!!",
-			"start": "Byl spuštěn algoritmus Arc consistency.",
+			"start": "Byl spuštěn algoritmus Arc consistency.\n",
+			"zacatekUpravy": "Zkoumání, jestli se dají odstranit prvky z domén proměnných.\n",
+			"kteraPromenna": "Upravuji doménu proměnné {{nazev}}.\n",
+			"nesplneno": "V doméně proměnné {{porovnavanaPromenna}} neexistuje prvek, který by splňoval omezení {{nazev}} {{typOmezeni}} {{porovnavanaPromenna}} pro hodnotu {{hodnota}} z proměnné {{nazev}}. Odstraňuji hodnota {{hodnota}} z proměnné {{nazev}}.\n",
+			"povolenoNesplneno": "Mezi proměnnou {{nazev}} a proměnnou {{porovnavanaPromenna}} se nenašla povolená dvojice pro hodnotu {{hodnota}} z proměnné {{nazev}}.\n Odstraňuji hodnota {{hodnota}} z proměnné {{nazev}}.\n",
+			"zakazaneNesplneno": "Mezi proměnnou {{nazev}} a proměnnou {{porovnavanaPromenna}} se našla zakázaná dvojice pro hodnotu {{hodnota}} z proměnné {{nazev}}.\n Odstraňuji hodnota {{hodnota}} z proměnné {{nazev}}.\n",
 			"upravaDomeny": "U proměnné {{nazev}} se odebral prvek {{hodnota}} z domény, jelikož v proměnné {{porovnavanaPromenna}} neexistuje prvek v doméně, který by splňoval omezení {{nazev}} {{typ}} {{porovnavanaPromenna}}.\n",
 			"prazdnaDomena": "U proměnné {{nazev}} vznikla prázdná doména, tudíž pro tento problém neexistuje řešení.\n"
 		},
@@ -153,7 +158,6 @@
 			"deadend": "Jelikož je porušeno omezení započne zpětná fáze, při které se přejde na předchozí proměnnou.\n",
 			"reseni": "Jelikož jsou všechna omezení splněna a všechny proměnné mají přiřazenou hodnotu jedná se o řešení.\n",
 			"konec": "Byly nastaveny všechny možné kombinace přiřazení prvků, které splňují omezení a další přiřazení není možné. Ukončuji výpočet."
-
 		},
 		"dynamicOrder": {
 			"nazev": "Dynamic value ordering",
@@ -181,7 +185,9 @@
 		"iConsistency": {
 			"nazev": "iConsistency",
 			"definice": "TODO: Napsat definici algoritmu iConsistency",
-			"start": "Byl spuštěn algoritmus iConsistency."
+			"start": "Byl spuštěn algoritmus iConsistency.",
+			"nedostacujiciPocet": "Bylo nalezeno pouze {{pocetUspesnychPromennych}} z požadovaných {{iPocet}}. Odebírám prvek {{prvek}} z domény proměnné {{nazev}}.\n",
+			"prazdnaDomena": "U proměnné {{nazev}} vznikla prázdná doména, tudíž pro tento problém neexistuje řešení.\n"
 		},
 		"forwarCheckDynamicOrder": {
 			"nazev": "Forward checking + DVO",

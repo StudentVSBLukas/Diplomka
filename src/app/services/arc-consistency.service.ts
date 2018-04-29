@@ -1,4 +1,4 @@
-import {Promenna, KrokAlgoritmu, LokalizovanaZprava, TypKroku, TypOmezeni, StavKroku} from '../data-model';
+import { Promenna, KrokAlgoritmu, LokalizovanaZprava, TypKroku, TypOmezeni, StavKroku, Omezeni } from '../data-model';
 import { Algoritmus } from './algoritmus';
 import { Injectable } from '@angular/core';
 import AlgoritmusUtils from './algoritmus-utils';
@@ -11,7 +11,11 @@ export class ArcConsistencyService implements Algoritmus {
 
   constructor(private backtracking: BacktrackingService) { }
 
-  run(seznamPromennych: Array<Promenna>, pozadovanychReseni:  number): Array<KrokAlgoritmu> {
+  run(seznamPromennych: Array<Promenna>, pozadovanychReseni: number): Array<KrokAlgoritmu> {
+    // seznamPromennych = [];
+    // seznamPromennych.push(new Promenna('A', [1, 2, 4], ));
+    // seznamPromennych.push(new Promenna('B', [5], [new Omezeni(TypOmezeni.nerovno, ['A'], null)]));
+    // seznamPromennych.push(new Promenna('C', [2, 4, 5], [new Omezeni(TypOmezeni.zakazano, ['B'], [[2, 5], [4, 5], [5, 5]])]));
     AlgoritmusUtils.prevedOmezeni(seznamPromennych);
 
     var postupTvoreniGrafu = new Array();
@@ -20,6 +24,12 @@ export class ArcConsistencyService implements Algoritmus {
     startKrok.popis.push(new LokalizovanaZprava('popis.arcConsistency.start'));
     postupTvoreniGrafu.push(startKrok);
 
+    var krokAlgoritmu = new KrokAlgoritmu();
+    krokAlgoritmu.typ = TypKroku.popis;
+    var lokalizovanaZprava = new LokalizovanaZprava();
+    lokalizovanaZprava.klic = 'popis.arcConsistency.zacatekUpravy';
+    krokAlgoritmu.popis.push(lokalizovanaZprava);
+    postupTvoreniGrafu.push(krokAlgoritmu);
 
     var zmeneno;
     let selhani;
@@ -34,29 +44,27 @@ export class ArcConsistencyService implements Algoritmus {
               let krokAlgoritmu = new KrokAlgoritmu();
               krokAlgoritmu.typ = TypKroku.popis;
               selhani = this._arcConsistencyLesser(promenna, porovnavanaPromenna);
-              switch (selhani[0]) {
-                case 'uprava':
-                  for (var l = 0; l < selhani[1].length; l++) {
-                    krokAlgoritmu.popis.push(selhani[1][l]);
-                    postupTvoreniGrafu.push(krokAlgoritmu);
-                  }
-                  break;
-                case 'prazdna domena':
-                  return this._arcConsistencyFail(seznamPromennych, promenna, selhani);
+              for (var l = 0; l < selhani[1].length; l++) {
+                krokAlgoritmu = new KrokAlgoritmu();
+                krokAlgoritmu.typ = TypKroku.popis;
+                krokAlgoritmu.popis.push(selhani[1][l]);
+                postupTvoreniGrafu.push(krokAlgoritmu);
               }
-              
+              if (selhani[0] == "prazdna domena") {
+                return postupTvoreniGrafu;
+              }
+
               krokAlgoritmu = new KrokAlgoritmu();
               krokAlgoritmu.typ = TypKroku.popis;
               selhani = this._arcConsistencyGreater(porovnavanaPromenna, promenna);
-              switch (selhani[0]) {
-                case 'uprava':
-                  for (var l = 0; l < selhani[1].length; l++) {
-                    krokAlgoritmu.popis.push(selhani[1][l]);
-                    postupTvoreniGrafu.push(krokAlgoritmu);
-                  }
-                  break;
-                case 'prazdna domena':
-                  return this._arcConsistencyFail(seznamPromennych, promenna, selhani);
+              for (var l = 0; l < selhani[1].length; l++) {
+                krokAlgoritmu = new KrokAlgoritmu();
+                krokAlgoritmu.typ = TypKroku.popis;
+                krokAlgoritmu.popis.push(selhani[1][l]);
+                postupTvoreniGrafu.push(krokAlgoritmu);
+              }
+              if (selhani[0] == "prazdna domena") {
+                return postupTvoreniGrafu;
               }
             }
             break;
@@ -66,29 +74,27 @@ export class ArcConsistencyService implements Algoritmus {
               let krokAlgoritmu = new KrokAlgoritmu();
               krokAlgoritmu.typ = TypKroku.popis;
               selhani = this._arcConsistencyGreater(promenna, porovnavanaPromenna);
-              switch (selhani[0]) {
-                case 'uprava':
-                  for (var l = 0; l < selhani[1].length; l++) {
-                    krokAlgoritmu.popis.push(selhani[1][l]);
-                    postupTvoreniGrafu.push(krokAlgoritmu);
-                  }
-                  break;
-                case 'prazdna domena':
-                  return this._arcConsistencyFail(seznamPromennych, promenna, selhani);
+              for (var l = 0; l < selhani[1].length; l++) {
+                krokAlgoritmu = new KrokAlgoritmu();
+                krokAlgoritmu.typ = TypKroku.popis;
+                krokAlgoritmu.popis.push(selhani[1][l]);
+                postupTvoreniGrafu.push(krokAlgoritmu);
               }
-              
+              if (selhani[0] == "prazdna domena") {
+                return postupTvoreniGrafu;
+              }
+
               krokAlgoritmu = new KrokAlgoritmu();
               krokAlgoritmu.typ = TypKroku.popis;
               selhani = this._arcConsistencyLesser(porovnavanaPromenna, promenna);
-              switch (selhani[0]) {
-                case 'uprava':
-                  for (var l = 0; l < selhani[1].length; l++) {
-                    krokAlgoritmu.popis.push(selhani[1][l]);
-                    postupTvoreniGrafu.push(krokAlgoritmu);
-                  }
-                  break;
-                case 'prazdna domena':
-                  return this._arcConsistencyFail(seznamPromennych, promenna, selhani);
+              for (var l = 0; l < selhani[1].length; l++) {
+                krokAlgoritmu = new KrokAlgoritmu();
+                krokAlgoritmu.typ = TypKroku.popis;
+                krokAlgoritmu.popis.push(selhani[1][l]);
+                postupTvoreniGrafu.push(krokAlgoritmu);
+              }
+              if (selhani[0] == "prazdna domena") {
+                return postupTvoreniGrafu;
               }
             }
             break;
@@ -98,30 +104,29 @@ export class ArcConsistencyService implements Algoritmus {
               let krokAlgoritmu = new KrokAlgoritmu();
               krokAlgoritmu.typ = TypKroku.popis;
               selhani = this._arcConsistencyEqual(promenna, porovnavanaPromenna);
-              switch (selhani[0]) {
-                case 'uprava':
-                  for (var l = 0; l < selhani[1].length; l++) {
-                    krokAlgoritmu.popis.push(selhani[1][l]);
-                    postupTvoreniGrafu.push(krokAlgoritmu);
-                  }
-                  break;
-                case 'prazdna domena':
-                  return this._arcConsistencyFail(seznamPromennych, promenna, selhani);
+              for (var l = 0; l < selhani[1].length; l++) {
+                krokAlgoritmu = new KrokAlgoritmu();
+                krokAlgoritmu.typ = TypKroku.popis;
+                krokAlgoritmu.popis.push(selhani[1][l]);
+                postupTvoreniGrafu.push(krokAlgoritmu);
               }
-              
+              if (selhani[0] == "prazdna domena") {
+                return postupTvoreniGrafu;
+              }
+
               krokAlgoritmu = new KrokAlgoritmu();
               krokAlgoritmu.typ = TypKroku.popis;
               selhani = this._arcConsistencyEqual(porovnavanaPromenna, promenna);
-              switch (selhani[0]) {
-                case 'uprava':
-                  for (var l = 0; l < selhani[1].length; l++) {
-                    krokAlgoritmu.popis.push(selhani[1][l]);
-                    postupTvoreniGrafu.push(krokAlgoritmu);
-                  }
-                  break;
-                case 'prazdna domena':
-                  return this._arcConsistencyFail(seznamPromennych, promenna, selhani);
+              for (var l = 0; l < selhani[1].length; l++) {
+                krokAlgoritmu = new KrokAlgoritmu();
+                krokAlgoritmu.typ = TypKroku.popis;
+                krokAlgoritmu.popis.push(selhani[1][l]);
+                postupTvoreniGrafu.push(krokAlgoritmu);
               }
+              if (selhani[0] == "prazdna domena") {
+                return postupTvoreniGrafu;
+              }
+
             }
             break;
           case TypOmezeni.nerovno:
@@ -130,29 +135,27 @@ export class ArcConsistencyService implements Algoritmus {
               let krokAlgoritmu = new KrokAlgoritmu();
               krokAlgoritmu.typ = TypKroku.popis;
               selhani = this._arcConsistencyNotEqual(promenna, porovnavanaPromenna);
-              switch (selhani[0]) {
-                case 'uprava':
-                  for (var l = 0; l < selhani[1].length; l++) {
-                    krokAlgoritmu.popis.push(selhani[1][l]);
-                    postupTvoreniGrafu.push(krokAlgoritmu);
-                  }
-                  break;
-                case 'prazdna domena':
-                  return this._arcConsistencyFail(seznamPromennych, promenna, selhani);
+              for (var l = 0; l < selhani[1].length; l++) {
+                krokAlgoritmu = new KrokAlgoritmu();
+                krokAlgoritmu.typ = TypKroku.popis;
+                krokAlgoritmu.popis.push(selhani[1][l]);
+                postupTvoreniGrafu.push(krokAlgoritmu);
               }
-              
+              if (selhani[0] == "prazdna domena") {
+                return postupTvoreniGrafu;
+              }
+
               krokAlgoritmu = new KrokAlgoritmu();
               krokAlgoritmu.typ = TypKroku.popis;
               selhani = this._arcConsistencyNotEqual(porovnavanaPromenna, promenna);
-              switch (selhani[0]) {
-                case 'uprava':
-                  for (var l = 0; l < selhani[1].length; l++) {
-                    krokAlgoritmu.popis.push(selhani[1][l]);
-                    postupTvoreniGrafu.push(krokAlgoritmu);
-                  }
-                  break;
-                case 'prazdna domena':
-                  return this._arcConsistencyFail(seznamPromennych, promenna, selhani);
+              for (var l = 0; l < selhani[1].length; l++) {
+                krokAlgoritmu = new KrokAlgoritmu();
+                krokAlgoritmu.typ = TypKroku.popis;
+                krokAlgoritmu.popis.push(selhani[1][l]);
+                postupTvoreniGrafu.push(krokAlgoritmu);
+              }
+              if (selhani[0] == "prazdna domena") {
+                return postupTvoreniGrafu;
               }
             }
             break;
@@ -161,29 +164,27 @@ export class ArcConsistencyService implements Algoritmus {
             let krokAlgoritmu = new KrokAlgoritmu();
             krokAlgoritmu.typ = TypKroku.popis;
             selhani = this._arcConsistencyPovoleneDvojice(promenna, porovnavanaPromenna, 0, 1, j, 1);
-            switch (selhani[0]) {
-              case 'uprava':
-                for (var l = 0; l < selhani[1].length; l++) {
-                  krokAlgoritmu.popis.push(selhani[1][l]);
-                  postupTvoreniGrafu.push(krokAlgoritmu);
-                }
-                break;
-              case 'prazdna domena':
-                return this._arcConsistencyFail(seznamPromennych, promenna, selhani);
+            for (var l = 0; l < selhani[1].length; l++) {
+              krokAlgoritmu = new KrokAlgoritmu();
+              krokAlgoritmu.typ = TypKroku.popis;
+              krokAlgoritmu.popis.push(selhani[1][l]);
+              postupTvoreniGrafu.push(krokAlgoritmu);
             }
-            
+            if (selhani[0] == "prazdna domena") {
+              return postupTvoreniGrafu;
+            }
+
             krokAlgoritmu = new KrokAlgoritmu();
             krokAlgoritmu.typ = TypKroku.popis;
             selhani = this._arcConsistencyPovoleneDvojice(promenna, porovnavanaPromenna, 1, 0, j, 2);
-            switch (selhani[0]) {
-              case 'uprava':
-                for (var l = 0; l < selhani[1].length; l++) {
-                  krokAlgoritmu.popis.push(selhani[1][l]);
-                  postupTvoreniGrafu.push(krokAlgoritmu);
-                }
-                break;
-              case 'prazdna domena':
-                return this._arcConsistencyFail(seznamPromennych, promenna, selhani);
+            for (var l = 0; l < selhani[1].length; l++) {
+              krokAlgoritmu = new KrokAlgoritmu();
+              krokAlgoritmu.typ = TypKroku.popis;
+              krokAlgoritmu.popis.push(selhani[1][l]);
+              postupTvoreniGrafu.push(krokAlgoritmu);
+            }
+            if (selhani[0] == "prazdna domena") {
+              return postupTvoreniGrafu;
             }
             break;
           case TypOmezeni.zakazano:
@@ -191,29 +192,27 @@ export class ArcConsistencyService implements Algoritmus {
             krokAlgoritmu = new KrokAlgoritmu();
             krokAlgoritmu.typ = TypKroku.popis;
             selhani = this._arcConsistencyZakazanDvojice(promenna, porovnavanaPromenna, 0, j, 1);
-            switch (selhani[0]) {
-              case 'uprava':
-                for (var l = 0; l < selhani[1].length; l++) {
-                  krokAlgoritmu.popis.push(selhani[1][l]);
-                  postupTvoreniGrafu.push(krokAlgoritmu);
-                }
-                break;
-              case 'prazdna domena':
-                return this._arcConsistencyFail(seznamPromennych, promenna, selhani);
+            for (var l = 0; l < selhani[1].length; l++) {
+              krokAlgoritmu = new KrokAlgoritmu();
+              krokAlgoritmu.typ = TypKroku.popis;
+              krokAlgoritmu.popis.push(selhani[1][l]);
+              postupTvoreniGrafu.push(krokAlgoritmu);
             }
-            
+            if (selhani[0] == "prazdna domena") {
+              return postupTvoreniGrafu;
+            }
+
             krokAlgoritmu = new KrokAlgoritmu();
             krokAlgoritmu.typ = TypKroku.popis;
             selhani = this._arcConsistencyZakazanDvojice(promenna, porovnavanaPromenna, 0, j, 2);
-            switch (selhani[0]) {
-              case 'uprava':
-                for (var l = 0; l < selhani[1].length; l++) {
-                  krokAlgoritmu.popis.push(selhani[1][l]);
-                  postupTvoreniGrafu.push(krokAlgoritmu);
-                }
-                break;
-              case 'prazdna domena':
-                return this._arcConsistencyFail(seznamPromennych, promenna, selhani);
+            for (var l = 0; l < selhani[1].length; l++) {
+              krokAlgoritmu = new KrokAlgoritmu();
+              krokAlgoritmu.typ = TypKroku.popis;
+              krokAlgoritmu.popis.push(selhani[1][l]);
+              postupTvoreniGrafu.push(krokAlgoritmu);
+            }
+            if (selhani[0] == "prazdna domena") {
+              return postupTvoreniGrafu;
             }
             break;
         }
@@ -223,9 +222,7 @@ export class ArcConsistencyService implements Algoritmus {
       }
     }
 
-    var backtrackingPostup = this.backtracking.run(seznamPromennych, pozadovanychReseni);
-    backtrackingPostup.shift();
-    return postupTvoreniGrafu.concat(backtrackingPostup);
+    return this.backtracking.backtrack(seznamPromennych, pozadovanychReseni, postupTvoreniGrafu);
   }
 
   // a = prvni promenna prozkoumavanych prvku, b = ddruha promenna
@@ -233,10 +230,16 @@ export class ArcConsistencyService implements Algoritmus {
     var remove;
     var popisUpravy = new Array<LokalizovanaZprava>();
     var provedlaSeUprava = 'nic';
+    var zprava = new LokalizovanaZprava();
+    zprava.klic = 'popis.arcConsistency.kteraPromenna';
+    zprava.parametry = { 'nazev': promennaA.nazev }
+    popisUpravy.push(zprava)
+    var porovnavanaHodnota;
     for (var i = 0; i < promennaA.domena.length; i++) {
       remove = true;
       for (var j = 0; j < promennaB.domena.length; j++) {
-        if (promennaA.domena[i] < promennaB.domena[j]) {
+        porovnavanaHodnota = promennaA.domena[i]
+        if (porovnavanaHodnota < promennaB.domena[j]) {
           remove = false;
           break;
         }
@@ -246,8 +249,8 @@ export class ArcConsistencyService implements Algoritmus {
         i--;
         provedlaSeUprava = 'uprava';
         var zprava = new LokalizovanaZprava();
-        zprava.klic = 'popis.arcConsistency.prazdnaDomena';
-        zprava.parametry = { 'nazev': promennaA.nazev, 'hodnota': promennaA.domena[i], 'porovnavanaPromenna': promennaB.nazev, 'typ': TypOmezeni.rovno }
+        zprava.klic = 'popis.arcConsistency.nesplneno';
+        zprava.parametry = { 'nazev': promennaA.nazev, 'hodnota': porovnavanaHodnota, 'porovnavanaPromenna': promennaB.nazev, 'typOmezeni': TypOmezeni.rovno }
         popisUpravy.push(zprava)
         if (promennaA.domena.length === 0) {
           var zprava = new LokalizovanaZprava();
@@ -265,10 +268,16 @@ export class ArcConsistencyService implements Algoritmus {
     var remove;
     var popisUpravy = new Array<LokalizovanaZprava>();
     var provedlaSeUprava = 'nic';
+    var zprava = new LokalizovanaZprava();
+    zprava.klic = 'popis.arcConsistency.kteraPromenna';
+    zprava.parametry = { 'nazev': promennaA.nazev }
+    popisUpravy.push(zprava)
+    var porovnavanaHodnota;
     for (var i = 0; i < promennaA.domena.length; i++) {
       remove = true;
       for (var j = 0; j < promennaB.domena.length; j++) {
-        if (promennaA.domena[i] > promennaB.domena[j]) {
+        porovnavanaHodnota = promennaA.domena[i]
+        if (porovnavanaHodnota > promennaB.domena[j]) {
           remove = false;
           break;
         }
@@ -278,8 +287,8 @@ export class ArcConsistencyService implements Algoritmus {
         i--;
         provedlaSeUprava = 'uprava';
         var zprava = new LokalizovanaZprava();
-        zprava.klic = 'popis.arcConsistency.prazdnaDomena';
-        zprava.parametry = { 'nazev': promennaA.nazev, 'hodnota': promennaA.domena[i], 'porovnavanaPromenna': promennaB.nazev, 'typ': TypOmezeni.rovno }
+        zprava.klic = 'popis.arcConsistency.nesplneno';
+        zprava.parametry = { 'nazev': promennaA.nazev, 'hodnota': porovnavanaHodnota, 'porovnavanaPromenna': promennaB.nazev, 'typOmezeni': TypOmezeni.rovno }
         popisUpravy.push(zprava)
         if (promennaA.domena.length === 0) {
           var zprava = new LokalizovanaZprava();
@@ -297,10 +306,16 @@ export class ArcConsistencyService implements Algoritmus {
     var remove;
     var popisUpravy = new Array<LokalizovanaZprava>();
     var provedlaSeUprava = 'nic';
+    var zprava = new LokalizovanaZprava();
+    zprava.klic = 'popis.arcConsistency.kteraPromenna';
+    zprava.parametry = { 'nazev': promennaA.nazev }
+    popisUpravy.push(zprava)
+    var porovnavanaHodnota;
     for (var i = 0; i < promennaA.domena.length; i++) {
       remove = true;
       for (var j = 0; j < promennaB.domena.length; j++) {
-        if (promennaA.domena[i] === promennaB.domena[j]) {
+        porovnavanaHodnota = promennaA.domena[i]
+        if (porovnavanaHodnota === promennaB.domena[j]) {
           remove = false;
           break;
         }
@@ -310,8 +325,8 @@ export class ArcConsistencyService implements Algoritmus {
         i--;
         provedlaSeUprava = 'uprava';
         var zprava = new LokalizovanaZprava();
-        zprava.klic = 'popis.arcConsistency.prazdnaDomena';
-        zprava.parametry = { 'nazev': promennaA.nazev, 'hodnota': promennaA.domena[i], 'porovnavanaPromenna': promennaB.nazev, 'typ': TypOmezeni.rovno }
+        zprava.klic = 'popis.arcConsistency.nesplneno';
+        zprava.parametry = { 'nazev': promennaA.nazev, 'hodnota': porovnavanaHodnota, 'porovnavanaPromenna': promennaB.nazev, 'typOmezeni': TypOmezeni.rovno }
         popisUpravy.push(zprava)
         if (promennaA.domena.length === 0) {
           var zprava = new LokalizovanaZprava();
@@ -329,10 +344,16 @@ export class ArcConsistencyService implements Algoritmus {
     var remove;
     var popisUpravy = new Array<LokalizovanaZprava>();
     var provedlaSeUprava = 'nic';
+    var zprava = new LokalizovanaZprava();
+    zprava.klic = 'popis.arcConsistency.kteraPromenna';
+    zprava.parametry = { 'nazev': promennaA.nazev }
+    popisUpravy.push(zprava)
+    var porovnavanaHodnota;
     for (var i = 0; i < promennaA.domena.length; i++) {
       remove = true;
       for (var j = 0; j < promennaB.domena.length; j++) {
-        if (promennaA.domena[i] !== promennaB.domena[j]) {
+        porovnavanaHodnota = promennaA.domena[i]
+        if (porovnavanaHodnota !== promennaB.domena[j]) {
           remove = false;
           break;
         }
@@ -342,8 +363,8 @@ export class ArcConsistencyService implements Algoritmus {
         i--;
         provedlaSeUprava = 'uprava';
         var zprava = new LokalizovanaZprava();
-        zprava.klic = 'popis.arcConsistency.prazdnaDomena';
-        zprava.parametry = { 'nazev': promennaA.nazev, 'hodnota': promennaA.domena[i], 'porovnavanaPromenna': promennaB.nazev, 'typ': '!=' }
+        zprava.klic = 'popis.arcConsistency.nesplneno';
+        zprava.parametry = { 'nazev': promennaA.nazev, 'hodnota': porovnavanaHodnota, 'porovnavanaPromenna': promennaB.nazev, 'typOmezeni': TypOmezeni.rovno }
         popisUpravy.push(zprava)
         if (promennaA.domena.length === 0) {
           var zprava = new LokalizovanaZprava();
@@ -365,6 +386,13 @@ export class ArcConsistencyService implements Algoritmus {
     var remove, pomoc;
     var vlastniDvojice = [];
     var indexyHodnot = [];
+    var popisUpravy = new Array<LokalizovanaZprava>();
+    var provedlaSeUprava = 'nic';
+    var zprava = new LokalizovanaZprava();
+    zprava.klic = 'popis.arcConsistency.kteraPromenna';
+    zprava.parametry = { 'nazev': promennaA.nazev }
+    popisUpravy.push(zprava)
+    var porovnavanaHodnota;
     if (volani === 1) {
       var domenaA = promennaA.domena;
       var domenaB = promennaB.domena;
@@ -390,19 +418,38 @@ export class ArcConsistencyService implements Algoritmus {
         }
       }
       if (remove && volani === 1) {
+        provedlaSeUprava = 'uprava';
+        var zprava = new LokalizovanaZprava();
+        zprava.klic = 'popis.arcConsistency.povolenoNesplneno';
+        zprava.parametry = { 'nazev': promennaA.nazev, 'hodnota': promennaA.domena[i], 'porovnavanaPromenna': promennaB.nazev, 'typOmezeni': TypOmezeni.rovno }
+        popisUpravy.push(zprava)
         promennaA.domena.splice(i, 1);
         i--;
         if (promennaA.domena.length === 0) {
-          return 'popis.arcConsistency.prazdnaDomena';
+          var zprava = new LokalizovanaZprava();
+          zprava.klic = 'popis.arcConsistency.prazdnaDomena';
+          zprava.parametry = { 'nazev': promennaA.nazev }
+          popisUpravy.push(zprava)
+          return ['prazdna domena', popisUpravy];
         }
       } else if (remove && volani === 2) {
+        provedlaSeUprava = 'uprava';
+        var zprava = new LokalizovanaZprava();
+        zprava.klic = 'popis.arcConsistency.povolenoNesplneno';
+        zprava.parametry = { 'nazev': promennaA.nazev, 'hodnota': promennaB.domena[i], 'porovnavanaPromenna': promennaB.nazev }
+        popisUpravy.push(zprava)
         promennaB.domena.splice(i, 1);
         i--;
         if (promennaB.domena.length === 0) {
-          return 'popis.arcConsistency.prazdnaDomena';
+          var zprava = new LokalizovanaZprava();
+          zprava.klic = 'popis.arcConsistency.prazdnaDomena';
+          zprava.parametry = { 'nazev': promennaA.nazev }
+          popisUpravy.push(zprava)
+          return ['prazdna domena', popisUpravy];
         }
       }
     }
+    return [provedlaSeUprava, popisUpravy];
   }
 
   _arcConsistencyZakazanDvojice(promennaA, promennaB, d, index, volani) {
@@ -410,7 +457,13 @@ export class ArcConsistencyService implements Algoritmus {
     var vlastniDvojice = [];
     var indexyHodnot = [];
     var povoleneDvojice = [];
-    if (volani === 1) {
+    var popisUpravy = new Array<LokalizovanaZprava>();
+    var provedlaSeUprava = 'nic';
+    var zprava = new LokalizovanaZprava();
+    zprava.klic = 'popis.arcConsistency.kteraPromenna';
+    zprava.parametry = { 'nazev': promennaA.nazev }
+    popisUpravy.push(zprava)
+    var porovnavanaHodnota; if (volani === 1) {
       var domenaA = promennaA.domena;
       var domenaB = promennaB.domena;
     } else {
@@ -463,19 +516,38 @@ export class ArcConsistencyService implements Algoritmus {
         }
       }
       if (remove && volani === 1) {
+        provedlaSeUprava = 'uprava';
+        var zprava = new LokalizovanaZprava();
+        zprava.klic = 'popis.arcConsistency.zakazaneNesplneno';
+        zprava.parametry = { 'nazev': promennaA.nazev, 'hodnota': promennaA.domena[i], 'porovnavanaPromenna': promennaB.nazev, 'typOmezeni': TypOmezeni.rovno }
+        popisUpravy.push(zprava)
         promennaA.domena.splice(i, 1);
         if (promennaA.domena.length === 0) {
-          return 'popis.arcConsistency.prazdnaDomena';
+          var zprava = new LokalizovanaZprava();
+          zprava.klic = 'popis.arcConsistency.prazdnaDomena';
+          zprava.parametry = { 'nazev': promennaA.nazev }
+          popisUpravy.push(zprava)
+          return ['prazdna domena', popisUpravy];
         }
         i--;
       } else if (remove && volani === 2) {
+        provedlaSeUprava = 'uprava';
+        var zprava = new LokalizovanaZprava();
+        zprava.klic = 'popis.arcConsistency.zakazaneNesplneno';
+        zprava.parametry = { 'nazev': promennaA.nazev, 'hodnota': promennaA.domena[i], 'porovnavanaPromenna': promennaB.nazev, 'typOmezeni': TypOmezeni.rovno }
+        popisUpravy.push(zprava)
         promennaB.domena.splice(i, 1);
         if (promennaB.domena.length === 0) {
-          return 'popis.arcConsistency.prazdnaDomena';
+          var zprava = new LokalizovanaZprava();
+          zprava.klic = 'popis.arcConsistency.prazdnaDomena';
+          zprava.parametry = { 'nazev': promennaA.nazev }
+          popisUpravy.push(zprava)
+          return ['prazdna domena', popisUpravy];
         }
         i--;
       }
     }
+    return [provedlaSeUprava, popisUpravy];
   }
 
   _arcConsistencyFail(seznamPromennych: Array<Promenna>, promenna: Promenna, popis: string) {
