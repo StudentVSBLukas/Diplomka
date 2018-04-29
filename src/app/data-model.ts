@@ -57,7 +57,7 @@ export enum TypKroku {
 export enum StavKroku {
   uzel = 'uzel',
   deadend = 'deadend',
-  reseni = 'reseni,'
+  reseni = 'reseni'
 }
 
 export class KrokAlgoritmu {
