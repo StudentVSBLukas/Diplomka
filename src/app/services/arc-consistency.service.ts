@@ -224,6 +224,7 @@ export class ArcConsistencyService implements Algoritmus {
     }
 
     var backtrackingPostup = this.backtracking.run(seznamPromennych, pozadovanychReseni);
+    backtrackingPostup.shift();
     return postupTvoreniGrafu.concat(backtrackingPostup);
   }
 
