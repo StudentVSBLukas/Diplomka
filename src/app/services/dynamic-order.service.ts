@@ -20,18 +20,17 @@ export class DynamicOrderService implements Algoritmus {
     //    seznamPromennych.push(new Promenna('E', [1, 5], []));
 
     AlgoritmusUtils.prevedOmezeni(seznamPromennych);
-    
+
     var postupTvoreniGrafu = new Array();
     var startKrok = new KrokAlgoritmu();
-    startKrok.hodnota = 'Dynamic value ordering'; 
+    startKrok.hodnota = 'Dynamic value ordering';
     startKrok.popis.push(new LokalizovanaZprava('popis.dynamicOrder.start'));
-    postupTvoreniGrafu.push(startKrok);    
+    postupTvoreniGrafu.push(startKrok);
 
     var pocetReseni = 0;
     var promenna = 0;
 
-    const krokAlgoritmu = new KrokAlgoritmu();
-
+    var krokAlgoritmu = new KrokAlgoritmu();
     var lokalizovanaZprava = new LokalizovanaZprava();
     lokalizovanaZprava.klic = 'popis.dynamicOrder.poradiPred';
     krokAlgoritmu.popis.push(lokalizovanaZprava);
@@ -44,7 +43,16 @@ export class DynamicOrderService implements Algoritmus {
       krokAlgoritmu.popis.push(lokalizovanaZprava);
     }
 
+    var krokAlgoritmu = new KrokAlgoritmu();
+    var lokalizovanaZprava = new LokalizovanaZprava();
+    lokalizovanaZprava.klic = 'popis.dynamicOrder.zacinamSerazovat';
+    krokAlgoritmu.popis.push(lokalizovanaZprava);
+    krokAlgoritmu.typ = TypKroku.popis;
+    postupTvoreniGrafu.push(krokAlgoritmu);
+
+
     seznamPromennych = this._dynamicOrder(promenna, seznamPromennych);
+    AlgoritmusUtils.prevedOmezeni(seznamPromennych);
 
     const krokAlgoritmu2 = new KrokAlgoritmu();
     var lokalizovanaZprava = new LokalizovanaZprava();
@@ -69,46 +77,71 @@ export class DynamicOrderService implements Algoritmus {
         continue;
       }
 
-      const krokAlgoritmu = new KrokAlgoritmu();
+      var krokAlgoritmu = new KrokAlgoritmu();
       krokAlgoritmu.nazev = zpracovavanaPromenna.nazev;
       krokAlgoritmu.hodnota = zpracovavanaPromenna.domena[zpracovavanaPromenna.pozice];
       krokAlgoritmu.rodic = AlgoritmusUtils.najdiRodice(seznamPromennych[promenna - 1], postupTvoreniGrafu);
+      postupTvoreniGrafu.push(krokAlgoritmu);
 
       var lokalizovanaZprava = new LokalizovanaZprava();
       lokalizovanaZprava.klic = 'popis.dynamicOrder.prirazeni';
       lokalizovanaZprava.parametry = { 'nazev': krokAlgoritmu.nazev, 'hodnota': krokAlgoritmu.hodnota }
       krokAlgoritmu.popis.push(lokalizovanaZprava);
+
+      lokalizovanaZprava = new LokalizovanaZprava();
+      lokalizovanaZprava.klic = 'popis.dynamicOrder.kontrolaOmezeni';
+      lokalizovanaZprava.parametry = { 'nazev': krokAlgoritmu.nazev, 'hodnota': krokAlgoritmu.hodnota }
+      krokAlgoritmu = new KrokAlgoritmu();
+      krokAlgoritmu.typ = TypKroku.popis;
+      krokAlgoritmu.popis.push(lokalizovanaZprava);
       postupTvoreniGrafu.push(krokAlgoritmu);
 
       const poruseneOmezeni = AlgoritmusUtils.porovnej(zpracovavanaPromenna, seznamPromennych);
       if (poruseneOmezeni) {
-        for (var i = 0; i < poruseneOmezeni.length; i++) {
-          krokAlgoritmu.popis.push(poruseneOmezeni[i]);
+        krokAlgoritmu = new KrokAlgoritmu();
+        krokAlgoritmu.typ = TypKroku.popis;
+        krokAlgoritmu.popis.push(poruseneOmezeni);
+        postupTvoreniGrafu.push(krokAlgoritmu);
+        if (zpracovavanaPromenna.domena.length > zpracovavanaPromenna.pozice + 1) {
+          lokalizovanaZprava = new LokalizovanaZprava();
+          lokalizovanaZprava.klic = 'popis.dynamicOrder.pokracovaniPrirazeni';
+          lokalizovanaZprava.parametry = { 'nazev': krokAlgoritmu.nazev, 'hodnota': krokAlgoritmu.hodnota }
+          krokAlgoritmu = new KrokAlgoritmu();
+          krokAlgoritmu.typ = TypKroku.popis;
+          krokAlgoritmu.popis.push(lokalizovanaZprava);
+          postupTvoreniGrafu.push(krokAlgoritmu);
+        } else {
+          lokalizovanaZprava = new LokalizovanaZprava();
+          lokalizovanaZprava.klic = 'popis.dynamicOrder.deadend';
+          lokalizovanaZprava.parametry = { 'nazev': krokAlgoritmu.nazev, 'hodnota': krokAlgoritmu.hodnota }
+          krokAlgoritmu = new KrokAlgoritmu();
+          krokAlgoritmu.typ = TypKroku.popis;
+          krokAlgoritmu.popis.push(lokalizovanaZprava);
+          krokAlgoritmu.stav = StavKroku.deadend;
+          postupTvoreniGrafu.push(krokAlgoritmu);
         }
-      }
-      if (poruseneOmezeni) {
-        var lokalizovanaZprava = new LokalizovanaZprava();
-        lokalizovanaZprava.klic = 'popis.dynamicOrder.deadend';
-        lokalizovanaZprava.parametry = { 'nazev': krokAlgoritmu.nazev, 'hodnota': krokAlgoritmu.hodnota }
-        krokAlgoritmu.popis.push(lokalizovanaZprava);
-        krokAlgoritmu.stav = StavKroku.deadend;
       } else {
         if (promenna === (seznamPromennych.length - 1)) {
           pocetReseni++;
-          krokAlgoritmu.stav = StavKroku.reseni;
           var lokalizovanaZprava = new LokalizovanaZprava();
           lokalizovanaZprava.klic = 'popis.dynamicOrder.reseni';
           lokalizovanaZprava.parametry = { 'nazev': krokAlgoritmu.nazev, 'hodnota': krokAlgoritmu.hodnota }
+          krokAlgoritmu = new KrokAlgoritmu();
+          krokAlgoritmu.typ = TypKroku.popis;
           krokAlgoritmu.popis.push(lokalizovanaZprava);
+          krokAlgoritmu.stav = StavKroku.reseni;
+          postupTvoreniGrafu.push(krokAlgoritmu);
         } else {
           promenna++;
           var lokalizovanaZprava = new LokalizovanaZprava();
           lokalizovanaZprava.klic = 'popis.dynamicOrder.uzel';
           lokalizovanaZprava.parametry = { 'nazev': krokAlgoritmu.nazev, 'hodnota': krokAlgoritmu.hodnota }
+          krokAlgoritmu = new KrokAlgoritmu();
+          krokAlgoritmu.typ = TypKroku.popis;
           krokAlgoritmu.popis.push(lokalizovanaZprava);
+          postupTvoreniGrafu.push(krokAlgoritmu);
         }
       }
-
     }
     return postupTvoreniGrafu;
   }
@@ -119,7 +152,7 @@ export class DynamicOrderService implements Algoritmus {
     for (var i = promenna; i < seznamPromennych.length; i++) {
       nejmensiDelkaDomeny = seznamPromennych[i].domena.length;
       pozicePromenneSNejmensiDelkouDomeny = i;
-        for (var j = i+1; j < seznamPromennych.length; j++) {
+      for (var j = i + 1; j < seznamPromennych.length; j++) {
         if (seznamPromennych[j].domena.length < nejmensiDelkaDomeny) {
           nejmensiDelkaDomeny = seznamPromennych[j].domena.length;
           pozicePromenneSNejmensiDelkouDomeny = j;

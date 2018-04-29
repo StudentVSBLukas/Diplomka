@@ -196,8 +196,6 @@ export default class AlgoritmusUtils {
       return null;
     }
 
-    const popisPrubehuOmezeni = new Array<LokalizovanaZprava>();
-
     var cislo = promenna.domena[promenna.pozice];
     for (var i = 0; i < promenna.omezeni.length; i++) {
       var omezeni = promenna.omezeni[i];
@@ -210,14 +208,12 @@ export default class AlgoritmusUtils {
             if (!(cislo < porovnavanaHodnota)) {
               var popis = new LokalizovanaZprava();
               popis.klic = 'popis.omezeni.nesplneno';
-              popis.parametry = { 'nazev': promenna.nazev, 'porovnavanaPromenna': porovnavanaPromenna, 'hondnota': cislo, 'porovnavanaHodnota': porovnavanaHodnota, 'typOmezeni': omezeni.typOmezeni }
-              popisPrubehuOmezeni.push(popis);
-              return popisPrubehuOmezeni;
+              popis.parametry = { 'nazev': promenna.nazev, 'porovnavanaPromenna': porovnavanaPromenna, 'hodnota': cislo, 'porovnavanaHodnota': porovnavanaHodnota, 'typOmezeni': omezeni.typOmezeni }
+              return popis;
             }
-            var popis = new LokalizovanaZprava();
-            popis.klic = 'popis.omezeni.splneno';
-            popis.parametry = { 'nazev': promenna.nazev, 'porovnavanaPromenna': porovnavanaPromenna, 'hondnota': cislo, 'porovnavanaHodnota': porovnavanaHodnota, 'typOmezeni': omezeni.typOmezeni }
-            popisPrubehuOmezeni.push(popis);
+            // var popis = new LokalizovanaZprava();
+            // popis.klic = 'popis.omezeni.splneno';
+            // popis.parametry = { 'nazev': promenna.nazev, 'porovnavanaPromenna': porovnavanaPromenna, 'hodnota': cislo, 'porovnavanaHodnota': porovnavanaHodnota, 'typOmezeni': omezeni.typOmezeni }
           }
           break;
         case TypOmezeni.vetsi:
@@ -227,14 +223,13 @@ export default class AlgoritmusUtils {
             if (!(cislo > porovnavanaHodnota)) {
               var popis = new LokalizovanaZprava();
               popis.klic = 'popis.omezeni.nesplneno';
-              popis.parametry = { 'nazev': promenna.nazev, 'porovnavanaPromenna': porovnavanaPromenna, 'hondnota': cislo, 'porovnavanaHodnota': porovnavanaHodnota, 'typOmezeni': omezeni.typOmezeni }
-              popisPrubehuOmezeni.push(popis);
-              return popisPrubehuOmezeni;
+              popis.parametry = { 'nazev': promenna.nazev, 'porovnavanaPromenna': porovnavanaPromenna, 'hodnota': cislo, 'porovnavanaHodnota': porovnavanaHodnota, 'typOmezeni': omezeni.typOmezeni }
+              return popis;
             }
-            var popis = new LokalizovanaZprava();
-            popis.klic = 'popis.omezeni.splneno';
-            popis.parametry = { 'nazev': promenna.nazev, 'porovnavanaPromenna': porovnavanaPromenna, 'hondnota': cislo, 'porovnavanaHodnota': porovnavanaHodnota, 'typOmezeni': omezeni.typOmezeni }
-            popisPrubehuOmezeni.push(popis);
+            // var popis = new LokalizovanaZprava();
+            // popis.klic = 'popis.omezeni.splneno';
+            // popis.parametry = { 'nazev': promenna.nazev, 'porovnavanaPromenna': porovnavanaPromenna, 'hondnota': cislo, 'porovnavanaHodnota': porovnavanaHodnota, 'typOmezeni': omezeni.typOmezeni }
+            // popisPrubehuOmezeni.push(popis);
           }
           break;
         case TypOmezeni.rovno:
@@ -244,14 +239,13 @@ export default class AlgoritmusUtils {
             if (cislo !== porovnavanaHodnota) {
               var popis = new LokalizovanaZprava();
               popis.klic = 'popis.omezeni.nesplneno';
-              popis.parametry = { 'nazev': promenna.nazev, 'porovnavanaPromenna': porovnavanaPromenna, 'hondnota': cislo, 'porovnavanaHodnota': porovnavanaHodnota, 'typOmezeni': omezeni.typOmezeni }
-              popisPrubehuOmezeni.push(popis);
-              return popisPrubehuOmezeni;
+              popis.parametry = { 'nazev': promenna.nazev, 'porovnavanaPromenna': porovnavanaPromenna, 'hodnota': cislo, 'porovnavanaHodnota': porovnavanaHodnota, 'typOmezeni': omezeni.typOmezeni }
+              return popis;
             }
-            var popis = new LokalizovanaZprava();
-            popis.klic = 'popis.omezeni.splneno';
-            popis.parametry = { 'nazev': promenna.nazev, 'porovnavanaPromenna': porovnavanaPromenna, 'hondnota': cislo, 'porovnavanaHodnota': porovnavanaHodnota, 'typOmezeni': omezeni.typOmezeni }
-            popisPrubehuOmezeni.push(popis);
+            // var popis = new LokalizovanaZprava();
+            // popis.klic = 'popis.omezeni.splneno';
+            // popis.parametry = { 'nazev': promenna.nazev, 'porovnavanaPromenna': porovnavanaPromenna, 'hondnota': cislo, 'porovnavanaHodnota': porovnavanaHodnota, 'typOmezeni': omezeni.typOmezeni }
+            // popisPrubehuOmezeni.push(popis);
           }
           break;
         case TypOmezeni.nerovno:
@@ -261,14 +255,13 @@ export default class AlgoritmusUtils {
             if (cislo === porovnavanaHodnota) {
               var popis = new LokalizovanaZprava();
               popis.klic = 'popis.omezeni.nesplneno';
-              popis.parametry = { 'nazev': promenna.nazev, 'porovnavanaPromenna': porovnavanaPromenna, 'hondnota': cislo, 'porovnavanaHodnota': porovnavanaHodnota, 'typOmezeni': omezeni.typOmezeni }
-              popisPrubehuOmezeni.push(popis);
-              return popisPrubehuOmezeni;
+              popis.parametry = { 'nazev': promenna.nazev, 'porovnavanaPromenna': porovnavanaPromenna, 'hodnota': cislo, 'porovnavanaHodnota': porovnavanaHodnota, 'typOmezeni': omezeni.typOmezeni }
+              return popis;
             }
-            var popis = new LokalizovanaZprava();
-            popis.klic = 'popis.omezeni.splneno';
-            popis.parametry = { 'nazev': promenna.nazev, 'porovnavanaPromenna': porovnavanaPromenna, 'hondnota': cislo, 'porovnavanaHodnota': porovnavanaHodnota, 'typOmezeni': omezeni.typOmezeni }
-            popisPrubehuOmezeni.push(popis);
+            // var popis = new LokalizovanaZprava();
+            // popis.klic = 'popis.omezeni.splneno';
+            // popis.parametry = { 'nazev': promenna.nazev, 'porovnavanaPromenna': porovnavanaPromenna, 'hondnota': cislo, 'porovnavanaHodnota': porovnavanaHodnota, 'typOmezeni': omezeni.typOmezeni }
+            // popisPrubehuOmezeni.push(popis);
           }
           break;
         case TypOmezeni.povoleno:
@@ -286,14 +279,13 @@ export default class AlgoritmusUtils {
           if (!nalezeno) {
             var popis = new LokalizovanaZprava();
             popis.klic = 'popis.omezeni.povolenoNesplneno';
-            popis.parametry = { 'nazev': promenna.nazev, 'porovnavanaPromenna': porovnavanaPromenna, 'hondnota': cislo, 'porovnavanaHodnota': porovnavanaHodnota }
-            popisPrubehuOmezeni.push(popis);
-            return popisPrubehuOmezeni;
+            popis.parametry = { 'nazev': promenna.nazev, 'porovnavanaPromenna': porovnavanaPromenna, 'hodnota': cislo, 'porovnavanaHodnota': porovnavanaHodnota }
+            return popis;
           }
-          var popis = new LokalizovanaZprava();
-          popis.klic = 'popis.omezeni.povolenoSplneno';
-          popis.parametry = { 'nazev': promenna.nazev, 'porovnavanaPromenna': porovnavanaPromenna, 'hondnota': cislo, 'porovnavanaHodnota': porovnavanaHodnota }
-          popisPrubehuOmezeni.push(popis);
+          // var popis = new LokalizovanaZprava();
+          // popis.klic = 'popis.omezeni.povolenoSplneno';
+          // popis.parametry = { 'nazev': promenna.nazev, 'porovnavanaPromenna': porovnavanaPromenna, 'hondnota': cislo, 'porovnavanaHodnota': porovnavanaHodnota }
+          // popisPrubehuOmezeni.push(popis);
           break;
         case TypOmezeni.zakazano:
           var porovnavanaPromenna = omezeni.omezeniProPromennou[0];
@@ -301,15 +293,14 @@ export default class AlgoritmusUtils {
           for (var j = 0; j < omezeni.hodnotyOmezeni.length; j++) {
             if (cislo === omezeni.hodnotyOmezeni[j][0] && porovnavanaHodnota === omezeni.hodnotyOmezeni[j][1]) {
               popis.klic = 'popis.omezeni.zakazaneNesplneno';
-              popis.parametry = { 'nazev': promenna.nazev, 'porovnavanaPromenna': porovnavanaPromenna, 'hondnota': cislo, 'porovnavanaHodnota': porovnavanaHodnota }
-              popisPrubehuOmezeni.push(popis);
-              return popisPrubehuOmezeni;
+              popis.parametry = { 'nazev': promenna.nazev, 'porovnavanaPromenna': porovnavanaPromenna, 'hodnota': cislo, 'porovnavanaHodnota': porovnavanaHodnota }
+              return popis;
             }
           }
-          var popis = new LokalizovanaZprava();
-          popis.klic = 'popis.omezeni.zakazeneSplneno';
-          popis.parametry = { 'nazev': promenna.nazev, 'porovnavanaPromenna': porovnavanaPromenna, 'hondnota': cislo, 'porovnavanaHodnota': porovnavanaHodnota }
-          popisPrubehuOmezeni.push(popis);
+          // var popis = new LokalizovanaZprava();
+          // popis.klic = 'popis.omezeni.zakazeneSplneno';
+          // popis.parametry = { 'nazev': promenna.nazev, 'porovnavanaPromenna': porovnavanaPromenna, 'hondnota': cislo, 'porovnavanaHodnota': porovnavanaHodnota }
+          // popisPrubehuOmezeni.push(popis);
           break;
       }
     }
