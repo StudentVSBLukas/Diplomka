@@ -198,7 +198,6 @@ export class BackjumpingService implements Algoritmus {
               leafend[promenna] = true;
               promenna++;
             }
-            postupTvoreniGrafu.push(krokAlgoritmu);
           } else {
             krokAlgoritmu = new KrokAlgoritmu();
             krokAlgoritmu.typ = TypKroku.popis;

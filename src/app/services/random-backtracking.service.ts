@@ -12,31 +12,6 @@ export class RandomBacktrackingService implements Algoritmus {
   constructor() { }
 
   run(seznamPromennych: Array<Promenna>, pozadovanychReseni: number): Array<KrokAlgoritmu> {
-    // TODO Test ze zadani
-    //    seznamPromennych = [];
-    //    // seznamPromennych.push(new Promenna("A", [1,2,3,4,5], []))
-    //    // seznamPromennych.push(new Promenna("B", [1,2,3,4,5], [new Omezeni("=", ["A"], null)]))
-    //    seznamPromennych.push(new Promenna('A', [1, 2], []));
-    //    seznamPromennych.push(new Promenna('B', [4, 5], [new Omezeni(TypOmezeni.rovno, ['A'], null)]));
-    //    seznamPromennych.push(new Promenna('C', [1, 2, 3, 4, 5], []));
-    //    seznamPromennych.push(new Promenna('D', [1, 2, 3, 4, 5], []));
-    //    seznamPromennych.push(new Promenna('E', [1, 2, 3, 4, 5], [new Omezeni(TypOmezeni.vetsi, ['A'], null)]));
-    //    //AlgoritmusUtils.prevedOmezeni(seznamPromennych);
-    //    seznamPromennych[0].zalohaDomeny = seznamPromennych[0].domena.slice();
-    //    seznamPromennych[1].zalohaDomeny = seznamPromennych[1].domena.slice();
-    //    seznamPromennych[2].zalohaDomeny = seznamPromennych[2].domena.slice();
-    //    seznamPromennych[3].zalohaDomeny = seznamPromennych[3].domena.slice();
-    //    seznamPromennych[4].zalohaDomeny = seznamPromennych[4].domena.slice();
-
-    // seznamPromennych = [];
-    // seznamPromennych.push(new Promenna('A', [1, 2, 3], [new Omezeni(TypOmezeni.nerovno, ['B', 'C', 'D', 'G'], null)]));
-    // seznamPromennych.push(new Promenna('B', [2, 3], [new Omezeni(TypOmezeni.nerovno, ['F'], null)]));
-    // seznamPromennych.push(new Promenna('C', [1, 2], [new Omezeni(TypOmezeni.nerovno, ['G'], null)]));
-    // seznamPromennych.push(new Promenna('D', [1, 2], [new Omezeni(TypOmezeni.nerovno, ['E', 'G'], null)]));
-    // seznamPromennych.push(new Promenna('E', [2, 3], [new Omezeni(TypOmezeni.nerovno, ['F', 'G'], null)]));
-    // seznamPromennych.push(new Promenna('F', [1, 3, 4]));
-    // seznamPromennych.push(new Promenna('G', [1, 2]));
-
     AlgoritmusUtils.prevedOmezeni(seznamPromennych);
 
     var postupTvoreniGrafu = new Array();

@@ -42,6 +42,7 @@ export class MainPageComponent implements OnInit {
 
 
   ngOnInit() {
+    // TODO dostranit
     for (let i = 0; i < 3; i++) {
       const p = this.promennaService.vytvor();
       p.domena = [i + 1, i + 2, i + 4];
