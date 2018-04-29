@@ -91,9 +91,9 @@ describe('ArcConsistencyService', () => {
     expect(testUtils.pocetReseni(postup)).toBe(0);
   });
 
-  it('příklad "Arc consistency" spočte během 0 kroků', () => {
+  it('příklad "Arc consistency" spočte během 1 kroků', () => {
     const postup = service.run(testUtils.arcConsistencyExample, 0);
-    expect(testUtils.pocetUzlu(postup)).toBe(0);
+    expect(testUtils.pocetUzlu(postup)).toBe(1);
   });
 
   it('na příkladu "iConsistency" nalezne 1 řešení', () => {

@@ -51,9 +51,9 @@ describe('IconsistencyService', () => {
     expect(testUtils.pocetReseni(postup)).toBe(9);
   });
 
-  it('příklad "Backjumping" spočte během 112 kroků', () => {
+  it('příklad "Backjumping" spočte během 67 kroků', () => {
     const postup = service.run(testUtils.backjumpingExample, 0, 3);
-    expect(testUtils.pocetUzlu(postup)).toBe(112);
+    expect(testUtils.pocetUzlu(postup)).toBe(67);
   });
 
   it('na příkladu "Dynamic value ordering" nalezne 60 řešení', () => {
@@ -81,9 +81,9 @@ describe('IconsistencyService', () => {
     expect(testUtils.pocetReseni(postup)).toBe(1);
   });
 
-  it('příklad "Forward checking + DVO" spočte během 19 kroků', () => {
+  it('příklad "Forward checking + DVO" spočte během 11 kroků', () => {
     const postup = service.run(testUtils.forwardDvoExample, 0, 3);
-    expect(testUtils.pocetUzlu(postup)).toBe(19);
+    expect(testUtils.pocetUzlu(postup)).toBe(11);
   });
 
   it('na příkladu "Arc consistency" nalezne 0 řešení', () => {
@@ -91,9 +91,9 @@ describe('IconsistencyService', () => {
     expect(testUtils.pocetReseni(postup)).toBe(0);
   });
 
-  it('příklad "Arc consistency" spočte během 5 kroků', () => {
+  it('příklad "Arc consistency" spočte během 1 kroků', () => {
     const postup = service.run(testUtils.arcConsistencyExample, 0, 3);
-    expect(testUtils.pocetUzlu(postup)).toBe(5);
+    expect(testUtils.pocetUzlu(postup)).toBe(1);
   });
 
   it('na příkladu "iConsistency" nalezne 1 řešení', () => {
@@ -101,8 +101,8 @@ describe('IconsistencyService', () => {
     expect(testUtils.pocetReseni(postup)).toBe(1);
   });
 
-  it('příklad "iConsistency" spočte během 17 kroků', () => {
+  it('příklad "iConsistency" spočte během 13 kroků', () => {
     const postup = service.run(testUtils.iConsistencyExample, 0, 3);
-    expect(testUtils.pocetUzlu(postup)).toBe(17);
+    expect(testUtils.pocetUzlu(postup)).toBe(13);
   });
 });
