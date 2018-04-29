@@ -48,21 +48,6 @@ export class GrafComponent implements OnInit, OnChanges {
     function valueConverter(krok) {
       return krok.nazev ? krok.nazev + ' = ' + krok.hodnota : krok.hodnota;
     }
-    function colorConverter(krok) {
-        const stav = krok.stav;
-
-        if (stav === StavKroku.reseni) {
-            return '#72E91B';
-        }
-        if (stav === StavKroku.deadend) {
-            return '#FFB40E';
-        }
-        if (stav === StavKroku.uzel) {
-            return 'gray';
-        }
-
-      return 'lightgray';
-    }
 
     function tooltipConverter(krok: KrokAlgoritmu) {
         return krok.popis.map(
@@ -89,7 +74,7 @@ export class GrafComponent implements OnInit, OnChanges {
                             {fill: 'lightgray',
                                 stroke: 'full', strokeWidth: 1,
                                 alignment: go.Spot.Center},
-                            new go.Binding('fill', 'krok', colorConverter)),
+                            new go.Binding('fill', 'krok', self.najdiBarvu)),
                     $(go.TextBlock,
                             {font: '700 15px Droid Serif, sans-serif',
                                 textAlign: 'center',
@@ -114,7 +99,7 @@ export class GrafComponent implements OnInit, OnChanges {
 
     this.graf.model = new go.TreeModel();
     this.krokuj();
-    this.fakeTransaction();
+    this.updateTransaction();
   }
 
   krokuj() {
@@ -137,7 +122,7 @@ export class GrafComponent implements OnInit, OnChanges {
         model.addNodeData({key: krok, parent: this.aktualniKrok.rodic, krok: this.aktualniKrok});
         model.commitTransaction('make new node');
       } else {
-        this.fakeTransaction();
+        this.updateTransaction();
       }
 
       return true;
@@ -197,12 +182,47 @@ export class GrafComponent implements OnInit, OnChanges {
     this.graf.zoomToFit();
   }
 
-  private fakeTransaction() {
+  private updateTransaction() {
     const model = this.graf.model;
 
     model.startTransaction('Fake transaction');
+    // Uprava stavu uzlu
+    if (this.aktualniKrok.stav !== StavKroku.uzel) {
+      const akce = this.najdiAkci(this.aktualniKrok);
+      const uzel = this.graf.findNodeForKey(this.postup.indexOf(akce));
+      uzel.elements.first().fill = this.najdiBarvu(this.aktualniKrok);
+    }
+    // Zmena pro undoManager
     const root = model.findNodeDataForKey(0);
     model.setDataProperty(root, 'aktualniKrok', this.graf.model.undoManager.historyIndex);
     model.commitTransaction('FakeTransaction');
   }
+
+  private najdiAkci(krok: KrokAlgoritmu) {
+    for (let i = this.postup.indexOf(krok); i >= 0; i--) {
+      const akce = this.postup[i];
+      if (akce.typ === TypKroku.akce) {
+        return akce;
+      }
+    }
+
+    return this.postup[0];
+  }
+  
+  private najdiBarvu(krok: KrokAlgoritmu) {
+      const stav = krok.stav;
+
+      if (stav === StavKroku.reseni) {
+          return '#72E91B';
+      }
+      if (stav === StavKroku.deadend) {
+          return '#FFB40E';
+      }
+      if (stav === StavKroku.uzel) {
+          return 'gray';
+      }
+
+      return 'lightgray';
+  }
 }
+
