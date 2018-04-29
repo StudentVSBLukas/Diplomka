@@ -97,7 +97,7 @@ export class ForwardCheckingDynamicOrderService extends ForwardCheckingService {
           krokAlgoritmu.popis.push(lokalizovanaZprava);
           krokAlgoritmu.hodnotaDomenKroku = this._forwardChechHodnotaDomen(seznamPromennych);
         } else {
-          var tmp = this._forwardCheck(promenna + 1, zpracovavanaPromenna.domena[zpracovavanaPromenna.pozice], seznamPromennych, vstup);
+          var tmp = this._forwardCheck(promenna + 1, zpracovavanaPromenna, seznamPromennych, vstup);
           for (var i = 0; i < tmp[2].length; i++) {
             krokAlgoritmu.popis.push(tmp[2][i]);
           }
