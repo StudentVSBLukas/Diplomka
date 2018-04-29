@@ -1,5 +1,6 @@
 * {
     box-sizing: border-box;
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
 }
 
 .form-header {
@@ -22,11 +23,31 @@ input:required, .ui-inputtext:required, p-dropdown[required] > .ui-dropdown, p-m
 	border-left: 2px solid orange;
 }
 
-.row .rowHover {
+.table-layout {
+	display: table;
+}
+
+.table-layout > div {
+	display: table-row;
+}
+
+.table-layout > div > div {
+	display: table-cell;
+}
+
+.row-layout > * {
+	display: inline-block;
+}
+
+.row-layout > * + * {
+	margin-left: 0.5em;
+}
+
+.row-layout .rowHover, .row .rowHover {
 	visibility: hidden;
 }
 
-.row:hover .rowHover {
+.row-layout:hover .rowHover, .row:hover .rowHover {
 	visibility: visible;
 }
 
@@ -58,3 +79,13 @@ input:required, .ui-inputtext:required, p-dropdown[required] > .ui-dropdown, p-m
 .spacer {
 	margin-top: 2em;
 }
+
+/* Primefaces */
+.ui-dialog-footer button {
+	min-width: 4em;
+}
+
+.ui-widget-overlay {
+	background: inherit;
+}
+

@@ -20,6 +20,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { FileUploadModule } from 'primeng/fileupload';
+import { ConfirmDialogModule } from 'primeng/confirmDialog';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
@@ -34,6 +35,7 @@ import { ForwardCheckingService } from './services/forward-checking.service';
 import { IconsistencyService } from './services/iconsistency.service';
 import { ImportService } from './services/import.service';
 import { RandomBacktrackingService } from './services/random-backtracking.service';
+import { ConfirmationService } from 'primeng/components/common/api';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, 'assets/i18n/');
@@ -62,6 +64,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     InputTextareaModule,
     MultiSelectModule,
     FileUploadModule,
+    ConfirmDialogModule,
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
@@ -80,7 +83,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     { provide: APP_ALGORITMY, useClass: ForwardCheckingService, multi: true },
     { provide: APP_ALGORITMY, useClass: ForwardCheckingDynamicOrderService, multi: true },
     { provide: APP_ALGORITMY, useClass: ArcConsistencyService, multi: true },
-    { provide: APP_ALGORITMY, useClass: IconsistencyService, multi: true }
+    { provide: APP_ALGORITMY, useClass: IconsistencyService, multi: true },
+    ConfirmationService
   ],
   bootstrap: [AppComponent]
 })

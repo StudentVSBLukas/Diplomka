@@ -1,11 +1,12 @@
-<div>
-    <div id="vstupy" class="form">
+<div id="page">
+    <div id="vstupy" *ngIf="zobrazPromenne" [@slideInOut]="zobrazPromenne" class="form">
         
 	     	<div class="row-layout container-fluid form-header">
 	     		<h3>{{'promenna.header' | translate}}</h3>
-	     		<i class="fa fa-fw fa-plus clickable" (click)="pridejPromennou()"></i>
-	     		<i class="fa fa-fw fa-upload clickable" (click)="zobrazImport()"></i>
-	     		<i class="fa fa-fw fa-download clickable" (click)="exportZadani()"></i>
+	     		<i class="fa fa-fw fa-plus clickable" (click)="pridejPromennou()" title="{{'promenna.vlozit' | translate}}"></i>
+	     		<i class="fa fa-fw fa-upload clickable" (click)="zobrazImport()" title="{{'promenna.import' | translate}}"></i>
+	     		<i class="fa fa-fw fa-download clickable" (click)="exportZadani()" title="{{'promenna.export' | translate}}"></i>
+	     		<i class="fa fa-remove text-danger clickable rowHover" (click)="odstranPromenne()" title="{{'promenna.smazatVse' | translate}}"></i>
 		     	<div class="lokalizace">
 		     		<app-lokalizace-component [lokalizace]="lokalizace"></app-lokalizace-component>
 		     	</div>
@@ -44,7 +45,7 @@
 		            	</p-dropdown>
 		            </div>
 		            <div class="col-sm-1">
-		            	<i class="fa fa-question-circle clickable" (click)="zobrazAlgoritmus()" ></i>
+		            	<i class="fa fa-question-circle clickable" (click)="zobrazAlgoritmus()" title="{{'algoritmus.definice' | translate}}"></i>
 		            </div>
 			    </div>
 		            
@@ -66,10 +67,15 @@
 	    </form>
     </div>
     
-    <div id="vstupySeparator"></div>
+    <div id="vstupySeparator">
+    	<div>
+    		<i class="fa fa-fw fa-caret-left clickable" *ngIf="zobrazPromenne" (click)="toggleZobrazPromenne()"></i>
+    		<i class="fa fa-fw fa-caret-right clickable" *ngIf="!zobrazPromenne" (click)="toggleZobrazPromenne()"></i>
+    	</div>
+    </div>
         
-    <div id="graf">
-		<app-graf *ngIf="postup" [postup]="postup"></app-graf>
+    <div id="graf" [class]="zobrazPromenne ? '' : 'full'">
+		<app-graf *ngIf="postup" [postup]="postup" [resize]="zobrazPromenne"></app-graf>
         <div *ngIf="!postup" class="navod">
         	<i class="fa fa-5x fa-edit"></i>
         		<span>{{'graf.navod.1' | translate}}</span>
@@ -80,5 +86,12 @@
     
     <app-dialog-algoritmus *ngIf="zobrazAlgoritmusDialog" [algoritmus]="vybranyAlgoritmus" (close)="skryjAlgoritmus()"></app-dialog-algoritmus>
     <app-dialog-import *ngIf="zobrazImportDialog" (close)="importZadani($event)"></app-dialog-import>
+	<p-confirmDialog #confirmControl header="{{'confirm.header' | translate}}" icon="fa fa-question-circle"
+		acceptLabel="{{'confirm.accept' | translate}}" rejectLabel="{{'confirm.reject' | translate}}">
+		<p-footer>
+	        <button type="button" class="btn btn-success" (click)="confirmControl.accept()">{{'confirm.accept' | translate}}</button>
+	        <button type="button" class="btn btn-default" (click)="confirmControl.reject()">{{'confirm.reject' | translate}}</button>
+    </p-footer>
+	</p-confirmDialog>
 </div>
 

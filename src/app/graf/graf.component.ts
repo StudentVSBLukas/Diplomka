@@ -11,9 +11,13 @@ import * as go from 'gojs';
 export class GrafComponent implements OnInit, OnChanges {
 
   @Input() postup: Array<KrokAlgoritmu>;
+  @Input() resize: any;
 
   graf: any;
   aktualniKrok: KrokAlgoritmu;
+
+  zobrazDomenu = false;
+  zobrazDetailDomeny = true;
 
   constructor(private translate: TranslateService) { }
 
@@ -22,12 +26,29 @@ export class GrafComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(zmeny: SimpleChanges) {
-    const novyPostup = zmeny['postup'];
-    if (novyPostup) {
+    // Zmena postupu
+    if (zmeny['postup']) {
+      this.zobrazDomenu = false;
+      for (let i = 0; i < this.postup.length; i++) {
+        const domena = this.postup[i].hodnotaDomenKroku;
+        if (domena && domena.length) {
+          this.zobrazDomenu = true;
+          break;
+        }
+      }
+
       this.reloadGraph();
+    }
+    
+    // Resize
+    if (zmeny['resize']) {
+      this.graf && this.graf.requestUpdate();
     }
   }
 
+  toggleDetailDomeny() {
+    this.zobrazDetailDomeny = !this.zobrazDetailDomeny;
+  }
 
 
   initGraph() {

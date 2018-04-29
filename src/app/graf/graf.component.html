@@ -8,26 +8,30 @@
 					</span>
 				</div>
 		        <div class="graf-navigation">
-	                <button (click)="odkrokujCele()">&lt;&lt;&lt;&lt;</button>
-	                <button (click)="odkrokujReseni()">&lt;&lt;&lt;</button>
-	                <button (click)="odkrokujAkci()">&lt;&lt;</button>
-	                <button (click)="odkrokuj()">&lt;</button>
+	                <button (click)="odkrokujCele()" title="{{'graf.navigace.zacatek' | translate}}">&lt;&lt;&lt;&lt;</button>
+	                <button (click)="odkrokujReseni()" title="{{'graf.navigace.dalsiReseni' | translate}}">&lt;&lt;&lt;</button>
+	                <button (click)="odkrokujAkci()" title="{{'graf.navigace.dalsiUzel' | translate}}">&lt;&lt;</button>
+	                <button (click)="odkrokuj()" title="{{'graf.navigace.dalsi' | translate}}">&lt;</button>
 	                <span class="graf-step">{{graf.model.undoManager.historyIndex + 1}}</span> / <span class="graf-step">{{postup.length}}</span>
-	                <button (click)="krokuj()">&gt;</button>
-	                <button (click)="krokujAkci()">&gt;&gt;</button>
-	                <button (click)="krokujReseni()">&gt;&gt;&gt;</button>
-	                <button (click)="krokujCele()">&gt;&gt;&gt;&gt;</button>
+	                <button (click)="krokuj()" title="{{'graf.navigace.predchozi' | translate}}">&gt;</button>
+	                <button (click)="krokujAkci()" title="{{'graf.navigace.predchoziUzel' | translate}}">&gt;&gt;</button>
+	                <button (click)="krokujReseni()" title="{{'graf.navigace.predchoziReseni' | translate}}">&gt;&gt;&gt;</button>
+	                <button (click)="krokujCele()" title="{{'graf.navigace.konec' | translate}}">&gt;&gt;&gt;&gt;</button>
 		        </div>
 
 	            <div class="graf-zoom">
-	                <button (click)="zoomIn()"><i class="fa fa-plus"></i></button>
-	                <button (click)="center()"><i class="fa fa-crosshairs"></i></button>
-	                <button (click)="zoomOut()"><i class="fa fa-minus"></i></button>
+	                <button (click)="zoomIn()" title="{{'graf.zoomin' | translate}}"><i class="fa fa-plus"></i></button>
+	                <button (click)="center()" title="{{'graf.center' | translate}}"><i class="fa fa-crosshairs"></i></button>
+	                <button (click)="zoomOut()" title="{{'graf.zoomout' | translate}}"><i class="fa fa-minus"></i></button>
 	            </div>
 	            
-	            <div class="graf-domena">
-	            	<h4>{{'graf.popisDomeny' | translate}}</h4>
-	            	<div class="table-layout">
+	            <div *ngIf="zobrazDomenu" class="graf-domena">
+	            	<div class="row-layout">
+	            		<h4>{{'graf.popisDomeny' | translate}}</h4>
+			     		<i class="fa fa-fw fa-ban clickable" *ngIf="zobrazDetailDomeny" (click)="toggleDetailDomeny()" title="{{'graf.domena.skryj' | translate}}"></i>
+			     		<i class="fa fa-fw fa-check-circle clickable" *ngIf="!zobrazDetailDomeny" (click)="toggleDetailDomeny()" title="{{'graf.domena.zobraz' | translate}}"></i>
+	            	</div>
+	            	<div *ngIf="zobrazDetailDomeny" class="table-layout">
 		            	<div *ngFor="let p of aktualniKrok?.hodnotaDomenKroku">
 		            		<div>{{p.nazev}}</div>
 		            		<div><span>= &#123;</span>{{p.domena}}<span>&#125;</span></div>

@@ -1,16 +1,30 @@
 import { Promenna, Omezeni, KrokAlgoritmu, LokalizovanaZprava, TypKroku, TypOmezeni } from '../data-model';
 import { APP_ALGORITMY, Algoritmus } from '../services/algoritmus';
+import { AlgoritmusTestUtils } from '../services/algoritmus-test-utils';
 import { PromennaService } from '../services/promenna.service';
+import { trigger, state, transition, style, animate } from '@angular/animations';
 import { Component, OnInit, ElementRef, ViewChild, Inject } from '@angular/core';
 import { TranslateService, TranslatePipe } from '@ngx-translate/core';
 import { SelectItem } from 'primeng/api';
 import { saveAs } from 'file-saver/FileSaver';
-import AlgoritmusUtils from '../services/algoritmus-utils';
+import { ConfirmationService } from 'primeng/components/common/api';
 
 @Component({
   selector: 'app-main-page',
   templateUrl: './main-page.component.html',
-  styleUrls: ['./main-page.component.css']
+  styleUrls: ['./main-page.component.css'],
+  animations: [
+  trigger('slideInOut', [
+    state('in', style({transform: 'translateX(0)'})),
+    transition('void => *', [
+      style({transform: 'translateX(-100%)'}),
+      animate(250)
+    ]),
+    transition('* => void', [
+      animate(250, style({transform: 'translateX(-100%)'}))
+    ])
+  ])
+]
 })
 export class MainPageComponent implements OnInit {
 
@@ -23,13 +37,14 @@ export class MainPageComponent implements OnInit {
 
   lokalizace = ['cz', 'gb'];
 
+  zobrazPromenne = 'in';
   zobrazAlgoritmusDialog = false;
   zobrazImportDialog = false;
 
   postup;
 
   constructor(private promennaService: PromennaService, private translate: TranslateService,
-    @Inject(APP_ALGORITMY) algoritmy: Array<Algoritmus>) {
+    @Inject(APP_ALGORITMY) algoritmy: Array<Algoritmus>, private confirm: ConfirmationService) {
     this.listPromennych = promennaService.list();
     this.algoritmy = algoritmy.map(
       (a: Algoritmus) => ({ label: '-', value: a })
@@ -58,11 +73,23 @@ export class MainPageComponent implements OnInit {
     //    const c = this.listPromennych[2];
     //    c.domena.push(7);
     //    c.omezeni.push(new Omezeni(TypOmezeni.zakazano, [[7,5]], 'B'));
+//    this.listPromennych = this.test.forwardCheckingExample;
+//    this.promennaService.listPromennych = this.listPromennych;
   }
 
   pridejPromennou() {
     const promenna = this.promennaService.vytvor();
     this.listPromennych = this.promennaService.list();
+  }
+
+  odstranPromenne() {
+    this.confirm.confirm({
+        message: this.translate.instant('confirm.promenne'),
+        accept: () => {
+          this.promennaService.smazVse();
+          this.listPromennych = this.promennaService.list();
+        }
+    });
   }
 
   zobrazAlgoritmus() {
@@ -75,6 +102,14 @@ export class MainPageComponent implements OnInit {
 
   zobrazImport() {
     this.zobrazImportDialog = true;
+  }
+
+  toggleZobrazPromenne() {
+    if (this.zobrazPromenne) {
+      this.zobrazPromenne = null;
+    } else {
+      this.zobrazPromenne = 'in';
+    }
   }
 
   run() {

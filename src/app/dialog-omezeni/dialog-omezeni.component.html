@@ -24,10 +24,13 @@
 			                  		</div>
 			                 	</div>
 			                  	<div class="col-sm-1">
-			                  		<i class="fa fa-remove text-danger clickable rowHover" (click)="odeberOmezeni(promenna, omezeni)"></i>
+			                  		<i class="fa fa-remove text-danger clickable rowHover" (click)="odeberOmezeni(promenna, omezeni)" title="{{'omezeni.smaz' | translate}}"></i>
 			                  	</div>
 								<div class="col-sm-12">		                        	
-			                  		<p-multiSelect id="omezeni{{omezeni.id}}" name="omezeni{{omezeni.id}}" #hodnotaOmezeni="ngModel" [(ngModel)]="omezeni.omezeniProPromennou" [options]="filtrovanePromenne" maxSelectedLabels="30" required [appendTo]="appendTo"></p-multiSelect>
+			                  		<p-multiSelect id="omezeni{{omezeni.id}}" name="omezeni{{omezeni.id}}" #hodnotaOmezeni="ngModel" [(ngModel)]="omezeni.omezeniProPromennou"
+			                  			[options]="filtrovanePromenne" maxSelectedLabels="30" required
+			                  			defaultLabel="{{'omezeni.vyber' | translate}}" [appendTo]="appendTo">
+			                  		</p-multiSelect>
 			                  	</div>
 	                  		</div>
 	                  
@@ -42,7 +45,7 @@
 			                 		</span>
 			                 	</div>
 			                  	<div class="col-sm-1">
-			                  		<i class="fa fa-remove text-danger clickable rowHover" (click)="odeberOmezeni(promenna, omezeni)"></i>
+			                  		<i class="fa fa-remove text-danger clickable rowHover" (click)="odeberOmezeni(promenna, omezeni)" title="{{'omezeni.smaz' | translate}}"></i>
 			                  	</div>
 			                  	
 								<div class="col-sm-12">		                        	
