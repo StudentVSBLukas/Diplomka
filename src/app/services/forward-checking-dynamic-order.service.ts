@@ -14,14 +14,6 @@ export class ForwardCheckingDynamicOrderService extends ForwardCheckingService {
   }
 
   run(seznamPromennych: Array<Promenna>, pozadovanychReseni:  number): Array<KrokAlgoritmu> {
-    // TODO Test ze zadani
-    //    seznamPromennych = [];
-    //    seznamPromennych.push(new Promenna('A', [5, 4], []));
-    //    seznamPromennych.push(new Promenna('B', [2], []));
-    //    seznamPromennych.push(new Promenna('C', [3], []));
-    //    seznamPromennych.push(new Promenna('D', [4], []));
-    //    seznamPromennych.push(new Promenna('E', [1, 2, 3, 4, 5], [new Omezeni(TypOmezeni.rovno, ['A', 'D'], null)]));
-
     AlgoritmusUtils.prevedOmezeni(seznamPromennych);
 
     var postupTvoreniGrafu = new Array();
@@ -89,11 +81,6 @@ export class ForwardCheckingDynamicOrderService extends ForwardCheckingService {
 
 
       const poruseneOmezeni = AlgoritmusUtils.porovnej(zpracovavanaPromenna, seznamPromennych);
-      if (poruseneOmezeni) {
-        for (var i = 0; i < poruseneOmezeni.length; i++) {
-          krokAlgoritmu.popis.push(poruseneOmezeni[i]);
-        }
-      }
       if (poruseneOmezeni) {
         var lokalizovanaZprava = new LokalizovanaZprava();
         lokalizovanaZprava.klic = 'popis.forwardCheck.deadend';

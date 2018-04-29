@@ -12,20 +12,6 @@ export class IconsistencyService implements Algoritmus {
   constructor(private backtracking: BacktrackingService) { }
 
   run(seznamPromennych: Array<Promenna>, pozadovanychReseni:  number, iPocet: number): Array<KrokAlgoritmu> {
-    // TODO Test ze zadani
-    //    seznamPromennych = [];
-    //    // seznamPromennych.push(new Promenna("A", [1, 2], []))
-    //    // seznamPromennych.push(new Promenna("B", [3, 4], []))
-    //    // seznamPromennych.push(new Promenna("C", [5, 6], []))
-    //    // seznamPromennych.push(new Promenna("D", [7, 8], []))
-    //    // seznamPromennych.push(new Promenna("E", [9, 0], [new Omezeni("=", ["A", "B", "D"], null)]))
-    //    seznamPromennych.push(new Promenna('A', [1], []));
-    //    seznamPromennych.push(new Promenna('B', [2], []));
-    //    seznamPromennych.push(new Promenna('C', [3, 4], []));
-    //    seznamPromennych.push(new Promenna('D', [4, 5], []));
-    //    seznamPromennych.push(new Promenna('E', [4, 5], [new Omezeni(TypOmezeni.rovno, ['C', 'D'], null)]));
-    //    iPocet = 3;
-
     AlgoritmusUtils.prevedOmezeni(seznamPromennych);
 
     var postupTvoreniGrafu = new Array();
@@ -57,6 +43,7 @@ export class IconsistencyService implements Algoritmus {
     ) { }
     
     var backtrackingPostup = this.backtracking.run(seznamPromennych, pozadovanychReseni);
+    backtrackingPostup.shift();
     return postupTvoreniGrafu.concat(backtrackingPostup);
   }
 
@@ -170,7 +157,7 @@ export class IconsistencyService implements Algoritmus {
           }
           break;
         case TypOmezeni.povoleno:
-          var porovnavanaPromenna = omezeni.omezeniProPromennou;
+          var porovnavanaPromenna = omezeni.omezeniProPromennou[0];
           if (porovnavanaPromenna != iOmezeni) {
             continue;
           }
@@ -189,7 +176,7 @@ export class IconsistencyService implements Algoritmus {
           }
           break;
         case TypOmezeni.zakazano:
-          var porovnavanaPromenna = omezeni.omezeniProPromennou;
+          var porovnavanaPromenna = omezeni.omezeniProPromennou[0];
           if (porovnavanaPromenna != iOmezeni) {
             continue;
           }
