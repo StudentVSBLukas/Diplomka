@@ -18,7 +18,7 @@ export class DialogImportComponent implements OnInit {
   constructor(private promennaService: PromennaService, private importService: ImportService) {
     importService.nacistPriklady().subscribe(
       data => this.priklady = data.map(
-        (soubor: string) => ({ label: soubor, value: soubor })
+        (soubor: string) => ({ label: soubor.replace(/\.[^/.]+$/, ''), value: soubor })
       )
     );
   }
