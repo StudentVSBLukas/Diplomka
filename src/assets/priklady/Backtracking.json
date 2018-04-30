@@ -1,0 +1,117 @@
+[
+  {
+    "nazev": "A",
+    "domena": [
+      1,
+      2,
+      3
+    ],
+    "omezeni": [
+      {
+        "id": 0,
+        "typOmezeni": "!",
+        "omezeniProPromennou": [
+          "B",
+          "C",
+          "D",
+          "G"
+        ],
+        "hodnotyOmezeni": []
+      }
+    ],
+    "aktivni": true
+  },
+  {
+    "nazev": "B",
+    "domena": [
+      2,
+      3
+    ],
+    "omezeni": [
+      {
+        "id": 1,
+        "typOmezeni": "!",
+        "omezeniProPromennou": [
+          "F"
+        ],
+        "hodnotyOmezeni": []
+      }
+    ],
+    "aktivni": true
+  },
+  {
+    "nazev": "C",
+    "domena": [
+      1,
+      2
+    ],
+    "omezeni": [
+      {
+        "id": 2,
+        "typOmezeni": "!",
+        "omezeniProPromennou": [
+          "G"
+        ],
+        "hodnotyOmezeni": []
+      }
+    ],
+    "aktivni": true
+  },
+  {
+    "nazev": "D",
+    "domena": [
+      1,
+      2
+    ],
+    "omezeni": [
+      {
+        "id": 3,
+        "typOmezeni": "!",
+        "omezeniProPromennou": [
+          "E",
+          "G"
+        ],
+        "hodnotyOmezeni": []
+      }
+    ],
+    "aktivni": true
+  },
+  {
+    "nazev": "E",
+    "domena": [
+      2,
+      3
+    ],
+    "omezeni": [
+      {
+        "id": 4,
+        "typOmezeni": "!",
+        "omezeniProPromennou": [
+          "F",
+          "G"
+        ],
+        "hodnotyOmezeni": []
+      }
+    ],
+    "aktivni": true
+  },
+  {
+    "nazev": "F",
+    "domena": [
+      1,
+      3,
+      4
+    ],
+    "omezeni": [],
+    "aktivni": true
+  },
+  {
+    "nazev": "G",
+    "domena": [
+      1,
+      2
+    ],
+    "omezeni": [],
+    "aktivni": true
+  }
+]

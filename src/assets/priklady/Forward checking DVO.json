@@ -1,0 +1,57 @@
+[
+  {
+    "nazev": "A",
+    "domena": [
+      5,
+      4
+    ],
+    "omezeni": [],
+    "aktivni": true
+  },
+  {
+    "nazev": "B",
+    "domena": [
+      2
+    ],
+    "omezeni": [],
+    "aktivni": true
+  },
+  {
+    "nazev": "C",
+    "domena": [
+      3
+    ],
+    "omezeni": [],
+    "aktivni": true
+  },
+  {
+    "nazev": "D",
+    "domena": [
+      4
+    ],
+    "omezeni": [],
+    "aktivni": true
+  },
+  {
+    "nazev": "E",
+    "domena": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "omezeni": [
+      {
+        "id": 0,
+        "typOmezeni": "=",
+        "omezeniProPromennou": [
+          "A",
+          "D"
+        ],
+        "hodnotyOmezeni": []
+      }
+    ],
+    "aktivni": true
+  }
+]

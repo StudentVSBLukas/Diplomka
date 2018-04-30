@@ -1,0 +1,74 @@
+[
+  {
+    "nazev": "A",
+    "domena": [
+      1,
+      2
+    ],
+    "omezeni": [],
+    "aktivni": true
+  },
+  {
+    "nazev": "B",
+    "domena": [
+      4,
+      5
+    ],
+    "omezeni": [
+      {
+        "id": 0,
+        "typOmezeni": "=",
+        "omezeniProPromennou": [
+          "A"
+        ],
+        "hodnotyOmezeni": []
+      }
+    ],
+    "aktivni": true
+  },
+  {
+    "nazev": "C",
+    "domena": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "omezeni": [],
+    "aktivni": true
+  },
+  {
+    "nazev": "D",
+    "domena": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "omezeni": [],
+    "aktivni": true
+  },
+  {
+    "nazev": "E",
+    "domena": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "omezeni": [
+      {
+        "id": 1,
+        "typOmezeni": ">",
+        "omezeniProPromennou": [
+          "A"
+        ],
+        "hodnotyOmezeni": []
+      }
+    ],
+    "aktivni": true
+  }
+]
