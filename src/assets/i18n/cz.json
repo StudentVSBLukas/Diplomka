@@ -28,7 +28,7 @@
 			"random": "Random",
 			"dynamicOrder": "DynamicOrder",
 			"iConsistency": "iConsistency",
-			"fcdvo": "forward Check + DynamicOrder"
+			"fcdvo": "Forward Check + DynamicOrder"
 		}
 	},
 	"omezeni": {

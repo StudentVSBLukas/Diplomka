@@ -1,14 +1,22 @@
 {
 	"promenna": {
-		"header": "Setting",
+		"header": "Definitions",
+		"vlozit": "insert a new variable",
+		"smazat": "Remove variable",
+		"smazatVse": "Remove all variables",
+		"import": "Import definitions",
+		"export": "Export definitions",
+		"zakazat": "Disable variable",
+		"povolit": "Rnable variable",
+		"omezeni": "Edit variable constraints",
 		"validace": {
-			"pattern": "Enabled are integers separated by a comma"
+			"pattern": "Only comma separated integers are allowed"
 		}
 	},
 	"provedeni": {
-		"header": "Execution",
-		"pocet": "Number of solution",
-		"pocetPlaceholder": "Infinity",
+		"header": "Algorithm",
+		"pocet": "Solutions",
+		"pocetPlaceholder": "Unlimited",
 		"algoritmus": "Algorithm",
 		"iConsistency": "iConsistency",
 		"spust": "Run",
@@ -20,22 +28,24 @@
 			"random": "Random",
 			"dynamicOrder": "DynamicOrder",
 			"iConsistency": "iConsistency",
-      "fcdvo" : "forward Check + DynamicOrder"
+			"fcdvo": "Forward Check + DynamicOrder"
 		}
 	},
 	"omezeni": {
-		"header": "Constraint of the variable {{nazev}}",
+		"header": "Constraints for variable {{nazev}}",
 		"validace": {
 			"required": "Value is required",
-			"dvojice": "It is possible to enter only pairs of integers separated by a space"
+			"dvojice": "Only space separated pairs of integers are allowed"
 		},
-		"prazdne": "The variable has no constraint. Add it below.",
+		"prazdne": "Variable has no constrains. Insert new constraint bellow",
 		"typPlaceholder": "Type",
-		"cilPlaceholder": "Variable",
+		"cilPlaceholder": "Target",
 		"pridat": "Add",
 		"ulozit": "Save",
-		"vratit": "Return",
+		"vratit": "Reset",
 		"zrusit": "Cancel",
+		"smaz": "Remove constraint",
+		"vyber": "Select target variables",
 		"typ": {
 			"<": "<",
 			">": ">",
@@ -45,64 +55,169 @@
 			"z": "z"
 		}
 	},
+	"algoritmus": {
+		"zavrit": "Close",
+		"definice": "Show algorithm description"
+	},
 	"graf": {
-		"popisDomeny": "Domains of variables",
+		"popisDomeny": "Variable domain",
 		"navod": {
 			"1": "Define variables and their constraints.",
-			"2": "Select algorithm.",
-			"3": "Run solution."
+			"2": "Select an algorithm",
+			"3": "Run the algorithm."
+		},
+		"zoomin": "Zoom in",
+		"center": "Reset",
+		"zoomout": "Zoom out",
+		"navigace": {
+			"zacatek": "Start",
+			"konec": "End",
+			"dalsi": "Next step",
+			"dalsiUzel": "Next assignment",
+			"dalsiReseni": "Next solution",
+			"predchozi": "Previous step",
+			"predchoziUzel": "Previous assignment",
+			"predchoziReseni": "Previous solution"
+		},
+		"domena": {
+			"zobraz": "Show domains",
+			"skryj": "Hide domains"
 		}
 	},
 	"popis": {
 		"start": "Start",
 		"backtracking": {
-			"prirazeni" : "Selecting the first free value from the variable domain {{nazev}} = {{hodnota}}.\n",
-			"uzel" : "This value does not violate any constraints, starting forward phase to the next variable.\n",
-			"deadend" : "Since the constraint is violated, the back phase begins.\n",
-			"reseni" : "Because all constraints are met and all variables have assigned value, this is a solution.\n"
+			"nazev": "Backtracking",
+			"definice": "TODO: Napsat definici algoritmu Backtracking. Muzes pouzit HTML!!",
+			"start": "Backtracking algorithm has been started.",
+			"prirazeni": "First unassigned value from the variable domain is assigned {{nazev}} = {{hodnota}}.\n",
+			"kontrolaOmezeni": "Check if this assignment is valid and meets all the constraints.\n",
+			"pokracovaniPrirazeni": "This partial assignment violates a constraint. The subtree is cut atree is cut and a new value is assigned to the variable.\n",
+			"uzel": "This partial assignment meets all the constraints and is valid so far. Continue to the next variable assignment.\n",
+			"deadend": "This partial assignment violates a constraint. The subtree is cut and backward phase is initiated.\n",
+			"reseni": "This assignment meets all the constraints. There are no unassigned variables and therefore this is a solution!\n",
+			"konec": "All potential combination of variable assignments has been examined. The algorithm has finished."
 		},
 		"backjumping": {
-			"prirazeni" : "Selecting the first free value from the variable domain {{nazev}} = {{hodnota}}.\n",
-			"uzel" : "This value does not violate any constraints, starting forward phase to the next variable.\n",
-			"deadend" : "Since the constraint is violated, the back phase begins.\n",
-			"reseni" : "Because all constraints are met and all variables have assigned value, this is a solution.\n",
-			"deadendNedokonceny" : "Since the constraint is violated it continues to assign another element.\n",
-      "backjump" : "Since the constraint is violated and domain don't have any free value starting back pahse.\nSince this is a leaf variable, then a jump back to the {{backjump}} variable, the jump is performed on this variable because it is a constraint with the variable and was last assigned.\n"
+			"nazev": "Backjumping",
+			"definice": "TODO: Napsat definici algoritmu Backtracking. Muzes pouzit HTML!!",
+			"start": "Backjumping algorithm has been started.",
+			"kontrolaOmezeni": "Check if this assignment is valid and meets all the constraints.\n",
+			"prirazeni": "First unassigned value from the variable domain is assigned {{nazev}} = {{hodnota}}.\n",
+			"pokracovaniPrirazeni": "This partial assignment violates a constraint. The subtree is cut atree is cut and a new value is assigned to the variable.\n",
+			"uzel": "This partial assignment meets all the constraints and is valid so far. Continue to the next variable assignment.\n",
+			"deadend": "A constraint is violated. The subtree is cut and backward phase is initiated.\n",
+			"reseni": "This assignment meets all the constraints. There are no unassigned variables and therefore this is a solution!\n",
+			"jestliBackjumpu": "Check where the backjump can be performed.\n",
+			"backjumpNe": "This is not a leaf variable therefore a jump to the previous variable.\n",
+			"backjumpAno": "This is a leaf variable therefore a backjump can be performed. I seek the variable I will jump back to.\n",
+			"backjumpNeniOmezeni": "There are no constraints to this variable. Jump back to previous variable.\n",
+			"backjumpNalezenaPromenna":"There are some constraints for this variable. I will jump back to the nearest assigned variable from this constraints - {{nazev}}",
+			"backjumpNastaveniPozic":"Jumping back to variable {{nazev}}. All variables 'bellow' are unassigned.\n",
+			"konec": "All potential combination of variable assignments has been examined. The algorithm has finished."
+
 		},
 		"forwardCheck": {
-			"prirazeni" : "Selecting the first free value from the variable domain {{nazev}} = {{hodnota}}.\n",
-			"uzel" : "This value does not violate any constraints, starting forward phase to the next variable.\n",
-			"deadend" : "Since the constraint is violated, the back phase begins.\n",
-			"reseni" : "Because all constraints are met and all variables have assigned value, this is a solution.\n",
-		  "nesplneno" : "Constraint with type {{nazev}} {{typOmezeni}} {{porovnavanaPromenna}} ({{hondnota}} {{typOmezeni}} {{porovnavanaHodnota}}).\nValue {{porovnavanaHodnota}} is removed from domain of variable {{nazev}}.\n",
-      "povolenoNesplneno" : "Between variables {{nazev}} and {{porovnavanaPromenna}} wasn't found allowed pair with values {{hodnota}},{{porovnavanaHodnota}}.\nValue {{porovnavanaHodnota}} is removed from domain of variable {{nazev}}.\n",
-      "zakazaneNesplneno" : "Between variables {{nazev}} and {{porovnavanaPromenna}} was found forbidden pair with values {{hodnota}},{{porovnavanaHodnota}}.\nValue {{porovnavanaHodnota}} is removed from domain of variable {{nazev}}.\n"
+			"nazev": "Forward checking",
+			"definice": "TODO: Napsat definici algoritmu Backtracking. Muzes pouzit HTML!!",
+			"start": "Forward checking algorithm has been started.",
+			"kontrolaOmezeni": "Check if this assignment is valid and meets all the constraints.\n",
+			"prirazeni": "First unassigned value from the variable domain is assigned {{nazev}} = {{hodnota}}.\n",
+			"pokracovaniPrirazeni": "This partial assignment violates a constraint. The subtree is cut atree is cut and a new value is assigned to the variable.\n",
+			"splneniOmezeni": "This partial assignment meet all the constraints. Forward checking if I may remove any values from domains of unassigned variables.\n",
+			"uzel": "I removed all the values that would violated a constraint if they were assigned.\n",
+			"prazdnaDomena": "Variable {{porovnavanaPromenna}} domain is empty after all its values has been removed. There is no potential solution for this partial assignment.\n",
+			"deadend": "This partial assignment violates a constraint. The subtree is cut and backward phase is initiated.\n",
+			"reseni": "This assignment meets all the constraints. There are no unassigned variables and therefore this is a solution!\n",
+			"nesplneno": "Assignment ({{nazev}}, {{porovnavanaPromenna}}) = ({{hodnota}}, {{porovnavanaHodnota}}) violates constraint {{nazev}} {{typOmezeni}} {{porovnavanaPromenna}}. {{porovnavanaHodnota}} is removed from domain of {{porovnavanaPromenna}}.\n",
+			"povolenoNesplneno": "Assignment ({{nazev}}, {{porovnavanaPromenna}}) = ({{hodnota}}, {{porovnavanaHodnota}}) is not listed in {{nazev}}p{{porovnavanaPromenna}}. {{porovnavanaHodnota}} is removed from domain of {{porovnavanaPromenna}}.\n",
+			"zakazaneNesplneno": "Assignment ({{nazev}}, {{porovnavanaPromenna}}) = ({{hodnota}}, {{porovnavanaHodnota}}) violates constraint {{nazev}}z{{porovnavanaPromenna}}. {{porovnavanaHodnota}} is removed from domain of {{porovnavanaPromenna}}.\n",
+			"konec": "All potential combination of variable assignments has been examined. The algorithm has finished."
+
 		},
 		"arcConsistency": {
-			"prazdnaDomena" : "There was an empty domain for variable {{name}}, so there is no solution to this problem.\n"
+			"nazev": "Arc consistency",
+			"definice": "TODO: Napsat definici algoritmu Arc consistency. Muzes pouzit HTML!!",
+			"start": "Arc consistency algorithm has been started.\n",
+			"zacatekUpravy": "Before assignment is started, I check the constraints and try to remove values from variable domains that would always violate a constraint",
+			"kteraPromenna": "I'm removing values from domain {{nazev}}'",
+			"nesplneno": "Assignment ({{nazev}}, {{porovnavanaPromenna}}) = ({{hodnota}}, {{porovnavanaHodnota}}) violates constraint {{nazev}} {{typOmezeni}} {{porovnavanaPromenna}}. {{porovnavanaHodnota}} is removed from domain of {{porovnavanaPromenna}}.",
+			"povolenoNesplneno": "Assignment ({{nazev}}, {{porovnavanaPromenna}}) = ({{hodnota}}, {{porovnavanaHodnota}}) is not listed in {{nazev}}p{{porovnavanaPromenna}}. {{porovnavanaHodnota}} is removed from domain of {{porovnavanaPromenna}}.\n",
+			"zakazaneNesplneno": "Assignment ({{nazev}}, {{porovnavanaPromenna}}) = ({{hodnota}}, {{porovnavanaHodnota}}) violates constraint {{nazev}}z{{porovnavanaPromenna}}. {{porovnavanaHodnota}} is removed from domain of {{porovnavanaPromenna}}.\n",
+			"upravaDomeny": "There is no value in domain {{porovnavanaPromenna}} to meet constraint {{nazev}} {{typ}} {{porovnavanaPromenna}}. {{hodnota}} is removed from domain {{nazev}}.\n",
+			"prazdnaDomena": "Variable {{nazev}} domain is empty after all its values has been removed. There is no potential solution for this partial assignment.\n"
 		},
 		"random": {
-			"prirazeni" : "Selecting a random free value from the variable domain {{nazev}} = {{hodnota}}.\n",
-			"uzel" : "This value does not violate any constraints, starting forward phase to the next variable.\n",
-			"deadend" : "Since the constraint is violated, the back phase begins.\n",
-			"reseni" : "Because all constraints are met and all variables have assigned value, this is a solution.\n"
+			"nazev": "Random backtracking",
+			"definice": "TODO: Napsat definici algoritmu Backtracking. Muzes pouzit HTML!!",
+			"start": "Random backtracking algorithm has been started.",
+			"kontrolaOmezeni": "Check if this assignment is valid and meets all the constraints.\n",
+			"pokracovaniPrirazeni": "This partial assignment violates a constraint. The subtree is cut atree is cut and a new value is assigned to the variable.\n",
+			"prirazeni": "Random unassigned value from the variable domain is assigned {{nazev}} = {{hodnota}}.\n",
+			"uzel": "This partial assignment meets all the constraints and is valid so far. Continue to the next variable assignment.\n",
+			"deadend": "This partial assignment violates a constraint. The subtree is cut and backward phase is initiated.\n",
+			"reseni": "This assignment meets all the constraints. There are no unassigned variables and therefore this is a solution!\n",
+			"konec": "All potential combination of variable assignments has been examined. The algorithm has finished."
 		},
 		"dynamicOrder": {
-			"prirazeni" : "Selecting the first free value from the variable domain {{nazev}} = {{hodnota}}.\n",
-			"uzel" : "This value does not violate any constraints, starting forward phase to the next variable.\n",
-			"deadend" : "Since the constraint is violated, the back phase begins.\n",
-			"reseni" : "Because all constraints are met and all variables have assigned value, this is a solution.\n",
-      "poradiPred" : "List of variable before arrangement:\n", 		
-      "poradiPo" : "List of variable after arrangement:\n", 		
-      "poradiInfo" : "Variable {{nazev}} with domain length = {{delka}}.\n" 		
-    },
+			"nazev": "Dynamic value ordering",
+			"definice": "TODO: Napsat definici algoritmu Backtracking. Muzes pouzit HTML!!",
+			"start": "Dynamic value ordering algorithm has been started.",
+			"prirazeni": "First unassigned value from the variable domain is assigned {{nazev}} = {{hodnota}}.\n",
+			"kontrolaOmezeni": "Check if this assignment is valid and meets all the constraints.\n",
+			"pokracovaniPrirazeni": "This partial assignment violates a constraint. The subtree is cut atree is cut and a new value is assigned to the variable.\n",
+			"uzel": "This partial assignment meets all the constraints and is valid so far. Continue to the next variable assignment.\n",
+			"deadend": "This partial assignment violates a constraint. The subtree is cut and backward phase is initiated.\n",
+			"reseni": "This assignment meets all the constraints. There are no unassigned variables and therefore this is a solution!\n",
+			"poradiPred": "List of variable before ordering:",
+			"zacinamSerazovat": "I will order variables by their domain carrdinality\n",
+			"poradiPo": "List of variable after ordering:\n",
+			"poradiInfo": "Variable {{nazev}} with domain length = {{delka}}.\n"
+		},
 		"omezeni": {
-			"splneno" : "Constraint with type between variables {{nazev}} {{typOmezeni}} {{porovnavanaPromenna}} ({{hodnota}} {{typOmezeni}} {{porovnavanaHodnota}}).\n",
-			"nesplneno" : "Constraint with type between variables {{nazev}} {{typOmezeni}} {{porovnavanaPromenna}} ({{hondnota}} {{typOmezeni}} {{porovnavanaHodnota}}).\n",
-      "povolenoSplneno" : "Between variables {{nazev}} and {{porovnavanaPromenna}} was found allowed pair with values {{hodnota}},{{porovnavanaHodnota}}.\n",
-      "povolenoNesplneno" : "Between variables {{nazev}} and {{porovnavanaPromenna}} wasn't found allowed pair with values {{hodnota}},{{porovnavanaHodnota}}.\n",
-      "zakazaneNesplneno" : "Between variables {{nazev}} and {{porovnavanaPromenna}} wasn't found forbidden pair with values {{hodnota}},{{porovnavanaHodnota}}.\n",
-      "zakazaneSplneno" : "Between variables {{nazev}} and {{porovnavanaPromenna}} was found forbidden pair with values {{hodnota}},{{porovnavanaHodnota}}.\n"
+			"splneno": "Assignment ({{nazev}}, {{porovnavanaPromenna}}) = ({{hodnota}}, {{porovnavanaHodnota}}) meets constraint {{nazev}} {{typOmezeni}} {{porovnavanaPromenna}}. It is valid.\n",
+			"nesplneno": "Assignment ({{nazev}}, {{porovnavanaPromenna}}) = ({{hodnota}}, {{porovnavanaHodnota}}) violates constraint {{nazev}} {{typOmezeni}} {{porovnavanaPromenna}}.",
+			"povolenoSplneno": "Assignment ({{nazev}}, {{porovnavanaPromenna}}) = ({{hodnota}}, {{porovnavanaHodnota}}) is listed in {{nazev}}p{{porovnavanaPromenna}}. It is valid.",
+			"povolenoNesplneno": "Assignment ({{nazev}}, {{porovnavanaPromenna}}) = ({{hodnota}}, {{porovnavanaHodnota}}) is not listed in {{nazev}}p{{porovnavanaPromenna}}. {{porovnavanaHodnota}} is removed from domain of {{porovnavanaPromenna}}.\n",
+			"zakazeneSplneno": "Assignment ({{nazev}}, {{porovnavanaPromenna}}) = ({{hodnota}}, {{porovnavanaHodnota}}) is not listed in {{nazev}}z{{porovnavanaPromenna}}. It is valid.",
+			"zakazaneNesplneno": "Assignment ({{nazev}}, {{porovnavanaPromenna}}) = ({{hodnota}}, {{porovnavanaHodnota}}) violates constraint {{nazev}}z{{porovnavanaPromenna}}. {{porovnavanaHodnota}} is removed from domain of {{porovnavanaPromenna}}.\n"
+		},
+		"iConsistency": {
+			"nazev": "iConsistency",
+			"definice": "TODO: Napsat definici algoritmu iConsistency",
+			"start": "iConsistency algorithm has been started.",
+			"nedostacujiciPocet": "Bylo nalezeno pouze {{pocetUspesnychPromennych}} z požadovaných {{iPocet}}. Odebírám prvek {{prvek}} z domény proměnné {{nazev}}.\n",
+			"prazdnaDomena": "Variable {{nazev}} domain is empty after all its values has been removed. There is no potential solution for the definitions"
+		},
+		"forwarCheckDynamicOrder": {
+			"nazev": "Forward checking + DVO",
+			"definice": "TODO: Napsat definici algoritmu iConsistency",
+			"start": "Forward checking + Dynamic value ordering algorithm has been started."
 		}
+	},
+	"promennePanel": {
+		"empty": "Add a new variable by click the + sign above."
+	},
+	"import": {
+		"header": "Import definitions",
+		"zavrit": "Cancel",
+		"priklad": {
+			"label": "Importovat example",
+			"placeholder": "Choose example",
+			"akce": "Import"
+		},
+		"soubor": {
+			"label": "Importovat from file",
+			"vybrat": "Choose file"
+		}
+	},
+	"confirm": {
+		"header": "Confirmation",
+		"accept": "Yes",
+		"reject": "No",
+		"promenna": "Do you really want to remove the variable?",
+		"promenne": "Do you really want to remove all the variables?"
 	}
 }
+
+
